@@ -10,8 +10,8 @@
       <Pane prefHeight="174.0" prefWidth="776.0" BorderPane.alignment="CENTER">
          <children>
             <StringGrid layoutX="27.0" layoutY="14.0" prefHeight="116.0" prefWidth="726.0" rivit="Korttityyppi|  PVM  | Korttinumero| PIN-koodi | CVC | Lähimaksu |  Verkkopankkitunnus | Salasana &#10;Debit |  2005| 1234-5678-9123 | 1234 | 456 | Kyllä | FI69 4206 6636 07|QWERTY" />
-            <Button layoutX="669.0" layoutY="135.0" mnemonicParsing="false" text="Poista Kortti" />
-            <Button layoutX="27.0" layoutY="135.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Sulje" />
+            <Button layoutX="669.0" layoutY="135.0" mnemonicParsing="false" text="Poista Kortti" onAction ="#TestiPesti"/>
+            <Button fx:id="suljeNappi" layoutX="27.0" layoutY="135.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Sulje" onAction ="#Lopeta" />
          </children>
       </Pane>
    </top>

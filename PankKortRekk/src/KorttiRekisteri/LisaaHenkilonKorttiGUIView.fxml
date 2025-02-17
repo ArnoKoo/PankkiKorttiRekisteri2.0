@@ -7,8 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane prefHeight="506.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KorttiRekisteri.LisaaHenkilonKorttiGUIController">
    <children>
       <Accordion layoutX="86.0" layoutY="154.0" />
       <Accordion layoutX="190.0" layoutY="193.0" />
@@ -28,7 +27,7 @@
       <TextField layoutX="330.0" layoutY="350.0" promptText="FIXX XXXX XXXX XX" />
       <TextArea editable="false" layoutX="150.0" layoutY="391.0" prefHeight="38.0" prefWidth="88.0" text="Salasana" />
       <TextField layoutX="330.0" layoutY="398.0" promptText="XXXX" />
-      <Button layoutX="14.0" layoutY="533.0" mnemonicParsing="false" text="Peruuta" />
-      <Button layoutX="511.0" layoutY="533.0" mnemonicParsing="false" text="Lisää Kortti" />
+      <Button fx:id="suljeNappi" layoutX="14.0" layoutY="467.0" mnemonicParsing="false" onAction="#Lopeta" text="Peruuta" />
+      <Button layoutX="631.0" layoutY="467.0" mnemonicParsing="false" onAction="#TestiPesti" text="Lisää Kortti" />
    </children>
 </Pane>

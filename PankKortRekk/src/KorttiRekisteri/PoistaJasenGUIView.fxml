@@ -10,8 +10,8 @@
       <Pane prefHeight="174.0" prefWidth="668.0" BorderPane.alignment="CENTER">
          <children>
             <StringGrid layoutX="17.0" layoutY="14.0" prefHeight="116.0" prefWidth="634.0" rivit="Nimi  |  Hetu | katuosoite| postinumero | postiosoite | puhelinnumero |  sähköposti &#10;Erik |  1234 | Rantatie 6 | 0050 | Helsinki | 040678123 | erik@yahoo.com" />
-            <Button layoutX="572.0" layoutY="135.0" mnemonicParsing="false" text="Poista jäsen" />
-            <Button layoutX="17.0" layoutY="135.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Sulje" />
+            <Button layoutX="572.0" layoutY="135.0" mnemonicParsing="false" text="Poista jäsen" onAction = "#TestiPesti"/>
+            <Button fx:id="suljeNappi" layoutX="17.0" layoutY="135.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Sulje" onAction = "#Lopeta" />
          </children>
       </Pane>
    </top>

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KorttiRekisteri.LisaaJasenGUIController">
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KorttiRekisteri.LisaaJasenGUIController">
    <top>
       <Pane prefHeight="319.0" prefWidth="306.0" BorderPane.alignment="CENTER">
          <children>
@@ -21,8 +21,8 @@
             <TextField editable="false" layoutY="107.0" prefHeight="25.0" prefWidth="97.0" text="Postinumero" />
             <TextField editable="false" layoutY="132.0" prefHeight="25.0" prefWidth="97.0" text="Postiosoite" />
             <TextField editable="false" layoutY="157.0" prefHeight="25.0" prefWidth="96.0" text="Puhelinnumero" />
-            <Button layoutX="209.0" layoutY="279.0" mnemonicParsing="false" text="lisää" />
-            <Button layoutX="30.0" layoutY="279.0" mnemonicParsing="false" text="peruuta" />
+            <Button layoutX="209.0" layoutY="279.0" mnemonicParsing="false" onAction="#TestiPesti" text="Lisää" />
+            <Button fx:id="suljeNappi" layoutX="30.0" layoutY="279.0" mnemonicParsing="false" onAction="#Lopeta" text="Peruuta" />
          </children>
       </Pane>
    </top>
