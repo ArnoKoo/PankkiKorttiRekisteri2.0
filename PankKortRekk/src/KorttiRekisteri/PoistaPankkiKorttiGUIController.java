@@ -1,7 +1,5 @@
 package KorttiRekisteri;
 
-import javafx.scene.control.TextField;
-
 import javafx.scene.control.Button;
 
 import fi.jyu.mit.fxgui.Dialogs;
@@ -26,6 +24,10 @@ public class PoistaPankkiKorttiGUIController implements ModalControllerInterface
     @FXML
     public void Lopeta() {
         ModalController.closeStage(suljeNappi);
+    }
+    
+    public void handleMuokkaaPankkiKorttia() {
+        // TODO Auto-generated method stub
     }
     
     @Override

@@ -1,93 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import fi.jyu.mit.fxgui.ListChooser?>
-<?import fi.jyu.mit.fxgui.StringGrid?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="506.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KorttiRekisteri.PaaikkunaGUIController">
+<BorderPane prefHeight="508.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KorttiRekisteri.PaaikkunaGUIController">
    <top>
       <BorderPane prefHeight="488.0" prefWidth="701.0" BorderPane.alignment="CENTER">
          <left>
-            <Pane pickOnBounds="false" prefHeight="463.0" prefWidth="363.0" BorderPane.alignment="CENTER">
+            <Pane pickOnBounds="false" prefHeight="463.0" prefWidth="720.0" BorderPane.alignment="CENTER">
                <children>
-                  <Text layoutX="150.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JÄSENET">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <TextField layoutX="100.0" layoutY="62.0" promptText="fred" />
-                  <Text layoutX="139.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HAKUEHTO">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <Button layoutX="70.0" layoutY="438.0" mnemonicParsing="false" text="Lisää Jäsen">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Button>
-                  <ChoiceBox layoutX="94.0" layoutY="36.0" prefHeight="26.0" prefWidth="161.0" />
-                  <Slider layoutX="54.0" layoutY="132.0" orientation="VERTICAL" prefHeight="297.0" prefWidth="15.0" />
-                  <ListChooser layoutX="70.0" layoutY="131.0" prefHeight="299.0" prefWidth="224.0" />
-                  <Button layoutX="182.0" layoutY="438.0" mnemonicParsing="false" text="Poista Jäsen">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Button>
+                  <TextField layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="693.0" promptText="Etsi jäsenen nimi" />
+                  <ListChooser layoutX="14.0" layoutY="76.0" prefHeight="349.0" prefWidth="224.0" />
+                  <ListChooser layoutX="248.0" layoutY="76.0" prefHeight="349.0" prefWidth="224.0" />
+                  <ListChooser layoutX="482.0" layoutY="76.0" prefHeight="349.0" prefWidth="224.0" />
+                  <TextField layoutX="14.0" layoutY="51.0" text="Jäsenlista" />
+                  <TextField layoutX="248.0" layoutY="51.0" text="Jäsenen tiedot" />
+                  <TextField layoutX="482.0" layoutY="51.0" text="Kortin tiedot" />
+                  <Button layoutX="14.0" layoutY="425.0" mnemonicParsing="false" onAction="#TestiPesti" text="Valitse" />
+                  <Button layoutX="248.0" layoutY="425.0" mnemonicParsing="false" onAction="#TestiPesti" text="Muokkaa tietoja" />
+                  <Button layoutX="482.0" layoutY="425.0" mnemonicParsing="false" onAction="#TestiPesti" text="Muokkaa tietoja" />
                </children>
             </Pane>
          </left>
-         <right>
-            <Pane prefHeight="448.0" prefWidth="347.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Text layoutX="48.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JÄSENEN TIEDOT">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <StringGrid layoutX="-50.0" layoutY="36.0" prefHeight="393.0" prefWidth="322.0" />
-                  <Slider layoutX="-48.0" layoutY="429.0" prefHeight="15.0" prefWidth="319.0" />
-                  <Button layoutX="69.0" layoutY="445.0" mnemonicParsing="false" text="Tallenna">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Button>
-               </children>
-            </Pane>
-         </right>
          <top>
             <MenuBar BorderPane.alignment="CENTER">
               <menus>
                 <Menu mnemonicParsing="false" text="TIEDOSTO">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Tallenna" />
-                        <MenuItem mnemonicParsing="false" text="Lopeta" />
+                    <MenuItem mnemonicParsing="false" onAction="#TestiPesti" text="Tallenna" />
+                        <MenuItem mnemonicParsing="false" onAction="#Lopeta" text="Lopeta" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="MUOKKAA">
+                <Menu mnemonicParsing="true" text="MUOKKAA">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Lisää uusi jäsen" />
-                        <MenuItem mnemonicParsing="false" text="Poista jäsen" />
-                        <MenuItem mnemonicParsing="false" text="Muokkaa jäsenen tietoja" />
-                        <MenuItem mnemonicParsing="false" text="Lisää uusi pankkikortti" />
-                        <MenuItem mnemonicParsing="false" text="Muokkaa pankkikorttia" />
-                        <MenuItem mnemonicParsing="false" text="Poista pankkikortti" />
+                    <MenuItem mnemonicParsing="false" onAction="#handleLisaaJasen" text="Lisää uusi jäsen" />
+                        <MenuItem mnemonicParsing="false" onAction="#handlePoistaJasen" text="Poista jäsen" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMuokkaJasen" text="Muokkaa jäsenen tietoja" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleLisaaPankkiKortti" text="Lisää uusi pankkikortti" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaPankkiKorttiVali" text="Muokkaa pankkikorttia" />
+                        <MenuItem mnemonicParsing="false" onAction="#handlePoistaPankkiKortti" text="Poista pankkikortti" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="APUA">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Apua" />
-                        <MenuItem mnemonicParsing="false" text="Tietoja" />
+                    <MenuItem mnemonicParsing="false" onAction="#Apua" text="Apua" />
+                        <MenuItem mnemonicParsing="false" onAction="#Apua" text="Tietoja" />
                   </items>
                 </Menu>
               </menus>

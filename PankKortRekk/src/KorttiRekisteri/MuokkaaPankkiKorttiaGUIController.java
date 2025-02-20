@@ -42,6 +42,10 @@ public class MuokkaaPankkiKorttiaGUIController implements ModalControllerInterfa
         // TODO Auto-generated method stub
         
     }
+    
+    public void handleMuokkaaPankkiKorttia() {
+    	// TODO Auto-generated method stub
+    }
     /**
      * @param modalityStage aa
      * @param oletus aa

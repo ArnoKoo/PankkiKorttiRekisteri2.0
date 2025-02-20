@@ -31,7 +31,7 @@ public class PaaikkunaGUIController implements ModalControllerInterface <String>
     
     //Jäsen muokkaukset
     @FXML private void handleMuokkaJasen() {
-        MuokkaJasenGUIController.alkuNaytto(null, "Muokkaa jäsenen tietoja"); //toimii
+        MuokkaJasenGUIController.alkuNaytto(null, "Muokkaa jäsenen tietoja"); //toimii // ei itseasiassa toimi // nyt toimii, oli ongelma FXML tiedostossa, joka oli bin kansiossa
     }
     
     @FXML private void handleLisaaJasen() {
@@ -39,7 +39,7 @@ public class PaaikkunaGUIController implements ModalControllerInterface <String>
     }
     
     @FXML private void handlePoistaJasen() {
-        PoistaJasenGUIController.alkuNaytto(null, "Poista jäsen"); //toimii
+        PoistaJasenGUIController.alkuNaytto(null, "Poista jäsen"); //toimii // ei toimi
     }
     
     //Pankkikortti muokkaukset

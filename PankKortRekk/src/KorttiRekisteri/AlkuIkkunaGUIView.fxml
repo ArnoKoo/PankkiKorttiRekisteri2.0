@@ -16,7 +16,7 @@
                   <Font size="32.0" />
                </font>
             </TextField>
-            <Button layoutX="499.0" layoutY="142.0" mnemonicParsing="false" onAction="#SiirryPaaSivulle" style="-fx-background-color: #00008B; -fx-text-fill: white;" text="Jatka">
+            <Button fx:id="Jatka" layoutX="499.0" layoutY="142.0" mnemonicParsing="false" onAction="#SiirryPaaSivulle" style="-fx-background-color: #00008B; -fx-text-fill: white;" text="Jatka">
                <font>
                   <Font size="20.0" />
                </font>
@@ -26,7 +26,7 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Text fill="WHITE" layoutX="159.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Arno Korhonen &amp; Dani Lobko" wrappingWidth="266.13671875">
+            <Text fill="WHITE" layoutX="151.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Arno Korhonen &amp; Dani Lobko" wrappingWidth="282.13671875">
                <font>
                   <Font size="20.0" />
                </font>

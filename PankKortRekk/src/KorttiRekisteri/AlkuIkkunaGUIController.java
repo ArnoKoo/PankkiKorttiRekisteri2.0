@@ -11,12 +11,16 @@ import javafx.scene.control.Button;
  * @version 9.2.2025
  *
  */ 
+
 public class AlkuIkkunaGUIController implements ModalControllerInterface <String>{
+	
+	@FXML private Button suljeNappi;
+    @FXML private Button Jatka;
+	
     @FXML private void SiirryPaaSivulle() {
+    	ModalController.closeStage(Jatka); // Nyt sulkee aloitusikkunan
         PaaikkunaGUIController.alkuNaytto(null, "Muokkaa jäsenen tietoja");
     }
-    
-    @FXML private Button suljeNappi;
     
     public void Lopeta() {
         ModalController.closeStage(suljeNappi);

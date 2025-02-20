@@ -22,9 +22,9 @@
                   <TextField layoutX="14.0" layoutY="51.0" text="Jäsenlista" />
                   <TextField layoutX="248.0" layoutY="51.0" text="Jäsenen tiedot" />
                   <TextField layoutX="482.0" layoutY="51.0" text="Kortin tiedot" />
-                  <Button layoutX="14.0" layoutY="425.0" mnemonicParsing="false" text="Valitse" onAction="#TestiPesti"/>
-                  <Button layoutX="248.0" layoutY="425.0" mnemonicParsing="false" text="Muokkaa tietoja" onAction="#TestiPesti"/>
-                  <Button layoutX="482.0" layoutY="425.0" mnemonicParsing="false" text="Muokkaa tietoja" onAction="#TestiPesti"/>
+                  <Button layoutX="14.0" layoutY="425.0" mnemonicParsing="false" onAction="#TestiPesti" text="Valitse" />
+                  <Button layoutX="248.0" layoutY="425.0" mnemonicParsing="false" onAction="#TestiPesti" text="Muokkaa tietoja" />
+                  <Button layoutX="482.0" layoutY="425.0" mnemonicParsing="false" onAction="#TestiPesti" text="Muokkaa tietoja" />
                </children>
             </Pane>
          </left>
@@ -44,13 +44,13 @@
                         <MenuItem mnemonicParsing="false" onAction="#handleMuokkaJasen" text="Muokkaa jäsenen tietoja" />
                         <MenuItem mnemonicParsing="false" onAction="#handleLisaaPankkiKortti" text="Lisää uusi pankkikortti" />
                         <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaPankkiKorttiVali" text="Muokkaa pankkikorttia" />
-                        <MenuItem mnemonicParsing="false" onAction="#handlePoistaPankkiKortti" text="Poista pankkikortti" />
+                        <MenuItem mnemonicParsing="false" onAction="#handlePoistaPankkiKorttiVali" text="Poista pankkikortti" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="APUA">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Apua" onAction = "#Apua"/>
-                        <MenuItem mnemonicParsing="false" text="Tietoja" onAction = "#Apua"/>
+                    <MenuItem mnemonicParsing="false" onAction="#Apua" text="Apua" />
+                        <MenuItem mnemonicParsing="false" onAction="#Apua" text="Tietoja" />
                   </items>
                 </Menu>
               </menus>

@@ -43,6 +43,10 @@ public class PoistaJasenGUIController implements ModalControllerInterface <Strin
         
     }
     
+    @FXML
+    private void handleMuokkaaPankkiKorttia() {
+    	// Mä en honestly tiedä miksi tää on täällä, mut tää on täällä :D
+    }
     /**
      * @param modalityStage aa
      * @param oletus aa
