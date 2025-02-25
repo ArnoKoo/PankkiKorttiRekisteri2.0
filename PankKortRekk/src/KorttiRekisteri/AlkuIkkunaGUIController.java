@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 /**
  * @author OMISTAJA
  * @version 9.2.2025
- *
+ * MOI DANI
  */ 
 
 public class AlkuIkkunaGUIController implements ModalControllerInterface <String>{
