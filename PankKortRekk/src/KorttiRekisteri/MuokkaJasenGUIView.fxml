@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KorttiRekisteri.MuokkaaJasenGUIController">
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KorttiRekisteri.MuokkaJasenGUIController">
    <top>
       <Pane prefHeight="362.0" prefWidth="378.0" BorderPane.alignment="CENTER">
          <children>

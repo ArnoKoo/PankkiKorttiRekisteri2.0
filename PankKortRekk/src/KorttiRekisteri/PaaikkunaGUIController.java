@@ -51,7 +51,7 @@ public class PaaikkunaGUIController implements ModalControllerInterface <String>
         MuokkaaGUIController.alkuNaytto(null, "Muokkaa pankkikortin tietoja"); //toimii
     }
     
-    @FXML private void handlePoistaPankkiKortti() {
+    @FXML private void handlePoistaPankkiKorttiVali() {
         PoistaPankkiKorttiGUIController.alkuNaytto(null, "Poista pankkikortti"); //toimii
     }
     
