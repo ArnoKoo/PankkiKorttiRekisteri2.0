@@ -12,6 +12,8 @@ import javafx.fxml.FXMLLoader;
  * @version 9.2.2025
  *
  */
+
+
 public class PaaikkunaMain extends Application {
     @Override
     public void start(Stage primaryStage) {
@@ -28,6 +30,16 @@ public class PaaikkunaMain extends Application {
             e.printStackTrace();
         }
     }
+    
+    
+    	
+    // pankkikortti olio
+    
+    	// Debit
+    
+    	// Credit
+    
+    	// Yhdistelmä
 
     /**
      * @param args Ei kaytossa
