@@ -3,6 +3,11 @@ package KorttiRekisteri;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+
+/*  Luokka "yhdistelmä" sijaitsee "Pankkikortit" luokan alla. Luokka vastaanottaa kahdeksan parametria, jotka näkyvät alla.
+ * 	Pohja on otettu Vesan esimerkeistä
+ */
+
 public class Yhdistelmä {
 	
 	private int			tunnusNro;
@@ -21,7 +26,11 @@ public class Yhdistelmä {
 		return korttityyppi;
 	}
 	
-	public void vastaaDebit() {
+	/*
+	 * Tämän tarkoituksena on palauttaa esimerkki yhdistelmä kortista
+	 */
+	
+	public void vastaaYhdistelmä() {
 		korttityyppi = "Yhdistelmä";
 		pvm = "1.1.2025";
 		korttinumero = "4000 0000 0000 0003";
@@ -31,6 +40,10 @@ public class Yhdistelmä {
 		VPT = "FI43 0000 0000 0000 00";
 		salasana = "2025";
 	}
+	
+	/*
+	 * Tulosta() tulostaa (no shit) kaikki tiedot ulos näkyville
+	 */
 	
 	public void tulosta(PrintStream out) {
         out.println(String.format("%03d", tunnusNro, 3) + "  " + korttityyppi + " " + pvm);
@@ -43,11 +56,19 @@ public class Yhdistelmä {
         tulosta(new PrintStream(os));
    }
 	 
+	 /*
+	  * rekisteroi() antaa tunnusnumeron pankkikortille ja antaa seuraavalle kortille numeron + 1 
+	  */
+	 
 	 public int rekisteroi() {
       tunnusNro = seuraavaNro;
       seuraavaNro++;
       return tunnusNro;
 	 }
+	 
+	 /*
+	  * Palauttaa tunnusnumeron
+	  */
 	 
 	 public int getTunnusNro( ) {
 		 return tunnusNro;
