@@ -20,12 +20,18 @@ public class PaaikkunaMain extends Application {
         try {
             FXMLLoader ldr = new FXMLLoader(getClass().getResource("PaaikkunaGUIView.fxml"));
             final Pane root = ldr.load();
-            //final PaaikkunaGUIController paaikkunaCtrl = (PaaikkunaGUIController) ldr.getController();
+            
+            final PaaikkunaGUIController paaikkunaCtrl = (PaaikkunaGUIController) ldr.getController();
+            
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("paaikkuna.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.setTitle("Paaikkuna");
             primaryStage.show();
+            
+            Pankki pankki = new Pankki();
+            paaikkunaCtrl.setPankki(pankki); 
+            
         } catch(Exception e) {
             e.printStackTrace();
         }

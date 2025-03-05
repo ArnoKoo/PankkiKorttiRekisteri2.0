@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
@@ -16,15 +17,23 @@
             <Pane pickOnBounds="false" prefHeight="463.0" prefWidth="720.0" BorderPane.alignment="CENTER">
                <children>
                   <TextField layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="693.0" promptText="Etsi jäsenen nimi" />
-                  <ListChooser layoutX="14.0" layoutY="76.0" prefHeight="349.0" prefWidth="224.0" />
-                  <ListChooser layoutX="248.0" layoutY="76.0" prefHeight="349.0" prefWidth="224.0" />
+                  
+                  
+                  <ListChooser fx:id="chooserAsiakkaat" layoutX="14.0" layoutY="76.0" prefHeight="349.0" prefWidth="224.0" />
+                  
+                  
                   <ListChooser layoutX="482.0" layoutY="76.0" prefHeight="349.0" prefWidth="224.0" />
                   <TextField layoutX="14.0" layoutY="51.0" text="Jäsenlista" />
                   <TextField layoutX="248.0" layoutY="51.0" text="Jäsenen tiedot" />
                   <TextField layoutX="482.0" layoutY="51.0" text="Kortin tiedot" />
-                  <Button layoutX="14.0" layoutY="425.0" mnemonicParsing="false" onAction="#TestiPesti" text="Valitse" />
+                  <Button layoutX="14.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleLisaaJasen" text="Uusi Asiakas" />
                   <Button layoutX="248.0" layoutY="425.0" mnemonicParsing="false" onAction="#TestiPesti" text="Muokkaa tietoja" />
                   <Button layoutX="482.0" layoutY="425.0" mnemonicParsing="false" onAction="#TestiPesti" text="Muokkaa tietoja" />
+                  
+                  
+                  <ScrollPane fx:id = "panelAsiakas" layoutX="250.0" layoutY="76.0" prefHeight="345.0" prefWidth="222.0" />
+                  
+                  
                </children>
             </Pane>
          </left>

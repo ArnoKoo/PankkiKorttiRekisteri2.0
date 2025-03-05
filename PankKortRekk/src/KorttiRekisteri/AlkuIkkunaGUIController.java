@@ -20,7 +20,7 @@ public class AlkuIkkunaGUIController implements ModalControllerInterface <String
     @FXML private void SiirryPaaSivulle() {
     	ModalController.closeStage(Jatka); // Nyt sulkee aloitusikkunan
         PaaikkunaGUIController.alkuNaytto(null, "Muokkaa jäsenen tietoja");
-    }
+    }    
     
     public void Lopeta() {
         ModalController.closeStage(suljeNappi);
