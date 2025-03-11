@@ -27,11 +27,12 @@
                   <TextField layoutX="248.0" layoutY="51.0" text="Jäsenen tiedot" />
                   <TextField layoutX="482.0" layoutY="51.0" text="Kortin tiedot" />
                   <Button layoutX="14.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleLisaaJasen" text="Uusi Asiakas" />
-                  <Button layoutX="248.0" layoutY="425.0" mnemonicParsing="false" onAction="#TestiPesti" text="Muokkaa tietoja" />
-                  <Button layoutX="482.0" layoutY="425.0" mnemonicParsing="false" onAction="#TestiPesti" text="Muokkaa tietoja" />
+                  <Button layoutX="248.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleLisaaDebitKortti" text="Lisää debit" />
+                  <Button layoutX="376.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleLisaaLuottoKortti" text="Lisää luottokortti" />
+                  <Button layoutX="296.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleLisaaYhdistelmaKortti" text="Lisää yhdistelmäkortti" />
                   
+                  <ScrollPane fx:id="panelAsiakas" layoutX="250.0" layoutY="76.0" prefHeight="345.0" prefWidth="222.0" />
                   
-                  <ScrollPane fx:id = "panelAsiakas" layoutX="250.0" layoutY="76.0" prefHeight="345.0" prefWidth="222.0" />
                   
                   
                </children>
@@ -51,7 +52,7 @@
                     <MenuItem mnemonicParsing="false" onAction="#handleLisaaJasen" text="Lisää uusi jäsen" />
                         <MenuItem mnemonicParsing="false" onAction="#handlePoistaJasen" text="Poista jäsen" />
                         <MenuItem mnemonicParsing="false" onAction="#handleMuokkaJasen" text="Muokkaa jäsenen tietoja" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleLisaaPankkiKortti" text="Lisää uusi pankkikortti" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleLisaaDebitKortti" text="Lisää uusi pankkikortti" />
                         <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaPankkiKorttiVali" text="Muokkaa pankkikorttia" />
                         <MenuItem mnemonicParsing="false" onAction="#handlePoistaPankkiKorttiVali" text="Poista pankkikortti" />
                   </items>

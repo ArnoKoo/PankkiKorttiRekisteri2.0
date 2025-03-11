@@ -30,7 +30,7 @@ public class Asiakas {
 	// Apumetodi, jolla saadaan täytettyä testiarvot jäsenelle.
 	
 	public void vastaaErik(String apuhetu) {
-		nimi = "Erik Sjöholm" + rand(1000, 9999);
+		nimi = "Erik Sandren" + rand(1000, 9999);
 		hetu = apuhetu;
 		katuosoite = "Rantatie 6";
 		postinumero = "00500";

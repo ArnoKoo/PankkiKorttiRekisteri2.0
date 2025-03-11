@@ -2,15 +2,17 @@ package KorttiRekisteri;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Iterator;
 
 /*  Luokka credit sijaitsee "Pankkikortit" luokan alla. Luokka vastaanottaa kahdeksan parametria, jotka näkyvät alla.
  * 	Pohja on otettu Vesan esimerkeistä
  */
 
-public class Credit {
+public class Credit implements Iterable <Pankkikortti> {
 	
 	private int			tunnusNro;
 	private String		korttityyppi				= "";
+	private int         asiakasNro;
 	private String		pvm							= "";
 	private String		korttinumero				= "";
 	private String		PIN							= "";
@@ -25,11 +27,31 @@ public class Credit {
 		return korttityyppi;
 	}
 	
-	/*
-	 * Tämän tarkoituksena on palauttaa esimerkki credit kortista
-	 */
+	public int getAsiakasNro() {
+	    return tunnusNro;
+	}
 	
-	public void vastaaCredit() {
+    /**
+     * Palataan asiaan ht seiskassa
+     */
+    public Credit() {
+         //
+     }
+     
+     /**
+      * UUSI JUTTU ----------------------------------------------------------------
+      * Alustetaan tietyn asiakkaan kortti 
+     * @param asiakasNro asiakkaan viitenumero
+     */
+    public Credit(int asiakasNro) {
+        this.asiakasNro = asiakasNro;
+     }
+	
+	/**
+	 * @param nro apujuttu Asiakasnumeroa varten
+	 */
+	public void vastaaCredit(int nro) {
+	    asiakasNro = nro;
 		korttityyppi = "Credit";
 		pvm = "1.1.2025";
 		korttinumero = "4000 0000 0000 0002";
@@ -37,12 +59,8 @@ public class Credit {
 		CVC = "420";
 		lähimaksu = true;
 		VPT = "FI42 0000 0000 0000 00";
-		salasana = "2025";
+		salasana = "2024";
 	}
-	
-	/*
-	 * Tulosta() tulostaa (no shit) kaikki tiedot ulos näkyville
-	 */
 	
 	public void tulosta(PrintStream out) {
         out.println(String.format("%03d", tunnusNro, 3) + "  " + korttityyppi + " " + pvm);
@@ -56,21 +74,30 @@ public class Credit {
         tulosta(new PrintStream(os));
 	 }
 	 
-	 /*
-	  * rekisteroi() antaa tunnusnumeron pankkikortille ja antaa seuraavalle kortille numeron + 1 
-	  */
-	 
 	 public int rekisteroi() {
       tunnusNro = seuraavaNro;
       seuraavaNro++;
       return tunnusNro;
 	 }
 	 
-	 /*
-	  * Palauttaa tunnusnumeron
-	  */
-	 
 	 public int getTunnusNro( ) {
 		 return tunnusNro;
 	 }
+	 
+	 /**
+     * UUSI JUTTU ----------------------------------------------------------------
+     * Seurasin Vesan luentoa ja huomasin meiltä puuttuvan main aliohjelma. 
+     * @param args ei tee mitään
+     */
+    public static void main(String[] args) {
+         Credit cre = new Credit();
+         cre.vastaaCredit(2);
+         cre.tulosta(System.out);
+     }
+
+    @Override
+    public Iterator<Pankkikortti> iterator() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

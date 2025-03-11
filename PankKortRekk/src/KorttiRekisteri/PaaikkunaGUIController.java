@@ -2,6 +2,7 @@ package KorttiRekisteri;
 
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import fi.jyu.mit.fxgui.Dialogs;
@@ -48,9 +49,7 @@ public class PaaikkunaGUIController implements Initializable {
         MuokkaJasenGUIController.alkuNaytto(null, "Muokkaa jäsenen tietoja"); //toimii // ei itseasiassa toimi // nyt toimii, oli ongelma FXML tiedostossa, joka oli bin kansiossa
     }
     
-    
-    //Arskan Vesa video seikkailut alkakoon----------------------------------
-    
+        
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
         alusta();
@@ -85,10 +84,9 @@ public class PaaikkunaGUIController implements Initializable {
             pankki.lisaa(uusi);
         } catch (SailoException e) { //Jos tulee SailoException...
             Dialogs.showMessageDialog("Ongelma uuden lisäämisessä: " + e.getMessage());
-        }    
+        }
         hae(uusi.getTunnusNro());
     }
-    
     
     private Pankki pankki;
     private TextArea areaAsiakas = new TextArea(); //Rakennusteline
@@ -97,7 +95,7 @@ public class PaaikkunaGUIController implements Initializable {
         this.pankki = pankki;
     }
     
-    private void alusta() {               
+    private void alusta() {
         panelAsiakas.setContent(areaAsiakas);
         areaAsiakas.setFont(new Font("Courier New", 12));
         panelAsiakas.setFitToHeight(true);
@@ -106,25 +104,74 @@ public class PaaikkunaGUIController implements Initializable {
         
     }
     
-    private void naytaAsiakas() {
+    private void naytaAsiakas() { //ONGELMA
         Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
         areaAsiakas.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaAsiakas)) {
+            os.println("---------------------------------");
             asiakasKohdalla.tulosta(os);
+            
+            //Debit
+            os.println("---------------------------------");
+            List<Debit> debitit = pankki.annaDebit(asiakasKohdalla);         
+            for (Debit deb : debitit) {
+                deb.tulosta(os);
+                os.println("---------------------------------");
+            }
+            
+            os.println("---------------------------------");
+            List<Credit> creditit = pankki.annaCredit(asiakasKohdalla);         
+            for (Credit cred : creditit) {
+                cred.tulosta(os);
+                os.println("---------------------------------");
+            } 
+            
+            os.println("---------------------------------");
+            List<Yhdistelmä> yhdistelmat = pankki.annaYhdistelma(asiakasKohdalla);         
+            for (Yhdistelmä yhd : yhdistelmat) {
+                yhd.tulosta(os);
+                os.println("---------------------------------");
+            }
         }            
     }
-    
-    //seikkailu loppuu-------------------------------------
     
     
     @FXML private void handlePoistaJasen() {
         PoistaJasenGUIController.alkuNaytto(null, "Poista jäsen"); //toimii // ei toimi
     }
     
-    //Pankkikortti muokkaukset
-    @FXML private void handleLisaaPankkiKortti() {
-        LisaaKorttiGUIController.alkuNaytto(null, "Lisää uusi pankkikortti"); //toimii
+    //Debit kortin logiikka UUSI JUTTU -----------------------------------------------------
+    @FXML private void handleLisaaDebitKortti() {
+        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
+        if (asiakasKohdalla == null) return;
+        Debit deb = new Debit();
+        deb.rekisteroi();
+        deb.vastaaDebit(asiakasKohdalla.getTunnusNro()); //TODO: posauta oikea dialogi, HT7
+        pankki.lisaaDebit(deb);
+        hae(asiakasKohdalla.getTunnusNro());
+    }
+    
+    //Luottokortin logiikka UUSI JUTTU -----------------------------------------------------
+    @FXML private void handleLisaaLuottoKortti() {
+        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
+        if (asiakasKohdalla == null) return;
+        Credit cre = new Credit();
+        cre.rekisteroi();
+        cre.vastaaCredit(asiakasKohdalla.getTunnusNro()); //TODO: posauta oikea dialogi, HT7
+        pankki.lisaaCredit(cre);
+        hae(asiakasKohdalla.getTunnusNro());
+    }
+    
+    //Yhdistelmäkortin logiikka UUSI JUTTU -----------------------------------------------------
+    @FXML private void handleLisaaYhdistelmaKortti() {
+        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
+        if (asiakasKohdalla == null) return;
+        Yhdistelmä yhd = new Yhdistelmä();
+        yhd.rekisteroi();
+        yhd.vastaaYhdistelmä(asiakasKohdalla.getTunnusNro()); //TODO: posauta oikea dialogi, HT7
+        pankki.lisaaYhdistelma(yhd);
+        hae(asiakasKohdalla.getTunnusNro());
     }
     
     @FXML private void handleMuokkaaPankkiKorttiVali() {

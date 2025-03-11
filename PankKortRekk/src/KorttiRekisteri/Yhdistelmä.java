@@ -2,16 +2,19 @@ package KorttiRekisteri;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Iterator;
+import KorttiRekisteri.HetuTarkistus;
 
 
 /*  Luokka "yhdistelmä" sijaitsee "Pankkikortit" luokan alla. Luokka vastaanottaa kahdeksan parametria, jotka näkyvät alla.
  * 	Pohja on otettu Vesan esimerkeistä
  */
 
-public class Yhdistelmä {
+public class Yhdistelmä implements Iterable <Pankkikortti> {
 	
 	private int			tunnusNro;
 	private String		korttityyppi				= "";
+	private int         asiakasNro;
 	private String		pvm							= "";
 	private String		korttinumero				= "";
 	private String		PIN							= "";
@@ -22,15 +25,42 @@ public class Yhdistelmä {
 	
 	private static int  seuraavaNro				= 1;
 
-	public String getKorttityyppi() {
-		return korttityyppi;
-	}
+    /**
+     * @return korttityypin
+     */
+    public String getKorttityyppi() {
+        return korttityyppi;
+    }
+    
+    /**
+     * @return asiakkaan numero
+     */
+    public int getAsiakasNro() {
+        return asiakasNro;
+    }
+    
+    /**
+    * Palataan asiaan ht seiskassa
+    */
+   public Yhdistelmä() {
+        //
+    }
+    
+    /**
+     * UUSI JUTTU ----------------------------------------------------------------
+     * Alustetaan tietyn asiakkaan kortti 
+    * @param asiakasNro asiakkaan viitenumero
+    */
+   public Yhdistelmä(int asiakasNro) {
+        this.asiakasNro = asiakasNro;
+    }
 	
 	/*
 	 * Tämän tarkoituksena on palauttaa esimerkki yhdistelmä kortista
 	 */
 	
-	public void vastaaYhdistelmä() {
+	public void vastaaYhdistelmä(int nro) {
+	    asiakasNro = nro;
 		korttityyppi = "Yhdistelmä";
 		pvm = "1.1.2025";
 		korttinumero = "4000 0000 0000 0003";
@@ -54,7 +84,7 @@ public class Yhdistelmä {
 	 
 	 public void tulosta(OutputStream os) {
         tulosta(new PrintStream(os));
-   }
+	 }
 	 
 	 /*
 	  * rekisteroi() antaa tunnusnumeron pankkikortille ja antaa seuraavalle kortille numeron + 1 
@@ -73,4 +103,21 @@ public class Yhdistelmä {
 	 public int getTunnusNro( ) {
 		 return tunnusNro;
 	 }
+	 
+	 /**
+	  * UUSI JUTTU ----------------------------------------------------------------
+	  * Seurasin Vesan luentoa ja huomasin meiltä puuttuvan main aliohjelma. 
+	 * @param args ei tee mitään
+	 */
+	public static void main(String[] args) {
+	     Yhdistelmä yhd = new Yhdistelmä();
+	     yhd.vastaaYhdistelmä(2);
+	     yhd.tulosta(System.out);
+	 }
+
+    @Override
+    public Iterator<Pankkikortti> iterator() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
