@@ -13,17 +13,20 @@ import java.util.List;
  */
 public class Pankkikortti {
 	
-	private static final int 	MAX_KORTIT 					= 20; //ei implementoitu ainakaan viel
+	private static final int 	MAX_KORTIT 					= 40; //ei implementoitu ainakaan viel
 	private int 				lkm 						= 3; //tää olennaisempi
 	private String 				tiedostonNimi 				= "";
 	private Debit				debit[] 					= new Debit[MAX_KORTIT];
 	private Credit				credit[] 					= new Credit[MAX_KORTIT];
 	private Yhdistelmä			yhdistelmä[] 				= new Yhdistelmä[MAX_KORTIT];
 	
+
+	
+	//-------------------------------------------------------------------------------------------------------------------------------------- Arskan juttuja
+	
 	/**
     * alustaa olion
     */
-	
     public Pankkikortti() {
         // Jää tyhjäksi toistaiseksi
     }
@@ -52,6 +55,8 @@ public class Pankkikortti {
         }
         return loydetyt; //palauttaa löydetyn
     }
+    
+    
 
 	private Collection<Credit> creditLista = new ArrayList<Credit>(); //UUSI JUTTU: saa nähdä, miten tää soveltuu sinne taulukkoon muiden kanssa
 	
@@ -76,6 +81,7 @@ public class Pankkikortti {
 	    }
 	    return loydetyt; //palauttaa löydetyn
 	}
+	
 	
 
     private Collection<Yhdistelmä> yhdistelmaLista = new ArrayList<Yhdistelmä>();
@@ -102,9 +108,7 @@ public class Pankkikortti {
         return loydetyt; //palauttaa löydetyn
     }
     
-    
-    // Toistaiseksi SailoException ei vielä toimi -> Korjattavaksi vaiheessa HT6
-    // Pitäisi toimia niin, että per asiakas max 10 korttia, eikä yhteensä koko pankissa max 10 korttia
+    //-------------------------------------------------------------------------------------------------------------------------------------- Arskan jutut loppuvat
 	
 	/**
 	 * Lisää debit kortin, jos on liikaa kortteja niin heittää virheen
@@ -139,6 +143,26 @@ public class Pankkikortti {
 		lkm++;
 	}
 		
+	
+	//Dani, mitä nää alla olevat tekevät?
+	
+	/**
+	 * lukee tiedostosta (TODO)
+	 * @param hakemisto tiedostonNimi kiinni tässä (Dani, täydennä)
+	 * @throws SailoException ei kye lukemaan (Dani, täydennä)
+	 */
+	public void lueTiedostosta(String hakemisto) throws SailoException {
+		tiedostonNimi = hakemisto + "/kortit.dat";
+		throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonNimi);
+	}
+	
+	/**
+	 * Talentaa tiedostoon (TODO)
+	 * @throws SailoException ei kye tallentamaan (Dani, täydennä)
+	 */	
+	public void talleta() throws SailoException {
+		throw new SailoException("Ei osata vielä tallettaa tiedostoa " + tiedostonNimi);
+	}
 	
     /**
      * Testiohjelma harrastuksille UUSI JUTTU: Testataan, tulostuuko oikein. Lainattu Vesan esimerkkiohjelmasta ja muunneltu.

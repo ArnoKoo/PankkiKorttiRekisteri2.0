@@ -122,7 +122,6 @@ public class PaaikkunaGUIController implements Initializable {
                 os.println("---------------------------------");
             }
             
-            //Credit
             os.println("---------------------------------"); //haetaan, onko luottokorttia lisätty    
             List<Credit> creditit = pankki.annaCredit(asiakasKohdalla);         
             for (Credit cred : creditit) { //jos on, tulostetaan
@@ -130,7 +129,6 @@ public class PaaikkunaGUIController implements Initializable {
                 os.println("---------------------------------");
             } 
             
-            //Yhdistelmä
             os.println("---------------------------------"); //haetaan, onko yhdistelmäkorttia lisätty    
             List<Yhdistelmä> yhdistelmat = pankki.annaYhdistelma(asiakasKohdalla);         
             for (Yhdistelmä yhd : yhdistelmat) { //jos on, tulostetaan
@@ -145,7 +143,7 @@ public class PaaikkunaGUIController implements Initializable {
         PoistaJasenGUIController.alkuNaytto(null, "Poista jäsen"); //toimii // ei toimi
     }
     
-    //Debit kortin logiikka
+    //Debit kortin logiikka UUSI JUTTU -----------------------------------------------------
     @FXML private void handleLisaaDebitKortti() { 
         Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject(); //hakee valitun asiakkaan chooserasiakkaat komponentista
         if (asiakasKohdalla == null) return;
@@ -156,7 +154,7 @@ public class PaaikkunaGUIController implements Initializable {
         hae(asiakasKohdalla.getTunnusNro()); //päivittää näkymän kutsumalla tunnusNro, jotta lisätty kortti näkyy käyttöliittymäs
     }
     
-    //Luottokortin logiikka 
+    //Luottokortin logiikka UUSI JUTTU -----------------------------------------------------
     @FXML private void handleLisaaLuottoKortti() {
         Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
@@ -167,7 +165,7 @@ public class PaaikkunaGUIController implements Initializable {
         hae(asiakasKohdalla.getTunnusNro());
     }
     
-    //Yhdistelmäkortin logiikka
+    //Yhdistelmäkortin logiikka UUSI JUTTU -----------------------------------------------------
     @FXML private void handleLisaaYhdistelmaKortti() {
         Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
