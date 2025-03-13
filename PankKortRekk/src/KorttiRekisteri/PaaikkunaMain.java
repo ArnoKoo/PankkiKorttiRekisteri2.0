@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.fxml.FXMLLoader;
+import KorttiRekisteri.Pankkikortti.*; // Ei tarvitse olla, mutta lisään sen varmuuden vuoksi koska muutaman kerran on tullut ongelmia, koska sitä ei ole
 
 
 /**
@@ -37,16 +38,6 @@ public class PaaikkunaMain extends Application {
         }
     }
     
-    
-    	
-    // pankkikortti olio
-    
-    	// Debit
-    
-    	// Credit
-    
-    	// Yhdistelmä
-
     /**
      * @param args Ei kaytossa
      */
