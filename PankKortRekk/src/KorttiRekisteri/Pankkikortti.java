@@ -13,8 +13,8 @@ import java.util.List;
  */
 public class Pankkikortti {
 	
-	private static final int 	MAX_KORTIT 					= 40;
-	private int 				lkm 						= 0;
+	private static final int 	MAX_KORTIT 					= 40; //ei implementoitu ainakaan viel
+	private int 				lkm 						= 3; //tää olennaisempi
 	private String 				tiedostonNimi 				= "";
 	private Debit				debit[] 					= new Debit[MAX_KORTIT];
 	private Credit				credit[] 					= new Credit[MAX_KORTIT];
@@ -24,90 +24,91 @@ public class Pankkikortti {
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------- Arskan juttuja
 	
-	
 	/**
-    * 
+    * alustaa olion
     */
     public Pankkikortti() {
         // Jää tyhjäksi toistaiseksi
     }
     
-    //Debitkorttien logiikka
+
     private Collection<Debit> debitLista = new ArrayList<Debit>(); //UUSI JUTTU: saa nähdä, miten tää soveltuu sinne taulukkoon muiden kanssa
     
     /**
      * @param deb lisättävä debitkortti
      */
-    public void lisaaDebitti(Debit deb) {
+    public void lisaaDebitti(Debit deb) { //Debitkorttien logiikka, lisää uuden pankkikortin kokoelmaan
         debitLista.add(deb);
     }
     
     /**
+     * Palauttaa listan tietylle asiakkaalle kuuluvista korteista
      * @param tunnusNro tunnusnumero
      * @return löydetyt numerot
      */
-    public List<Debit> annaDebitti(int tunnusNro) {
+    public List<Debit> annaDebitti(int tunnusNro) { 
         List<Debit> loydetyt = new ArrayList<Debit>();
-        for (Debit deb : debitLista) { //edellyyttää iteraattorin olemassaoloa 
-            if (deb.getAsiakasNro() == tunnusNro) {
-                loydetyt.add(deb);
+        for (Debit deb : debitLista) { //Käy läpi kaikki kortit ja...
+            if (deb.getAsiakasNro() == tunnusNro) { //...vertailee asiakkaan tunnusnumeroa
+                loydetyt.add(deb); //lisää löydetyn
             }
         }
-        return loydetyt;
+        return loydetyt; //palauttaa löydetyn
     }
     
     
-    //Luottokorttien logiikka
+
 	private Collection<Credit> creditLista = new ArrayList<Credit>(); //UUSI JUTTU: saa nähdä, miten tää soveltuu sinne taulukkoon muiden kanssa
 	
 	/**
 	 * @param cred lisättävä luottokortti
 	 */
-	public void lisaaKreditti(Credit cred) {
+	public void lisaaKreditti(Credit cred) { //Luottokorttien logiikka, lisää uuden pankkikortin kokoelmaan
 	    creditLista.add(cred);
 	}
 	
 	/**
+	 * Palauttaa listan tietylle asiakkaalle kuuluvista korteista
 	 * @param tunnusNro tunnusnumero
 	 * @return löydetyt numerot
 	 */
 	public List<Credit> annaKreditti(int tunnusNro) {
 	    List<Credit> loydetyt = new ArrayList<Credit>();
-	    for (Credit cred : creditLista) { //edellyyttää iteraattorin olemassaoloa 
-	        if (cred.getAsiakasNro() == tunnusNro) {
-	            loydetyt.add(cred);
+	    for (Credit cred : creditLista) { //Käy läpi kaikki kortit ja...
+	        if (cred.getAsiakasNro() == tunnusNro) { //...vertailee asiakkaan tunnusnumeroa
+	            loydetyt.add(cred); //lisää löydetyn
 	        }
 	    }
-	    return loydetyt;
+	    return loydetyt; //palauttaa löydetyn
 	}
 	
 	
-	//Yhdistelmäkorttien logiikka
+
     private Collection<Yhdistelmä> yhdistelmaLista = new ArrayList<Yhdistelmä>();
     
     /**
      * @param yhd lisättävä kredittikortti
      */
-    public void lisaaYhdistelma(Yhdistelmä yhd) {
+    public void lisaaYhdistelma(Yhdistelmä yhd) { //Yhdistelmäkorttien logiikka, lisää uuden pankkikortin kokoelmaan
         yhdistelmaLista.add(yhd);
     }
     
     /**
+     * Palauttaa listan tietylle asiakkaalle kuuluvista korteista
      * @param tunnusNro tunnusnumero
      * @return löydetyt numerot
      */
     public List<Yhdistelmä> annaYhdistelma(int tunnusNro) {
         List<Yhdistelmä> loydetyt = new ArrayList<Yhdistelmä>();
-        for (Yhdistelmä yhd : yhdistelmaLista) { //edellyyttää iteraattorin olemassaoloa 
-            if (yhd.getAsiakasNro() == tunnusNro) {
-                loydetyt.add(yhd);
+        for (Yhdistelmä yhd : yhdistelmaLista) { //Käy läpi kaikki kortit ja...
+            if (yhd.getAsiakasNro() == tunnusNro) { //...vertailee asiakkaan tunnusnumeroa
+                loydetyt.add(yhd); //lisää löydetyn
             }
         }
-        return loydetyt;
+        return loydetyt; //palauttaa löydetyn
     }
-	
-	
-	//-------------------------------------------------------------------------------------------------------------------------------------- Arskan jutut loppuvat
+    
+    //-------------------------------------------------------------------------------------------------------------------------------------- Arskan jutut loppuvat
 	
 	/**
 	 * Lisää debit kortin, jos on liikaa kortteja niin heittää virheen

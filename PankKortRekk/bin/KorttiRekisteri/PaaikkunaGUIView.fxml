@@ -26,7 +26,7 @@
                   <TextField layoutX="14.0" layoutY="51.0" text="Jäsenlista" />
                   <TextField layoutX="248.0" layoutY="51.0" text="Jäsenen tiedot" />
                   <TextField layoutX="482.0" layoutY="51.0" text="Kortin tiedot" />
-                  <Button layoutX="14.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleLisaaJasen" text="Uusi Asiakas" />
+                  <Button layoutX="14.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleLisaaAsiakas" text="Uusi Asiakas" />
                   <Button layoutX="248.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleLisaaDebitKortti" text="Lisää debit" />
                   <Button layoutX="376.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleLisaaLuottoKortti" text="Lisää luottokortti" />
                   <Button layoutX="296.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleLisaaYhdistelmaKortti" text="Lisää yhdistelmäkortti" />
@@ -49,7 +49,7 @@
                 </Menu>
                 <Menu mnemonicParsing="true" text="MUOKKAA">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#handleLisaaJasen" text="Lisää uusi jäsen" />
+                    <MenuItem mnemonicParsing="false" onAction="#handleLisaaAsiakas" text="Lisää uusi jäsen" />
                         <MenuItem mnemonicParsing="false" onAction="#handlePoistaJasen" text="Poista jäsen" />
                         <MenuItem mnemonicParsing="false" onAction="#handleMuokkaJasen" text="Muokkaa jäsenen tietoja" />
                         <MenuItem mnemonicParsing="false" onAction="#handleLisaaDebitKortti" text="Lisää uusi pankkikortti" />

@@ -30,7 +30,7 @@ public class Pankki {
     }
  
     /**
-     * Lisää pankkiin uuden asiakkaan
+     * Lisää pankkiin uuden asiakkaan, Sailoexception varmistaa ettei liikaa asiakkaita
      * @param asiakas on asiakas
      * @throws SailoException jos liikaa
      */    
@@ -39,6 +39,7 @@ public class Pankki {
     }
     
     /**
+     * lisää pankkiin uuden debit kortin
      * @param debit on Debit-luokasta napattu.
      */
     public void lisaaDebit(Debit debit) { //mietin tätä miten esim kreditti ja yhdistelmä huomenna, moi huomisen minä //Moi
@@ -46,16 +47,18 @@ public class Pankki {
     }
     
     /**
-     * @param credit on Credit-luokasta napattu.
+     * lisää pankkiin uuden luottokortin
+     * @param credit on Credit-luokasta napattu.    
      */
-    public void lisaaCredit(Credit credit) { //mietin tätä miten esim kreditti ja yhdistelmä huomenna, moi huomisen minä //Moi
+    public void lisaaCredit(Credit credit) {
         pankkikortti.lisaaKreditti(credit);
     }
     
     /**
+     * lisää pankkiin uuden yhditelmäkortin
      * @param yhdistelma on Yhdistelmä-luokasta napattu.
      */
-    public void lisaaYhdistelma(Yhdistelmä yhdistelma) { //mietin tätä miten esim kreditti ja yhdistelmä huomenna, moi huomisen minä //Moi
+    public void lisaaYhdistelma(Yhdistelmä yhdistelma) {
         pankkikortti.lisaaYhdistelma(yhdistelma);
     }
     
@@ -85,25 +88,35 @@ public class Pankki {
         return pankkikortti.annaYhdistelma(asiakas.getTunnusNro());
     }
     
-    // Palauttaa asiakkaan tietyssä indeksissä
-    
+    /**
+     * Palauttaa asiakkaan tietyssä indeksissä
+     * @param i indeksi
+     * @return asiakkaan tietystä indeksistä
+     * @throws IndexOutOfBoundsException jos i on asiakas listan ulkopuolella
+     */
     public Asiakas annaAsiakas(int i) throws IndexOutOfBoundsException {
     	return asiakkaat.anna(i);
     }
     
-    // Lukee pankin tiedot tiedostosta
-    
+    /**
+     * Lukee pankin tiedot tiedostosta KESKEN
+     * @param nimi tiedoston nimi
+     * @throws SailoException jos liikaa (Dani?)
+     */    
     public void lueTiedostosta(String nimi) throws SailoException {
     	asiakkaat.lueTiedostosta(nimi);
     }
     
-    // Tallettaa pankin tiedot tiedostoon
-    
+    /**
+     * Tallettaa pankin tiedot tiedostoon KESKEN
+     * @throws SailoException jos liikaa (Dani?)
+     */
     public void talleta() throws SailoException {
     	asiakkaat.talleta();
     }
     
     /**
+     * Testaan, toimiiko aliohjelmat ennen kun laitan GUIControlleriin Pääikkunaan.
      * @param args ei tee mitään
      */
     public static void main(String[] args) {
@@ -117,11 +130,11 @@ public class Pankki {
             pankki.lisaa(jaskaJokunen1);
             
             //Pankkikortti
-            Pankkikortti harrasteet1 = new Pankkikortti();
-            Debit pitsi1 = new Debit();
-            pitsi1.vastaaDebit(jaskaJokunen1.getTunnusNro());
+            Pankkikortti pankkikortti = new Pankkikortti();
+            Debit debit = new Debit();
+            debit.vastaaDebit(jaskaJokunen1.getTunnusNro());
             
-            harrasteet1.lisaaDebitti(pitsi1);
+            pankkikortti.lisaaDebitti(debit);
             
             
             for (int i = 0; i < pankki.getAsiakkaat(); i++) {
@@ -132,7 +145,7 @@ public class Pankki {
             
             System.out.println("============= Pankkikortti testi =================");
             
-            List<Debit> debitit = harrasteet1.annaDebitti(jaskaJokunen1.getTunnusNro());
+            List<Debit> debitit = pankkikortti.annaDebitti(jaskaJokunen1.getTunnusNro());
             
             for (Debit deb : debitit) {
                 System.out.print(deb.getAsiakasNro() + " ");

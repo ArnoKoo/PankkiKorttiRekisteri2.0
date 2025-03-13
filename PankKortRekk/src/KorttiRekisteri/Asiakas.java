@@ -39,11 +39,10 @@ public class Asiakas {
 		sähköposti = "erik@yahoo.com";
 	}
 	
-	/*	Apumetodi, jolla saadaan täytettyä testiarvot jäsenelle.
+	/**	Apumetodi, jolla saadaan täytettyä testiarvot jäsenelle.
 	* 	Henkilötunnus arvotaan, jotta kahdella jäsenellä ei olisi
 	* 	samoja tietoja.
 	*/
-	
 	public void vastaaErik() {
          String apuhetu = arvoHetu();
          vastaaErik(apuhetu);

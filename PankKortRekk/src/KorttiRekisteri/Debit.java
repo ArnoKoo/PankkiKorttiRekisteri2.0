@@ -33,6 +33,7 @@ public class Debit implements Iterable <Pankkikortti> {
 	}
 	
     /**
+     * Alustetaan kortti tietylle asiakkaalle
      * @return asiakkaan numero
      */
     public int getAsiakasNro() {
@@ -40,6 +41,7 @@ public class Debit implements Iterable <Pankkikortti> {
     }	
     
     /**
+     * Oletusrakentaja
      * Palataan asiaan ht seiskassa
      */
     public Debit() {
@@ -56,7 +58,7 @@ public class Debit implements Iterable <Pankkikortti> {
      }
 	
 	/**
-	 * Tämän tarkoituksena on palauttaa esimerkki debit kortista
+	 * Tämän tarkoituksena on palauttaa esimerkki debit kortin tiedoista
 	 * @param nro numero
 	 */
 	public void vastaaDebit(int nro) {
@@ -72,6 +74,7 @@ public class Debit implements Iterable <Pankkikortti> {
 	}
 	
 	/**
+	 * Tulostetaan kortin tiedot järjestettyyn muotoon.
 	 * @param out tietoa ulos näkyville
 	 */
 	public void tulosta(PrintStream out) {
@@ -82,6 +85,7 @@ public class Debit implements Iterable <Pankkikortti> {
     }
 	 
 	 /**
+	  * Ohjataan tulostuksen printstreamin kautta
 	 * @param os avustaa tulosta -aliohjelmaa
 	 */
 	public void tulosta(OutputStream os) {
@@ -89,7 +93,7 @@ public class Debit implements Iterable <Pankkikortti> {
 	 }
 	 
 	 /**
-	  * rekisteroi() antaa tunnusnumeron pankkikortille ja antaa seuraavalle kortille numeron + 1 
+	  * rekisteroi() antaa tunnusnumeron pankkikortille ja antaa seuraavalle kortille tunnusnumeron + 1 
 	 * @return tunnusnumero
 	 */
 	public int rekisteroi() {
@@ -99,6 +103,7 @@ public class Debit implements Iterable <Pankkikortti> {
 	 }
 	 
 	 /**
+	  * Palauttaa kortin tunnusnumeron
 	 * @return tunnusnumeron
 	 */
 	 public int getTunnusNro( ) {
@@ -107,13 +112,13 @@ public class Debit implements Iterable <Pankkikortti> {
 	 
 	 /**
      * UUSI JUTTU ----------------------------------------------------------------
-     * Seurasin Vesan luentoa ja huomasin meiltä puuttuvan main aliohjelma. 
+     * Seurasin Vesan luentoa ja huomasin meiltä puuttuvan main aliohjelma. UPDATE: ei pakollinen
      * @param args ei tee mitään
      */
     public static void main(String[] args) {
-        Debit yhd = new Debit();
-         yhd.vastaaDebit(1);
-         yhd.tulosta(System.out);
+        Debit deb = new Debit();
+        deb.vastaaDebit(1);
+        deb.tulosta(System.out);
      }
 
     @Override
