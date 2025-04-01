@@ -1,5 +1,12 @@
 package KorttiRekisteri;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,19 +19,20 @@ import java.util.List;
  *
  */
 public class Pankkikortti {
-	
-	private static final int 	MAX_KORTIT 					= 40; //ei implementoitu ainakaan viel
-	private int 				lkm 						= 3; //tää olennaisempi
-	private String 				tiedostonNimi 				= "";
-	private Debit				debit[] 					= new Debit[MAX_KORTIT];
-	private Credit				credit[] 					= new Credit[MAX_KORTIT];
-	private Yhdistelmä			yhdistelmä[] 				= new Yhdistelmä[MAX_KORTIT];
-	
+    
+    private static final int    MAX_KORTIT                  = 40; //ei implementoitu ainakaan viel
+    private int                 lkm                         = 3; //tää olennaisempi
+    private String              tiedostonNimi               = "";
+    private Debit               debit[]                     = new Debit[MAX_KORTIT];
+    private Credit              credit[]                    = new Credit[MAX_KORTIT];
+    private Yhdistelmä          yhdistelmä[]                = new Yhdistelmä[MAX_KORTIT];
+    private boolean             muutettu                    = false;
+    
 
-	
-	//-------------------------------------------------------------------------------------------------------------------------------------- Arskan juttuja
-	
-	/**
+    
+    //-------------------------------------------------------------------------------------------------------------------------------------- Arskan juttuja
+    
+    /**
     * alustaa olion
     */
     public Pankkikortti() {
@@ -39,6 +47,7 @@ public class Pankkikortti {
      */
     public void lisaaDebitti(Debit deb) { //Debitkorttien logiikka, lisää uuden pankkikortin kokoelmaan
         debitLista.add(deb);
+        muutettu = true;
     }
     
     /**
@@ -58,31 +67,31 @@ public class Pankkikortti {
     
     
 
-	private Collection<Credit> creditLista = new ArrayList<Credit>(); //UUSI JUTTU: saa nähdä, miten tää soveltuu sinne taulukkoon muiden kanssa
-	
-	/**
-	 * @param cred lisättävä luottokortti
-	 */
-	public void lisaaKreditti(Credit cred) { //Luottokorttien logiikka, lisää uuden pankkikortin kokoelmaan
-	    creditLista.add(cred);
-	}
-	
-	/**
-	 * Palauttaa listan tietylle asiakkaalle kuuluvista korteista
-	 * @param tunnusNro tunnusnumero
-	 * @return löydetyt numerot
-	 */
-	public List<Credit> annaKreditti(int tunnusNro) {
-	    List<Credit> loydetyt = new ArrayList<Credit>();
-	    for (Credit cred : creditLista) { //Käy läpi kaikki kortit ja...
-	        if (cred.getAsiakasNro() == tunnusNro) { //...vertailee asiakkaan tunnusnumeroa
-	            loydetyt.add(cred); //lisää löydetyn
-	        }
-	    }
-	    return loydetyt; //palauttaa löydetyn
-	}
-	
-	
+    private Collection<Credit> creditLista = new ArrayList<Credit>(); //UUSI JUTTU: saa nähdä, miten tää soveltuu sinne taulukkoon muiden kanssa
+    
+    /**
+     * @param cred lisättävä luottokortti
+     */
+    public void lisaaKreditti(Credit cred) { //Luottokorttien logiikka, lisää uuden pankkikortin kokoelmaan
+        creditLista.add(cred);
+    }
+    
+    /**
+     * Palauttaa listan tietylle asiakkaalle kuuluvista korteista
+     * @param tunnusNro tunnusnumero
+     * @return löydetyt numerot
+     */
+    public List<Credit> annaKreditti(int tunnusNro) {
+        List<Credit> loydetyt = new ArrayList<Credit>();
+        for (Credit cred : creditLista) { //Käy läpi kaikki kortit ja...
+            if (cred.getAsiakasNro() == tunnusNro) { //...vertailee asiakkaan tunnusnumeroa
+                loydetyt.add(cred); //lisää löydetyn
+            }
+        }
+        return loydetyt; //palauttaa löydetyn
+    }
+    
+    
 
     private Collection<Yhdistelmä> yhdistelmaLista = new ArrayList<Yhdistelmä>();
     
@@ -109,61 +118,145 @@ public class Pankkikortti {
     }
     
     //-------------------------------------------------------------------------------------------------------------------------------------- Arskan jutut loppuvat
-	
-	/**
-	 * Lisää debit kortin, jos on liikaa kortteja niin heittää virheen
-	 * @param kortti kortti debittiä varten
-	 * @throws SailoException jos liikaa kortteja
-	 */
-	public void lisaaDebit(Debit kortti) throws SailoException{
-		if (lkm >= debit.length) throw new SailoException("Liikaa alkioita");
-		debit[lkm] = kortti;
-		lkm++;
-	}
-	
-	/**
-	 * Lisää credit kortin, jos on liikaa kortteja niin heittää virheen
-	 * @param kortti kortti credittiä varten
-	 * @throws SailoException jos liikaa kortteja
-	 */
-	public void lisaaCredit(Credit kortti) throws SailoException{
-		if (lkm >= credit.length) throw new SailoException("Liikaa alkioita");
-		credit[lkm] = kortti;
-		lkm++;
-	}
-	
-	/**
-	 * Lisää yhdistelmä kortin, jos on liikaa kortteja niin heittää virheen
-	 * @param kortti kortti yhdistelmäkorttia varten
-	 * @throws SailoException jos liikaa kortteja
-	 */
-	public void lisaaYhdistelmä(Yhdistelmä kortti) throws SailoException{
-		if (lkm >= yhdistelmä.length) throw new SailoException("Liikaa alkioita");
-		yhdistelmä[lkm] = kortti;
-		lkm++;
-	}
-		
-	
-	//Dani, mitä nää alla olevat tekevät?
-	
-	/**
-	 * lukee tiedostosta (TODO)
-	 * @param hakemisto tiedostonNimi kiinni tässä (Dani, täydennä)
-	 * @throws SailoException ei kye lukemaan (Dani, täydennä)
-	 */
-	public void lueTiedostosta(String hakemisto) throws SailoException {
-		tiedostonNimi = hakemisto + "/kortit.dat";
-		throw new SailoException("Ei osata vielä lukea tiedostoa " + tiedostonNimi);
-	}
-	
-	/**
-	 * Talentaa tiedostoon (TODO)
-	 * @throws SailoException ei kye tallentamaan (Dani, täydennä)
-	 */	
-	public void talleta() throws SailoException {
-		throw new SailoException("Ei osata vielä tallettaa tiedostoa " + tiedostonNimi);
-	}
-	
+    
+    /**
+     * Lisää debit kortin, jos on liikaa kortteja niin heittää virheen
+     * @param kortti kortti debittiä varten
+     * @throws SailoException jos liikaa kortteja
+     */
+    public void lisaaDebit(Debit kortti) throws SailoException{
+        if (lkm >= debit.length) throw new SailoException("Liikaa alkioita");
+        debit[lkm] = kortti;
+        lkm++;
+        muutettu = true;
+    }
+    
+    /**
+     * Lisää credit kortin, jos on liikaa kortteja niin heittää virheen
+     * @param kortti kortti credittiä varten
+     * @throws SailoException jos liikaa kortteja
+     */
+    public void lisaaCredit(Credit kortti) throws SailoException{
+        if (lkm >= credit.length) throw new SailoException("Liikaa alkioita");
+        credit[lkm] = kortti;
+        lkm++;
+        muutettu = true;
+    }
+    
+    /**
+     * Lisää yhdistelmä kortin, jos on liikaa kortteja niin heittää virheen
+     * @param kortti kortti yhdistelmäkorttia varten
+     * @throws SailoException jos liikaa kortteja
+     */
+    public void lisaaYhdistelmä(Yhdistelmä kortti) throws SailoException{
+        if (lkm >= yhdistelmä.length) throw new SailoException("Liikaa alkioita");
+        yhdistelmä[lkm] = kortti;
+        lkm++;
+        muutettu = true;
+    }
+    
+    /**
+     * lukee tiedostosta (TODO)
+     * @param tied tiedostonNimi kiinni tässä (Dani, täydennä)
+     * @throws SailoException ei kye lukemaan (Dani, täydennä)
+     */
+    public void lueTiedostosta(String tied) throws SailoException {
+        setTiedostonPerusNimi(tied);
+        try ( BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi())) ) {
+            String rivi;
+            while ( (rivi = fi.readLine()) != null ) {
+                rivi = rivi.trim();
+                if ( "".equals(rivi) || rivi.charAt(0) == ';' ) continue;
+                Debit deb = new Debit();
+                deb.parse(rivi); // voisi olla virhekäsittely
+                lisaaDebitti(deb);
+            }
+            muutettu = false;
+
+        } catch ( FileNotFoundException e ) {
+            throw new SailoException("Tiedosto " + getTiedostonNimi() + " ei aukea");
+        } catch ( IOException e ) {
+            throw new SailoException("Ongelmia tiedoston kanssa: " + e.getMessage());
+        }
+    }
+
+    
+    /**
+     * Luetaan aikaisemmin annetun nimisestä tiedostosta
+     * @throws SailoException jos tulee poikkeus
+     */
+    public void lueTiedostosta() throws SailoException {
+        lueTiedostosta(getTiedostonPerusNimi());
+    }
+
+    
+    /**
+     * Talentaa tiedostoon (TODO)
+     * @throws SailoException ei kye tallentamaan (Dani, täydennä)
+     */ 
+    public void tallenna() throws SailoException {
+        if ( !muutettu ) return;
+
+        File fbak = new File(getBakNimi());
+        File ftied = new File(getTiedostonNimi());
+        fbak.delete(); //  if ... System.err.println("Ei voi tuhota");
+        ftied.renameTo(fbak); //  if ... System.err.println("Ei voi nimetä");
+
+        try ( PrintWriter fo = new PrintWriter(new FileWriter(ftied.getCanonicalPath())) ) {
+            for (Debit deb : debitLista) {
+                fo.println(deb.toString());
+            }
+        } catch ( FileNotFoundException ex ) {
+            throw new SailoException("Tiedosto " + ftied.getName() + " ei aukea");
+        } catch ( IOException ex ) {
+            throw new SailoException("Tiedoston " + ftied.getName() + " kirjoittamisessa ongelmia");
+        }
+
+        muutettu = false;
+    }
+
+    public int getLkm() {
+        return lkm;
+    }
+
+
+    /**
+     * Asettaa tiedoston perusnimen ilan tarkenninta
+     * @param tied tallennustiedoston perusnimi
+     */
+    public void setTiedostonPerusNimi(String tied) {
+        tiedostonNimi = tied;
+    }
+
+
+    /**
+     * Palauttaa tiedoston nimen, jota käytetään tallennukseen
+     * @return tallennustiedoston nimi
+     */
+    public String getTiedostonPerusNimi() {
+        return tiedostonNimi;
+    }
+
+
+    /**
+     * Palauttaa tiedoston nimen, jota käytetään tallennukseen
+     * @return tallennustiedoston nimi
+     */
+    public String getTiedostonNimi() {
+        return tiedostonNimi + ".dat";
+    }
+
+
+    /**
+     * Palauttaa varakopiotiedoston nimen
+     * @return varakopiotiedoston nimi
+     */
+    public String getBakNimi() {
+        return tiedostonNimi + ".bak";
+    }
+
+    
+    
     /**
      * Testiohjelma harrastuksille UUSI JUTTU: Testataan, tulostuuko oikein. Lainattu Vesan esimerkkiohjelmasta ja muunneltu.
      * @param args ei käytössä
@@ -210,12 +303,5 @@ public class Pankkikortti {
         }
 
     }
-	
-	/**
-	 * @return Palauttaa lukumäärän
-	 */	
-	public int getLkm() {
-		return lkm;
-	}
-	
+    
 }

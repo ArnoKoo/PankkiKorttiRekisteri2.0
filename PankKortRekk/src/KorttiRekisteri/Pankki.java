@@ -1,72 +1,76 @@
 package KorttiRekisteri;
 
+import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 /**
-* Kerho-luokka, joka huolehtii jäsenistöstä.  Pääosin kaikki metodit
-* ovat vain "välittäjämetodeja" jäsenistöön.
-* @author OMISTAJA
-* @version 10 Mar 2025
-*
-*/
+ * Kerho-luokka, joka huolehtii jäsenistöstä. Pääosin kaikki metodit
+ * ovat vain "välittäjämetodeja" jäsenistöön.
+ * 
+ * Tämä versio käyttää samaa tiedostonimi- ja oletustiedostojen luontilogiikkaa
+ * kuin Asiakkaat- ja Pankkikortti-luokissanne, jolloin sekä "nimet" että "asiakkaat"
+ * -tiedostot (ja niiden varakopiot) luodaan ja päivitetään oikein.
+ * 
+ * @author OMISTAJA
+ * @version 10 Mar 2025
+ */
 public class Pankki {
-	private final Asiakkaat asiakkaat = new Asiakkaat();
-	private final Pankkikortti pankkikortti = new Pankkikortti();
-		
-	/**
-	 * @return pankin asiakasmäärän
-	 */
-	public int getAsiakkaat() {
-		return asiakkaat.getLkm();
-	}
-	
-	/**
-	* Poistaa asiakkaan ja korteista ne joilla on nro. Kesken.
-	* @param nro viitenumero, jonka mukaan poistetaan
-	* @return montako jäsentä poistettiin
-	*/
+    private Asiakkaat asiakkaat = new Asiakkaat();
+    private Pankkikortti pankkikortti = new Pankkikortti();
+        
+    /**
+     * @return pankin asiakasmäärän
+     */
+    public int getAsiakkaat() {
+        return asiakkaat.getLkm();
+    }
+    
+    /**
+     * Poistaa asiakkaan ja korteista ne joilla on nro. Kesken.
+     * @param nro viitenumero, jonka mukaan poistetaan
+     * @return montako jäsentä poistettiin
+     */
     public int poista(@SuppressWarnings("unused") int nro) {
-          return 0;
+        return 0;
     }
  
     /**
-     * Lisää pankkiin uuden asiakkaan, Sailoexception varmistaa ettei liikaa asiakkaita
+     * Lisää pankkiin uuden asiakkaan, SailoException varmistaa ettei liikaa asiakkaita
      * @param asiakas on asiakas
      * @throws SailoException jos liikaa
      */    
     public void lisaa(Asiakas asiakas) throws SailoException {
-    	asiakkaat.lisaa(asiakas);
+        asiakkaat.lisaa(asiakas);
     }
     
     /**
-     * lisää pankkiin uuden debit kortin
-     * @param debit on Debit-luokasta napattu.
+     * Lisää pankkiin uuden debit-kortin.
+     * @param debit Debit-luokasta napattu kortti.
      */
-    public void lisaaDebit(Debit debit) { //mietin tätä miten esim kreditti ja yhdistelmä huomenna, moi huomisen minä //Moi
+    public void lisaaDebit(Debit debit) {
         pankkikortti.lisaaDebitti(debit);
     }
     
     /**
-     * lisää pankkiin uuden luottokortin
-     * @param credit on Credit-luokasta napattu.    
+     * Lisää pankkiin uuden luottokortin.
+     * @param credit Credit-luokasta napattu kortti.
      */
     public void lisaaCredit(Credit credit) {
         pankkikortti.lisaaKreditti(credit);
     }
     
     /**
-     * lisää pankkiin uuden yhditelmäkortin
-     * @param yhdistelma on Yhdistelmä-luokasta napattu.
+     * Lisää pankkiin uuden yhdistelmäkortin.
+     * @param yhdistelma Yhdistelmä-luokasta napattu kortti.
      */
     public void lisaaYhdistelma(Yhdistelmä yhdistelma) {
         pankkikortti.lisaaYhdistelma(yhdistelma);
     }
     
-    
-    
     /**
      * @param asiakas asiakas
-     * @return tietorakenne jossa viiteet löydetteyihin debitteihin
+     * @return tietorakenne, jossa viiteet löydettyihin debit-kortteihin
      */
     public List<Debit> annaDebit(Asiakas asiakas) {
         return pankkikortti.annaDebitti(asiakas.getTunnusNro());
@@ -74,7 +78,7 @@ public class Pankki {
     
     /**
      * @param asiakas asiakas
-     * @return tietorakenne jossa viiteet löydetteyihin luottokortteihi
+     * @return tietorakenne, jossa viiteet löydettyihin luottokortteihin
      */
     public List<Credit> annaCredit(Asiakas asiakas) {
         return pankkikortti.annaKreditti(asiakas.getTunnusNro());
@@ -82,78 +86,148 @@ public class Pankki {
     
     /**
      * @param asiakas asiakas
-     * @return tietorakenne jossa viiteet löydetteyihin yhdistelmäkortteihin
+     * @return tietorakenne, jossa viiteet löydettyihin yhdistelmäkortteihin
      */
     public List<Yhdistelmä> annaYhdistelma(Asiakas asiakas) {
         return pankkikortti.annaYhdistelma(asiakas.getTunnusNro());
     }
-    
+
     /**
-     * Palauttaa asiakkaan tietyssä indeksissä
+     * Palauttaa asiakkaan tietyssä indeksissä.
      * @param i indeksi
      * @return asiakkaan tietystä indeksistä
-     * @throws IndexOutOfBoundsException jos i on asiakas listan ulkopuolella
+     * @throws IndexOutOfBoundsException jos indeksi on listan ulkopuolella
      */
     public Asiakas annaAsiakas(int i) throws IndexOutOfBoundsException {
-    	return asiakkaat.anna(i);
+        return asiakkaat.anna(i);
     }
     
     /**
-     * Lukee pankin tiedot tiedostosta KESKEN
-     * @param nimi tiedoston nimi
-     * @throws SailoException jos liikaa (Dani?)
-     */    
-    public void lueTiedostosta(String nimi) throws SailoException {
-    	asiakkaat.lueTiedostosta(nimi);
-    }
-    
-    /**
-     * Tallettaa pankin tiedot tiedostoon KESKEN
-     * @throws SailoException jos liikaa (Dani?)
+     * Lukee pankin tiedot tiedostosta.
+     * Luodaan uudet Asiakkaat- ja Pankkikortti-oliot, asetetaan tiedostopolut,
+     * ja yritetään lukea molemmat tiedostot. Jos tiedostoja ei ole, luodaan oletustiedostot.
+     * @param nimi tiedoston nimi (hakemisto, esim. "AgoBank")
+     * @throws SailoException jos tiedostojen lukemisessa tulee ongelmia
      */
-    public void talleta() throws SailoException {
-    	asiakkaat.tallenna();
+    public void lueTiedostosta(String nimi) throws SailoException {
+        // Luo uudet tietorakenteet tyhjentääkseen mahdollisen edellisen datan
+        asiakkaat = new Asiakkaat();
+        pankkikortti = new Pankkikortti();
+
+        // Aseta tiedostopolut
+        setTiedosto(nimi);
+        try {
+            asiakkaat.lueTiedostosta();
+        } catch (Exception e) {
+            System.out.println("Error reading asiakkaat file: " + e.getMessage());
+        }
+
+        try {
+            pankkikortti.lueTiedostosta();
+        } catch (Exception e) {
+            System.out.println("Error reading pankkikortti file: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Tallentaa pankin tiedot tiedostoon.
+     * Ensiksi tallennetaan asiakkaat, sitten pankkikortit.
+     * @throws SailoException jos tallentamisessa tulee ongelmia
+     */
+    public void tallenna() throws SailoException {
+        String virhe = "";
+        try {
+            asiakkaat.tallenna();
+        } catch (SailoException ex) {
+            virhe = ex.getMessage();
+        }
+
+        try {
+            pankkikortti.tallenna();
+        } catch (SailoException ex) {
+            virhe += ex.getMessage();
+        }
+        if (!"".equals(virhe))
+            throw new SailoException(virhe);
+    }
+
+    /**
+     * Asettaa tiedostopolut molemmille osioille.
+     * Luo tarvittaessa hakemiston.
+     * @param nimi Hakemiston nimi, esim. "AgoBank"
+     */
+    public void setTiedosto(String nimi) {
+        File dir = new File(nimi);
+        dir.mkdirs();
+        String hakemistonNimi = "";
+        if (!nimi.isEmpty())
+            hakemistonNimi = nimi + "/";
+        // Asiakkaiden tiedostonimi: "hakemistonNimi" + "nimet"
+        asiakkaat.setTiedostonPerusNimi(hakemistonNimi + "nimet");
+        // Pankkikorttien tiedostonimi: "hakemistonNimi" + "asiakkaat"
+        pankkikortti.setTiedostonPerusNimi(hakemistonNimi + "asiakkaat");
+        System.out.println("Asiakkaat file path: " + hakemistonNimi + "nimet");
+        System.out.println("Pankkikortti file path: " + hakemistonNimi + "asiakkaat");
     }
     
     /**
-     * Testaan, toimiiko aliohjelmat ennen kun laitan GUIControlleriin Pääikkunaan.
-     * @param args ei tee mitään
+     * Etsii asiakkaita annetun hakuehdon perusteella.
+     * @param hakuehto hakuehto
+     * @param k kentän indeksi, jota verrataan (esim. nimi tai puhelinnumero)
+     * @return löydetyt asiakkaat
+     */
+    public Collection<Asiakas> etsi(String hakuehto, int k) { 
+        return asiakkaat.etsi(hakuehto, k); 
+    }
+
+    /**
+     * Testiohjelma.
+     * Luodaan pankki, lisätään asiakkaita ja kortteja, ja tallennetaan tiedostoon.
+     * @param args aa
      */
     public static void main(String[] args) {
         Pankki pankki = new Pankki();
-        
+
         try {
-            //Asiakas
-            Asiakas jaskaJokunen1 = new Asiakas();
-            jaskaJokunen1.rekisteroi();
-            jaskaJokunen1.vastaaErik();
-            pankki.lisaa(jaskaJokunen1);
-            
-            //Pankkikortti
-            Pankkikortti pankkikortti = new Pankkikortti();
-            Debit debit = new Debit();
-            debit.vastaaDebit(jaskaJokunen1.getTunnusNro());
-            
-            pankkikortti.lisaaDebitti(debit);
-            
-            
-            for (int i = 0; i < pankki.getAsiakkaat(); i++) {
-                Asiakas asiakas = pankki.annaAsiakas(i);
+            pankki.lueTiedostosta("AgoBank");
+
+            Asiakas aku1 = new Asiakas(), aku2 = new Asiakas();
+            aku1.rekisteroi();
+            aku1.vastaaErik();
+            aku2.rekisteroi();
+            aku2.vastaaErik();
+
+            pankki.lisaa(aku1);
+            pankki.lisaa(aku2);
+            int id1 = aku1.getTunnusNro();
+            int id2 = aku2.getTunnusNro();
+            Debit pitsi11 = new Debit(id1);
+            pitsi11.vastaaDebit(id1);
+            pankki.lisaaDebit(pitsi11);
+            Debit pitsi21 = new Debit(id2);
+            pitsi21.vastaaDebit(id2);
+            pankki.lisaaDebit(pitsi21);
+
+            System.out.println("============= Kerhon testi =================");
+            Collection<Asiakas> asiakkaat = pankki.etsi("", -1);
+            int i = 0;
+            for (Asiakas asiakas : asiakkaat) {
                 System.out.println("Jäsen paikassa: " + i);
                 asiakas.tulosta(System.out);
+                List<Debit> loytyneet = pankki.annaDebit(asiakas);
+                for (Debit deb : loytyneet) {
+                    deb.tulosta(System.out);
+                }
+                i++;
             }
-            
-            System.out.println("============= Pankkikortti testi =================");
-            
-            List<Debit> debitit = pankkikortti.annaDebitti(jaskaJokunen1.getTunnusNro());
-            
-            for (Debit deb : debitit) {
-                System.out.print(deb.getAsiakasNro() + " ");
-                deb.tulosta(System.out);
-            }
-            
+
         } catch (SailoException ex) {
             System.out.println(ex.getMessage());
+        }
+        try {
+            pankki.tallenna();
+        } catch (SailoException e) {
+            e.printStackTrace();
         }
     }
 }
