@@ -112,7 +112,7 @@ public class Pankki {
      * @throws SailoException jos liikaa (Dani?)
      */
     public void talleta() throws SailoException {
-    	asiakkaat.talleta();
+    	asiakkaat.tallenna();
     }
     
     /**

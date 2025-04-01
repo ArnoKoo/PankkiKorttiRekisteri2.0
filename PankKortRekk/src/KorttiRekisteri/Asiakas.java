@@ -2,6 +2,8 @@ package KorttiRekisteri;
 
 import java.io.*;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 /**
 * Kerhon jäsen joka osaa mm. itse huolehtia tunnusNro:staan.
 * Pohjana on käytetty Vesan esimerkkiä
@@ -47,6 +49,39 @@ public class Asiakas {
          String apuhetu = arvoHetu();
          vastaaErik(apuhetu);
      }
+	
+	   private void setTunnusNro(int nr) {
+	        tunnusNro = nr;
+	        if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
+	    }
+	
+	@Override
+    public String toString() {
+	    return "" + 
+	            getTunnusNro() + "|" +
+	            nimi + "|" +
+	            hetu + "|" +
+	            katuosoite + "|" +
+	            postinumero + "|" +
+	            postitoimipaikka + "|" +
+	            puhelinnumero + "|" +
+	            sähköposti;
+	}
+	
+	/**
+	 * @param rivi aa
+	 */
+	public void parse(String rivi) {
+	    var sb = new StringBuffer(rivi);
+	    setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
+	    nimi = Mjonot.erota(sb, '|', nimi);
+	    hetu = Mjonot.erota(sb, '|', hetu);
+	    katuosoite = Mjonot.erota(sb, '|', katuosoite);
+	    postinumero = Mjonot.erota(sb, '|', postinumero);
+	    postitoimipaikka = Mjonot.erota(sb, '|', postitoimipaikka);
+	    puhelinnumero = Mjonot.erota(sb, '|', puhelinnumero);
+	    sähköposti = Mjonot.erota(sb, '|', sähköposti);
+	}
 	
 	// Tulostetaan henkilön tiedot
 	
