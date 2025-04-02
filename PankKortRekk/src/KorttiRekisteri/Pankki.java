@@ -169,7 +169,7 @@ public class Pankki {
         System.out.println("Asiakkaat file path: " + hakemistonNimi + "nimet");
         System.out.println("Pankkikortti file path: " + hakemistonNimi + "asiakkaat");
     }
-    
+
     /**
      * Etsii asiakkaita annetun hakuehdon perusteella.
      * @param hakuehto hakuehto

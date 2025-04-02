@@ -29,7 +29,12 @@ public class PaaikkunaGUIController implements Initializable {
     @FXML private ScrollPane panelAsiakas;
     
     @FXML private void TestiPesti() {
-        Dialogs.showMessageDialog("Ei osata viel :D");
+        try {
+            pankki.tallenna();
+        } catch (SailoException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     @FXML private void Apua() {
@@ -52,6 +57,7 @@ public class PaaikkunaGUIController implements Initializable {
         
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
+        pankki = new Pankki();
         alusta();
     }
     
