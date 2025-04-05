@@ -28,7 +28,7 @@ public class Asiakkaat implements Iterable <Asiakas> {
     private boolean             muutettu = false;
     private int                 lkm = 0;
     private String              kokoNimi = "";
-    private String              tiedostonPerusNimi = "nimet";
+    private String              tiedostonPerusNimi = "asiakkaat";
     private Asiakas             alkiot[] = new Asiakas[MAX_ASIAKKAAT];
     
     public Asiakkaat() {
@@ -62,27 +62,34 @@ public class Asiakkaat implements Iterable <Asiakas> {
      */
     public void lueTiedostosta(String tied) throws SailoException {
         setTiedostonPerusNimi(tied);
-        try ( BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi())) ) {
-            kokoNimi = fi.readLine();
-            if ( kokoNimi == null ) throw new SailoException("Kerhon nimi puuttuu");
-            String rivi = fi.readLine();
-            if ( rivi == null ) throw new SailoException("Maksimikoko puuttuu");
-            // int maxKoko = Mjonot.erotaInt(rivi,10); // tehdään jotakin
 
-            while ( (rivi = fi.readLine()) != null ) {
+        //Debuggausta
+        String fileName = getTiedostonNimi();
+        File file = new File(fileName);
+        System.out.println("DEBUG: Luetaan tiedostoa: " + file.getAbsolutePath());
+        System.out.println("DEBUG: Olemassa? " + file.exists());
+
+        try (BufferedReader fi = new BufferedReader(new FileReader(file))) {
+            kokoNimi = fi.readLine();
+            if (kokoNimi == null) throw new SailoException("Kerhon nimi puuttuu");
+            String rivi = fi.readLine();
+            if (rivi == null) throw new SailoException("Maksimikoko puuttuu");
+
+            while ((rivi = fi.readLine()) != null) {
                 rivi = rivi.trim();
-                if ( "".equals(rivi) || rivi.charAt(0) == ';' ) continue;
+                if ("".equals(rivi) || rivi.charAt(0) == ';') continue;
                 Asiakas asiakas = new Asiakas();
-                asiakas.parse(rivi); // voisi olla virhekäsittely
+                asiakas.parse(rivi);
                 lisaa(asiakas);
             }
             muutettu = false;
-        } catch ( FileNotFoundException e ) {
+        } catch (FileNotFoundException e) {
             throw new SailoException("Tiedosto " + getTiedostonNimi() + " ei aukea");
-        } catch ( IOException e ) {
+        } catch (IOException e) {
             throw new SailoException("Ongelmia tiedoston kanssa: " + e.getMessage());
         }
     }
+
 
 
     

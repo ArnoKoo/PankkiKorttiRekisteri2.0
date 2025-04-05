@@ -138,14 +138,9 @@ public class Pankki {
         String virhe = "";
         try {
             asiakkaat.tallenna();
-        } catch (SailoException ex) {
-            virhe = ex.getMessage();
-        }
-
-        try {
             pankkikortti.tallenna();
         } catch (SailoException ex) {
-            virhe += ex.getMessage();
+            virhe = ex.getMessage();
         }
         if (!"".equals(virhe))
             throw new SailoException(virhe);
@@ -163,11 +158,9 @@ public class Pankki {
         if (!nimi.isEmpty())
             hakemistonNimi = nimi + "/";
         // Asiakkaiden tiedostonimi: "hakemistonNimi" + "nimet"
-        asiakkaat.setTiedostonPerusNimi(hakemistonNimi + "nimet");
+        asiakkaat.setTiedostonPerusNimi(hakemistonNimi + "asiakkaat");
         // Pankkikorttien tiedostonimi: "hakemistonNimi" + "asiakkaat"
-        pankkikortti.setTiedostonPerusNimi(hakemistonNimi + "asiakkaat");
-        System.out.println("Asiakkaat file path: " + hakemistonNimi + "nimet");
-        System.out.println("Pankkikortti file path: " + hakemistonNimi + "asiakkaat");
+        pankkikortti.setTiedostonPerusNimi(hakemistonNimi + "kortit");
     }
 
     /**

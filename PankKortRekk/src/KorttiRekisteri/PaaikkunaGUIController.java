@@ -23,9 +23,9 @@ import javafx.stage.Stage;
  * @version 9.2.2025
  *
  */
-public class PaaikkunaGUIController implements Initializable {
+public class PaaikkunaGUIController implements Initializable, ModalControllerInterface<String> {
     
-    @FXML private ListChooser<Asiakas> chooserAsiakkaat; //jäsenien/asiakkaiden käsittely
+    @FXML private ListChooser<Asiakas> chooserAsiakkaat; //jäsenten/asiakkaiden käsittely
     @FXML private ScrollPane panelAsiakas;
     @FXML private ScrollPane panelKortti;
     
@@ -33,8 +33,8 @@ public class PaaikkunaGUIController implements Initializable {
         try {
             pankki.tallenna();
         } catch (SailoException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            // Parannettu virheenkäsittely:
+            Dialogs.showMessageDialog("Tallennuksessa ongelmia: " + e.getMessage());
         }
     }
     
@@ -52,182 +52,192 @@ public class PaaikkunaGUIController implements Initializable {
     
     //Jäsen muokkaukset
     @FXML private void handleMuokkaJasen() {
-        MuokkaJasenGUIController.alkuNaytto(null, "Muokkaa jäsenen tietoja"); //toimii // ei itseasiassa toimi // nyt toimii, oli ongelma FXML tiedostossa, joka oli bin kansiossa
+        MuokkaJasenGUIController.alkuNaytto(null, "Muokkaa jäsenen tietoja");
     }
     
-        
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
-        pankki = new Pankki();
-        alusta();
+        try {
+            pankki.lueTiedostosta("AgoBank");  // vain tämä
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Tiedoston lukemisessa ongelmia: " + e.getMessage());
+        }
+
+        alusta(); // ilman tiedostonlukua
+        hae(0);
     }
+
     
     /**
      * Manu is the party king
      */
     @FXML
-    public void handleLisaaAsiakas() { //kun käyttäjä painaa "Lisää Asiakas" nappia.
-        //LisaaJasenGUIController.alkuNaytto(null, "Lisää uusi jäsen"); //toimii 
-        System.out.println("Nappia painettu!"); //mun debug juttu
+    public void handleLisaaAsiakas() {
+        System.out.println("Nappia painettu!");
         lisaaAsiakas();
     }
     
     private void hae(int asiakasNumero) {
-        chooserAsiakkaat.clear(); //tyhjennetään lista incase dispareita on olemassa
-        int indeksi = 0; //auttaa kattoo mistä kohti meil löytyy jäsennumero
-        for(int i = 0; i < pankki.getAsiakkaat(); i++) { //käydään läpi kaikki pankin asiakkaat ja lisätään ne valintalistaan
+        chooserAsiakkaat.clear();
+        int indeksi = 0;
+        System.out.println("Asiakkaita yhteensä: " + pankki.getAsiakkaat());
+        for (int i = 0; i < pankki.getAsiakkaat(); i++) {
             Asiakas asiakas = pankki.annaAsiakas(i); 
             if (asiakas.getTunnusNro() == asiakasNumero) {
                 indeksi = i;
             }
-            chooserAsiakkaat.add("" + asiakas.getNimi(), asiakas); //Lisätään valittu asiakas //Update: Videota katsoessa ongelmana on se, ettei olla määritelty nimiä kunnolla, niin käytetään tunnusNro väliaikaisena ratkaisuna //Update: holy fucking shit
+            chooserAsiakkaat.add("" + asiakas.getNimi(), asiakas);
         }
-        chooserAsiakkaat.setSelectedIndex(indeksi); //valitsee listasta sen asiakkaan, joka vastaa annettua asiakasNumeroa
+        chooserAsiakkaat.setSelectedIndex(indeksi);
     }
     
-    private void lisaaAsiakas() { //itsestäänselvä
-        Asiakas uusi = new Asiakas(); //luodaan oma muuttuja johon heitetään Asiakkaasta tietoa
-        uusi.rekisteroi(); //rekisteröidään (= annetaan tunnusNro)
-        uusi.vastaaErik(); //täytetään oletustiedoilla  TODO: random tietoja ht6 varten
+    private void lisaaAsiakas() {
+        Asiakas uusi = new Asiakas();
+        uusi.rekisteroi();
+        uusi.vastaaErik();
         try {
-            pankki.lisaa(uusi); //lisää asiakkaan pankin rekisteriin
-        } catch (SailoException e) { //Jos tulee SailoException / on liikaa...
+            pankki.lisaa(uusi);
+        } catch (SailoException e) {
             Dialogs.showMessageDialog("Ongelma uuden lisäämisessä: " + e.getMessage());
         }
-        hae(uusi.getTunnusNro()); //päivitetään käyttöliittymä, jotta näkyisi listassa.
+        hae(uusi.getTunnusNro());
     }
     
-    private Pankki pankki;
-    private TextArea areaAsiakas = new TextArea(); //Rakennusteline
-    private TextArea areaKortti = new TextArea(); // Rakennusteline kortteja varten
+    private Pankki pankki = new Pankki();
+    private TextArea areaAsiakas = new TextArea();
+    private TextArea areaKortti = new TextArea();
     
     public void setPankki(Pankki pankki) {
         this.pankki = pankki;
     }
     
     private void alusta() {
-    	
-        panelAsiakas.setContent(areaAsiakas); //asetetaan panelAsiakas kunnolla TextAreaan
-        areaAsiakas.setFont(new Font("Courier New", 12)); //uudistetaan fontit ja sen koko
-        panelAsiakas.setFitToHeight(true); //tekstialue mukautuu panelin korkeuteen.
-        chooserAsiakkaat.clear(); //jos sielä on disparina jo jotain tietoa, poistetaan kaikki
-        chooserAsiakkaat.addSelectionListener(e -> naytaAsiakas()); //Kun käyttäjä valitsee asiakkaan listalta, naytaAsiakas metodia kutsutaan ja valitun asiakkaan tiedot tulee näkyville.
+        panelAsiakas.setContent(areaAsiakas);
+        areaAsiakas.setFont(new Font("Courier New", 12));
+        panelAsiakas.setFitToHeight(true);
         
-        panelKortti.setContent(areaKortti); //asetetaan panelAsiakas kunnolla TextAreaan
-        areaKortti.setFont(new Font("Courier New", 12)); //uudistetaan fontit ja sen koko
-        panelKortti.setFitToHeight(true); //tekstialue mukautuu panelin korkeuteen.
-        chooserAsiakkaat.clear(); //jos sielä on disparina jo jotain tietoa, poistetaan kaikki
-        chooserAsiakkaat.addSelectionListener(k -> naytaKortti()); //Kun käyttäjä valitsee asiakkaan listalta, naytaAsiakas metodia kutsutaan ja valitun asiakkaan tiedot tulee näkyville.
-       
+        panelKortti.setContent(areaKortti);
+        areaKortti.setFont(new Font("Courier New", 12));
+        panelKortti.setFitToHeight(true);
+        
+        chooserAsiakkaat.addSelectionListener(e -> {
+            System.out.println("Asiakas valittu: " + chooserAsiakkaat.getSelectedObject());
+            naytaAsiakas();
+            naytaKortti();
+        });
     }
+
     
     private void naytaAsiakas() {
-        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject(); //hakee valitun asiakkaan
-        if (asiakasKohdalla == null) return; //varmistetaan vaan
-        areaAsiakas.setText(""); //tyhjennetään tekstialue
+        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
+        if (asiakasKohdalla == null) return;
+        areaAsiakas.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaAsiakas)) {
-            asiakasKohdalla.tulosta(os);  //tulostetaan asiakkaan perustiedot
+            asiakasKohdalla.tulosta(os);
         }            
     }
     
     private void naytaKortti() {
-    	Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject(); //hakee valitun asiakkaan
-        if (asiakasKohdalla == null) return; //varmistetaan vaan
-        areaKortti.setText(""); //tyhjennetään tekstialue
+        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
+        if (asiakasKohdalla == null) return;
+        areaKortti.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaKortti)) {
-            
-            //Debit
-            List<Debit> debitit = pankki.annaDebit(asiakasKohdalla); //haetaan, onko debit korttia lisätty         
-            for (Debit deb : debitit) { //jos on, tulostetaan
+            List<Debit> debitit = pankki.annaDebit(asiakasKohdalla);
+            System.out.println("Debit kortteja löytyi: " + debitit.size());
+            if (debitit.isEmpty()) {
+                os.println("Ei debit-kortteja.");
+            }
+            for (Debit deb : debitit) {
                 deb.tulosta(os);
                 os.println(" ");
             }
-              
-            List<Credit> creditit = pankki.annaCredit(asiakasKohdalla);         
-            for (Credit cred : creditit) { //jos on, tulostetaan
-                cred.tulosta(os); 
+
+            List<Credit> creditit = pankki.annaCredit(asiakasKohdalla);
+            System.out.println("Debit kortteja löytyi: " + creditit.size());
+            if (creditit.isEmpty()) {
+                os.println("Ei luottokortteja.");
+            }
+            for (Credit cred : creditit) {
+                cred.tulosta(os);
                 os.println(" ");
-            } 
-            
-            List<Yhdistelmä> yhdistelmat = pankki.annaYhdistelma(asiakasKohdalla);         
-            for (Yhdistelmä yhd : yhdistelmat) { //jos on, tulostetaan
+            }
+
+            List<Yhdistelmä> yhdistelmat = pankki.annaYhdistelma(asiakasKohdalla);
+            System.out.println("Debit kortteja löytyi: " + yhdistelmat.size());
+            if (yhdistelmat.isEmpty()) {
+                os.println("Ei yhdistelmäkortteja.");
+            }
+            for (Yhdistelmä yhd : yhdistelmat) {
                 yhd.tulosta(os);
                 os.println(" ");
             }
         }            
     }
-    
+
     
     @FXML private void handlePoistaJasen() {
-        PoistaJasenGUIController.alkuNaytto(null, "Poista jäsen"); //toimii // ei toimi
+        PoistaJasenGUIController.alkuNaytto(null, "Poista jäsen");
     }
     
-    //Debit kortin logiikka UUSI JUTTU -----------------------------------------------------
     @FXML private void handleLisaaDebitKortti() { 
-        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject(); //hakee valitun asiakkaan chooserasiakkaat komponentista
+        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
-        Debit deb = new Debit(); //luo debit kortin
-        deb.rekisteroi(); //rekisteröi kortin kutsumalla sitä
-        deb.vastaaDebit(asiakasKohdalla.getTunnusNro()); //täyttää kortin tiedot    TODO: posauta oikea dialogi, HT7
-        pankki.lisaaDebit(deb); //lisää rekisteröidyn kortin pankin rekisteriin.
-        hae(asiakasKohdalla.getTunnusNro()); //päivittää näkymän kutsumalla tunnusNro, jotta lisätty kortti näkyy käyttöliittymäs
+        Debit deb = new Debit();
+        deb.rekisteroi();
+        deb.vastaaDebit(asiakasKohdalla.getTunnusNro());
+        pankki.lisaaDebit(deb);
+        hae(asiakasKohdalla.getTunnusNro());
     }
     
-    //Luottokortin logiikka UUSI JUTTU -----------------------------------------------------
     @FXML private void handleLisaaLuottoKortti() {
         Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
         Credit cre = new Credit();
         cre.rekisteroi();
-        cre.vastaaCredit(asiakasKohdalla.getTunnusNro()); //TODO: posauta oikea dialogi, HT7
+        cre.vastaaCredit(asiakasKohdalla.getTunnusNro());
         pankki.lisaaCredit(cre);
         hae(asiakasKohdalla.getTunnusNro());
     }
     
-    //Yhdistelmäkortin logiikka UUSI JUTTU -----------------------------------------------------
     @FXML private void handleLisaaYhdistelmaKortti() {
         Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
         Yhdistelmä yhd = new Yhdistelmä();
         yhd.rekisteroi();
-        yhd.vastaaYhdistelmä(asiakasKohdalla.getTunnusNro()); //TODO: posauta oikea dialogi, HT7
+        yhd.vastaaYhdistelmä(asiakasKohdalla.getTunnusNro());
         pankki.lisaaYhdistelma(yhd);
         hae(asiakasKohdalla.getTunnusNro());
     }
     
     @FXML private void handleMuokkaaPankkiKorttiVali() {
-        MuokkaaGUIController.alkuNaytto(null, "Muokkaa pankkikortin tietoja"); //toimii
+        MuokkaaGUIController.alkuNaytto(null, "Muokkaa pankkikortin tietoja");
     }
     
     @FXML private void handlePoistaPankkiKorttiVali() {
-        PoistaPankkiKorttiGUIController.alkuNaytto(null, "Poista pankkikortti"); //toimii
+        PoistaPankkiKorttiGUIController.alkuNaytto(null, "Poista pankkikortti");
     }
     
     /**
      * @param modalityStage Stage-olio
      * @param oletus välitetään ikkunaan
-     * @return syöttämä arvo tai `null`
+     * @return syöttämä arvo tai null
      */
     public static String alkuNaytto(Stage modalityStage, String oletus) {
         return ModalController.showModal(MuokkaJasenGUIController.class.getResource("PaaikkunaGUIView.fxml"), "Tervetuloa AgoBank:iin!", modalityStage, oletus);
     }
-    /*
+
     @Override
     public String getResult() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void handleShown() {
-        // TODO Auto-generated method stub
-        
+    public void handleShown() { 
+        //
     }
 
     @Override
-    public void setDefault(String oletus) {
-        // TODO Auto-generated method stub
-        
+    public void setDefault(String arg0) { 
+        //
     }
-    */
 }

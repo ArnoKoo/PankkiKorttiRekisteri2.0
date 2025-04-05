@@ -164,6 +164,13 @@ public class Pankkikortti {
      */
     public void lueTiedostosta(String tied) throws SailoException {
         setTiedostonPerusNimi(tied);
+        
+        //Debuggausta
+        String fileName = getTiedostonNimi();
+        File file = new File(fileName);
+        System.out.println("DEBUG: Luetaan tiedostoa: " + file.getAbsolutePath());
+        System.out.println("DEBUG: Olemassa? " + file.exists());
+        
         try ( BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi())) ) {
             String rivi;
             while ( (rivi = fi.readLine()) != null ) {
