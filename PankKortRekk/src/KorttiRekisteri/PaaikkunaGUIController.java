@@ -27,6 +27,7 @@ public class PaaikkunaGUIController implements Initializable {
     
     @FXML private ListChooser<Asiakas> chooserAsiakkaat; //jäsenien/asiakkaiden käsittely
     @FXML private ScrollPane panelAsiakas;
+    @FXML private ScrollPane panelKortti;
     
     @FXML private void TestiPesti() {
         try {
@@ -98,18 +99,26 @@ public class PaaikkunaGUIController implements Initializable {
     
     private Pankki pankki;
     private TextArea areaAsiakas = new TextArea(); //Rakennusteline
+    private TextArea areaKortti = new TextArea(); // Rakennusteline kortteja varten
     
     public void setPankki(Pankki pankki) {
         this.pankki = pankki;
     }
     
     private void alusta() {
+    	
         panelAsiakas.setContent(areaAsiakas); //asetetaan panelAsiakas kunnolla TextAreaan
         areaAsiakas.setFont(new Font("Courier New", 12)); //uudistetaan fontit ja sen koko
         panelAsiakas.setFitToHeight(true); //tekstialue mukautuu panelin korkeuteen.
         chooserAsiakkaat.clear(); //jos sielä on disparina jo jotain tietoa, poistetaan kaikki
-        System.out.println("LAMBADA"); //pieni debug, kuuntelin biisiä
         chooserAsiakkaat.addSelectionListener(e -> naytaAsiakas()); //Kun käyttäjä valitsee asiakkaan listalta, naytaAsiakas metodia kutsutaan ja valitun asiakkaan tiedot tulee näkyville.
+        
+        panelKortti.setContent(areaKortti); //asetetaan panelAsiakas kunnolla TextAreaan
+        areaKortti.setFont(new Font("Courier New", 12)); //uudistetaan fontit ja sen koko
+        panelKortti.setFitToHeight(true); //tekstialue mukautuu panelin korkeuteen.
+        chooserAsiakkaat.clear(); //jos sielä on disparina jo jotain tietoa, poistetaan kaikki
+        chooserAsiakkaat.addSelectionListener(k -> naytaKortti()); //Kun käyttäjä valitsee asiakkaan listalta, naytaAsiakas metodia kutsutaan ja valitun asiakkaan tiedot tulee näkyville.
+       
     }
     
     private void naytaAsiakas() {
@@ -117,29 +126,33 @@ public class PaaikkunaGUIController implements Initializable {
         if (asiakasKohdalla == null) return; //varmistetaan vaan
         areaAsiakas.setText(""); //tyhjennetään tekstialue
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaAsiakas)) {
-            os.println("---------------------------------");
             asiakasKohdalla.tulosta(os);  //tulostetaan asiakkaan perustiedot
+        }            
+    }
+    
+    private void naytaKortti() {
+    	Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject(); //hakee valitun asiakkaan
+        if (asiakasKohdalla == null) return; //varmistetaan vaan
+        areaKortti.setText(""); //tyhjennetään tekstialue
+        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaKortti)) {
             
             //Debit
-            os.println("---------------------------------");
             List<Debit> debitit = pankki.annaDebit(asiakasKohdalla); //haetaan, onko debit korttia lisätty         
             for (Debit deb : debitit) { //jos on, tulostetaan
                 deb.tulosta(os);
-                os.println("---------------------------------");
+                os.println(" ");
             }
-            
-            os.println("---------------------------------"); //haetaan, onko luottokorttia lisätty    
+              
             List<Credit> creditit = pankki.annaCredit(asiakasKohdalla);         
             for (Credit cred : creditit) { //jos on, tulostetaan
                 cred.tulosta(os); 
-                os.println("---------------------------------");
+                os.println(" ");
             } 
             
-            os.println("---------------------------------"); //haetaan, onko yhdistelmäkorttia lisätty    
             List<Yhdistelmä> yhdistelmat = pankki.annaYhdistelma(asiakasKohdalla);         
             for (Yhdistelmä yhd : yhdistelmat) { //jos on, tulostetaan
                 yhd.tulosta(os);
-                os.println("---------------------------------");
+                os.println(" ");
             }
         }            
     }

@@ -22,7 +22,7 @@ public class Pankkikortti {
     
     private static final int    MAX_KORTIT                  = 40; //ei implementoitu ainakaan viel
     private int                 lkm                         = 3; //tää olennaisempi
-    private String              tiedostonNimi               = "";
+    private String              tiedostonNimi               = "kortit";
     private Debit               debit[]                     = new Debit[MAX_KORTIT];
     private Credit              credit[]                    = new Credit[MAX_KORTIT];
     private Yhdistelmä          yhdistelmä[]                = new Yhdistelmä[MAX_KORTIT];
@@ -74,6 +74,7 @@ public class Pankkikortti {
      */
     public void lisaaKreditti(Credit cred) { //Luottokorttien logiikka, lisää uuden pankkikortin kokoelmaan
         creditLista.add(cred);
+        muutettu = true;
     }
     
     /**
@@ -100,6 +101,7 @@ public class Pankkikortti {
      */
     public void lisaaYhdistelma(Yhdistelmä yhd) { //Yhdistelmäkorttien logiikka, lisää uuden pankkikortin kokoelmaan
         yhdistelmaLista.add(yhd);
+        muutettu = true;
     }
     
     /**
@@ -167,9 +169,18 @@ public class Pankkikortti {
             while ( (rivi = fi.readLine()) != null ) {
                 rivi = rivi.trim();
                 if ( "".equals(rivi) || rivi.charAt(0) == ';' ) continue;
+                
                 Debit deb = new Debit();
                 deb.parse(rivi); // voisi olla virhekäsittely
                 lisaaDebitti(deb);
+                
+                Credit cre = new Credit();
+                cre.parse(rivi); // voisi olla virhekäsittely
+                lisaaCredit(cre);
+                
+                Yhdistelmä yhd = new Yhdistelmä();
+                yhd.parse(rivi); // voisi olla virhekäsittely
+                lisaaYhdistelmä(yhd);
             }
             muutettu = false;
 
@@ -203,8 +214,15 @@ public class Pankkikortti {
         ftied.renameTo(fbak); //  if ... System.err.println("Ei voi nimetä");
 
         try ( PrintWriter fo = new PrintWriter(new FileWriter(ftied.getCanonicalPath())) ) {
+        	        	
             for (Debit deb : debitLista) {
                 fo.println(deb.toString());
+            }
+            for (Credit cre : creditLista) {
+                fo.println(cre.toString());
+            }
+            for (Yhdistelmä yhd : yhdistelmaLista) {
+                fo.println(yhd.toString());
             }
         } catch ( FileNotFoundException ex ) {
             throw new SailoException("Tiedosto " + ftied.getName() + " ei aukea");

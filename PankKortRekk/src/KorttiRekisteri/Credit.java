@@ -4,6 +4,8 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Iterator;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 /*  Luokka credit sijaitsee "Pankkikortit" luokan alla. Luokka vastaanottaa kahdeksan parametria, jotka näkyvät alla.
  * 	Pohja on otettu Vesan esimerkeistä
  */
@@ -61,6 +63,30 @@ public class Credit implements Iterable <Pankkikortti> {
 		VPT = "FI42 0000 0000 0000 00";
 		salasana = "2024";
 	}
+	
+	@Override
+    public String toString() {
+        return "" + getTunnusNro() + "|" + asiakasNro + "|" + korttityyppi + "|" + pvm + "|" + korttinumero + "|" + PIN + "|" + CVC + "|" + VPT + "|" + salasana;
+    }
+
+	
+	public void parse(String rivi) {
+        StringBuffer sb = new StringBuffer(rivi);
+        setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
+        korttityyppi = Mjonot.erota(sb, '|', korttityyppi);
+        asiakasNro = Mjonot.erota(sb, '|', asiakasNro);
+        pvm = Mjonot.erota(sb, '|', pvm);
+        korttinumero = Mjonot.erota(sb, '|', korttinumero);
+        PIN = Mjonot.erota(sb, '|', PIN);
+        CVC = Mjonot.erota(sb, '|', CVC);
+        VPT = Mjonot.erota(sb, '|', VPT);
+        salasana = Mjonot.erota(sb, '|', salasana);
+    }
+	
+	private void setTunnusNro(int nr) {
+        tunnusNro = nr;
+        if ( tunnusNro >= seuraavaNro ) seuraavaNro = tunnusNro + 1;
+    }
 	
 	public void tulosta(PrintStream out) {
         out.println(String.format("%03d", tunnusNro, 3) + "  " + korttityyppi + " " + pvm);

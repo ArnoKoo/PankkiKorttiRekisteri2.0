@@ -10,28 +10,26 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane prefHeight="508.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KorttiRekisteri.PaaikkunaGUIController">
+<BorderPane prefHeight="515.0" prefWidth="1110.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KorttiRekisteri.PaaikkunaGUIController">
    <top>
-      <BorderPane prefHeight="488.0" prefWidth="701.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="488.0" prefWidth="1034.0" BorderPane.alignment="CENTER">
          <left>
             <Pane pickOnBounds="false" prefHeight="463.0" prefWidth="720.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="693.0" promptText="Etsi jäsenen nimi" />
+                  <TextField layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="223.0" promptText="Etsi jäsenen nimi" />
                   
                   
                   <ListChooser fx:id="chooserAsiakkaat" layoutX="14.0" layoutY="76.0" prefHeight="349.0" prefWidth="224.0" />
-                  
-                  
-                  <ListChooser layoutX="482.0" layoutY="76.0" prefHeight="349.0" prefWidth="224.0" />
                   <TextField layoutX="14.0" layoutY="51.0" text="Jäsenlista" />
-                  <TextField layoutX="248.0" layoutY="51.0" text="Jäsenen tiedot" />
-                  <TextField layoutX="482.0" layoutY="51.0" text="Kortin tiedot" />
-                  <Button layoutX="14.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleLisaaAsiakas" text="Uusi Asiakas" />
-                  <Button layoutX="248.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleLisaaDebitKortti" text="Lisää debit" />
-                  <Button layoutX="376.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleLisaaLuottoKortti" text="Lisää luottokortti" />
-                  <Button layoutX="296.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleLisaaYhdistelmaKortti" text="Lisää yhdistelmäkortti" />
+                  <TextField layoutX="250.0" layoutY="51.0" text="Jäsenen tiedot" />
+                  <TextField layoutX="606.0" layoutY="51.0" text="Kortin tiedot" />
+                  <Button layoutX="74.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaAsiakas" text="Uusi Asiakas" />
+                  <Button layoutX="626.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaDebitKortti" text="Lisää debit" />
+                  <Button layoutX="747.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaLuottoKortti" text="Lisää luottokortti" />
+                  <Button layoutX="900.0" layoutY="436.0" mnemonicParsing="false" onAction="#handleLisaaYhdistelmaKortti" text="Lisää yhdistelmäkortti" />
                   
-                  <ScrollPane fx:id="panelAsiakas" layoutX="250.0" layoutY="76.0" prefHeight="345.0" prefWidth="222.0" />
+                  <ScrollPane fx:id="panelAsiakas" layoutX="250.0" layoutY="76.0" prefHeight="349.0" prefWidth="344.0" />
+                  <ScrollPane fx:id="panelKortti" layoutX="606.0" layoutY="77.0" prefHeight="349.0" prefWidth="468.0" />
                   
                   
                   
@@ -39,7 +37,7 @@
             </Pane>
          </left>
          <top>
-            <MenuBar BorderPane.alignment="CENTER">
+            <MenuBar prefHeight="5.0" prefWidth="782.0" BorderPane.alignment="CENTER">
               <menus>
                 <Menu mnemonicParsing="false" text="TIEDOSTO">
                   <items>

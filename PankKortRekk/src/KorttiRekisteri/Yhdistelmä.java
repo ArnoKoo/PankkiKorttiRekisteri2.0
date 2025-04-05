@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Iterator;
 import KorttiRekisteri.HetuTarkistus;
+import fi.jyu.mit.ohj2.Mjonot;
 
 
 /*  Luokka "yhdistelmä" sijaitsee "Pankkikortit" luokan alla. Luokka vastaanottaa kahdeksan parametria, jotka näkyvät alla.
@@ -70,6 +71,29 @@ public class Yhdistelmä implements Iterable <Pankkikortti> {
 		VPT = "FI43 0000 0000 0000 00";
 		salasana = "2025";
 	}
+	
+	@Override
+    public String toString() {
+        return "" + getTunnusNro() + "|" + asiakasNro + "|" + korttityyppi + "|" + pvm + "|" + korttinumero + "|" + PIN + "|" + CVC + "|" + VPT + "|" + salasana;
+    }
+	
+	public void parse(String rivi) {
+        StringBuffer sb = new StringBuffer(rivi);
+        setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
+        korttityyppi = Mjonot.erota(sb, '|', korttityyppi);
+        asiakasNro = Mjonot.erota(sb, '|', asiakasNro);
+        pvm = Mjonot.erota(sb, '|', pvm);
+        korttinumero = Mjonot.erota(sb, '|', korttinumero);
+        PIN = Mjonot.erota(sb, '|', PIN);
+        CVC = Mjonot.erota(sb, '|', CVC);
+        VPT = Mjonot.erota(sb, '|', VPT);
+        salasana = Mjonot.erota(sb, '|', salasana);
+    }
+	
+	private void setTunnusNro(int nr) {
+        tunnusNro = nr;
+        if ( tunnusNro >= seuraavaNro ) seuraavaNro = tunnusNro + 1;
+    }
 	
 	/*
 	 * Tulosta() tulostaa (no shit) kaikki tiedot ulos näkyville
