@@ -31,6 +31,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     
     @FXML private void TestiPesti() {
         try {
+            pankki.setTiedosto("AgoBank");
             pankki.tallenna();
         } catch (SailoException e) {
             // Parannettu virheenkäsittely:
@@ -58,6 +59,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
         try {
+            pankki.setTiedosto("AgoBank");
             pankki.lueTiedostosta("AgoBank");  // vain tämä
         } catch (SailoException e) {
             Dialogs.showMessageDialog("Tiedoston lukemisessa ongelmia: " + e.getMessage());
