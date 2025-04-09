@@ -171,23 +171,30 @@ public class Pankkikortti {
         System.out.println("DEBUG: Luetaan tiedostoa: " + file.getAbsolutePath());
         System.out.println("DEBUG: Olemassa? " + file.exists());
         
-        try ( BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi())) ) {
+        try ( BufferedReader fi = new BufferedReader(new FileReader(file)) ) {
+        	
             String rivi;
+                        
             while ( (rivi = fi.readLine()) != null ) {
+            	System.out.println("DEBUG: Luettu rivi: " + rivi);
                 rivi = rivi.trim();
                 if ( "".equals(rivi) || rivi.charAt(0) == ';' ) continue;
                 
-                Debit deb = new Debit();
-                deb.parse(rivi); // voisi olla virhekäsittely
-                lisaaDebitti(deb);
-                
-                Credit cre = new Credit();
-                cre.parse(rivi); // voisi olla virhekäsittely
-                lisaaCredit(cre);
-                
-                Yhdistelmä yhd = new Yhdistelmä();
-                yhd.parse(rivi); // voisi olla virhekäsittely
-                lisaaYhdistelmä(yhd);
+                if (rivi.startsWith("DEBIT|")) {
+                    Debit deb = new Debit();
+                    deb.parse(rivi.substring(6)); // Skip "DEBIT|"
+                    lisaaDebitti(deb);
+                } 
+                else if (rivi.startsWith("CREDIT|")) {
+                    Credit cre = new Credit();
+                    cre.parse(rivi.substring(7)); // Skip "CREDIT|"
+                    lisaaCredit(cre);
+                } 
+                else if (rivi.startsWith("YHDISTELMA|")) {
+                    Yhdistelmä yhd = new Yhdistelmä();
+                    yhd.parse(rivi.substring(11)); // Skip "YHDISTELMA|"
+                    lisaaYhdistelmä(yhd);
+                }
             }
             muutettu = false;
 
@@ -222,15 +229,16 @@ public class Pankkikortti {
 
         try ( PrintWriter fo = new PrintWriter(new FileWriter(ftied.getCanonicalPath())) ) {
         	        	
-            for (Debit deb : debitLista) {
-                fo.println(deb.toString());
+        	for (Debit deb : debitLista) {
+                fo.println("DEBIT|" + deb.toString());
             }
             for (Credit cre : creditLista) {
-                fo.println(cre.toString());
+                fo.println("CREDIT|" + cre.toString());
             }
             for (Yhdistelmä yhd : yhdistelmaLista) {
-                fo.println(yhd.toString());
+                fo.println("YHDISTELMA|" + yhd.toString());
             }
+            
         } catch ( FileNotFoundException ex ) {
             throw new SailoException("Tiedosto " + ftied.getName() + " ei aukea");
         } catch ( IOException ex ) {

@@ -74,7 +74,18 @@ public class Yhdistelmä implements Iterable <Pankkikortti> {
 	
 	@Override
     public String toString() {
-        return "" + getTunnusNro() + "|" + asiakasNro + "|" + korttityyppi + "|" + pvm + "|" + korttinumero + "|" + PIN + "|" + CVC + "|" + VPT + "|" + salasana;
+		return String.join("|", 
+		        String.valueOf(tunnusNro),
+		        String.valueOf(asiakasNro),
+		        korttityyppi,
+		        pvm,
+		        korttinumero,
+		        PIN,
+		        CVC,
+		        String.valueOf(lähimaksu),
+		        VPT,
+		        salasana
+		    );
     }
 	
 	public void parse(String rivi) {

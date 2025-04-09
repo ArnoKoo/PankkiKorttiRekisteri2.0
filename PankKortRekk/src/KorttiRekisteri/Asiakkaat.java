@@ -90,8 +90,10 @@ public class Asiakkaat implements Iterable <Asiakas> {
         }
     }
 
-
-
+    /**
+     * Luetaan aikaisemmin annetun nimisestä tiedostosta
+     * @throws SailoException jos tulee poikkeus
+     */
     
     public void lueTiedostosta() throws SailoException {
         lueTiedostosta(getTiedostonPerusNimi());

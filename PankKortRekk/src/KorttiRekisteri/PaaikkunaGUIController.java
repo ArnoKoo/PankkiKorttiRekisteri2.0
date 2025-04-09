@@ -69,13 +69,8 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         hae(0);
     }
 
-    
-    /**
-     * Manu is the party king
-     */
     @FXML
     public void handleLisaaAsiakas() {
-        System.out.println("Nappia painettu!");
         lisaaAsiakas();
     }
     
@@ -83,6 +78,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         chooserAsiakkaat.clear();
         int indeksi = 0;
         System.out.println("Asiakkaita yhteensä: " + pankki.getAsiakkaat());
+        System.out.println(" ");
         for (int i = 0; i < pankki.getAsiakkaat(); i++) {
             Asiakas asiakas = pankki.annaAsiakas(i); 
             if (asiakas.getTunnusNro() == asiakasNumero) {
@@ -125,7 +121,9 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         chooserAsiakkaat.addSelectionListener(e -> {
             System.out.println("Asiakas valittu: " + chooserAsiakkaat.getSelectedObject());
             naytaAsiakas();
+            System.out.println(" ");
             naytaKortti();
+            System.out.println(" ");
         });
     }
 
@@ -143,6 +141,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
         areaKortti.setText("");
+        
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaKortti)) {
             List<Debit> debitit = pankki.annaDebit(asiakasKohdalla);
             System.out.println("Debit kortteja löytyi: " + debitit.size());
@@ -155,7 +154,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
             }
 
             List<Credit> creditit = pankki.annaCredit(asiakasKohdalla);
-            System.out.println("Debit kortteja löytyi: " + creditit.size());
+            System.out.println("Credit kortteja löytyi: " + creditit.size());
             if (creditit.isEmpty()) {
                 os.println("Ei luottokortteja.");
             }
@@ -165,7 +164,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
             }
 
             List<Yhdistelmä> yhdistelmat = pankki.annaYhdistelma(asiakasKohdalla);
-            System.out.println("Debit kortteja löytyi: " + yhdistelmat.size());
+            System.out.println("Yhdistelmä kortteja löytyi: " + yhdistelmat.size());
             if (yhdistelmat.isEmpty()) {
                 os.println("Ei yhdistelmäkortteja.");
             }

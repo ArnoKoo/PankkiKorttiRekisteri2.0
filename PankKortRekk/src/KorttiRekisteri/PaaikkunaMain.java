@@ -37,16 +37,6 @@ public class PaaikkunaMain extends Application {
         }
     }
     
-    
-    	
-    // pankkikortti olio
-    
-    	// Debit
-    
-    	// Credit
-    
-    	// Yhdistelmä
-
     /**
      * @param args Ei kaytossa
      */
