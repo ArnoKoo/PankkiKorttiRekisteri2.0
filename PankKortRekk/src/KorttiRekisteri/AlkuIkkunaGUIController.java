@@ -3,6 +3,7 @@ import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 //import fi.jyu.mit.fxgui.Dialogs;
 
@@ -25,6 +26,14 @@ public class AlkuIkkunaGUIController implements ModalControllerInterface <String
     public void Lopeta() {
         ModalController.closeStage(suljeNappi);
     }
+    
+    public static String kysyNimi(Stage modalityStage, String oletus) {
+        return ModalController.showModal(
+                AlkuIkkunaGUIController.class.getResource("AlkuIkkunaGUIView.fxml"),
+                "AgoBank",
+                modalityStage, oletus);
+    }
+
 
     @Override
     public String getResult() {

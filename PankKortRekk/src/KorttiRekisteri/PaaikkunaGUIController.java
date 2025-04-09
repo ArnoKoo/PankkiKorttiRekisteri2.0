@@ -29,6 +29,8 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     @FXML private ScrollPane panelAsiakas;
     @FXML private ScrollPane panelKortti;
     
+    private String pankinNimi = "AgoBank";
+    
     @FXML private void TestiPesti() {
         try {
             pankki.setTiedosto("AgoBank");
@@ -109,6 +111,17 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         this.pankki = pankki;
     }
     
+    public boolean voikoSulkea() {
+        try {
+            pankki.tallenna();
+        } catch (SailoException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    
     private void alusta() {
         panelAsiakas.setContent(areaAsiakas);
         areaAsiakas.setFont(new Font("Courier New", 12));
@@ -174,6 +187,34 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
             }
         }            
     }
+
+    
+    /**
+     * @param nimi aa
+     * @return aa
+     */
+    protected String lueTiedosto(String nimi) {
+        pankinNimi = nimi;
+        try {
+            pankki.lueTiedostosta(nimi);
+            hae(0);
+            return null;
+        } catch (SailoException e) {
+            hae(0);
+            String virhe = e.getMessage(); 
+            if ( virhe != null ) Dialogs.showMessageDialog(virhe);
+            return virhe;
+        }
+     }
+    
+    public boolean avaa() {
+        String uusinimi = AlkuIkkunaGUIController.kysyNimi(null, pankinNimi);
+        if (uusinimi == null) return false;
+        lueTiedosto(uusinimi);
+        return true;
+    }
+
+
 
     
     @FXML private void handlePoistaJasen() {
