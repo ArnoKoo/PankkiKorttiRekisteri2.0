@@ -20,7 +20,7 @@ public class PaaikkunaMain extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("AgoBank");
             
-            // Platform.setImplicitExit(false); // tätä ei kai saa laittaa
+            Platform.setImplicitExit(false); // tätä ei kai saa laittaa
 
             primaryStage.setOnCloseRequest((event) -> {
                     if ( !pankkiCtrl.voikoSulkea() ) event.consume();

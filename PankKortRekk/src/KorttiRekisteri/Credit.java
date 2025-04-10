@@ -19,7 +19,7 @@ public class Credit implements Iterable <Pankkikortti> {
 	private String		korttinumero				= "";
 	private String		PIN							= "";
 	private String		CVC							= "";
-	private Boolean		lähimaksu;
+	private boolean		lähimaksu;
 	private String		VPT							= ""; // Verkkopankkitunnus
 	private String		salasana					= "";
 	
@@ -84,12 +84,13 @@ public class Credit implements Iterable <Pankkikortti> {
 	public void parse(String rivi) {
         StringBuffer sb = new StringBuffer(rivi);
         setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
-        korttityyppi = Mjonot.erota(sb, '|', korttityyppi);
         asiakasNro = Mjonot.erota(sb, '|', asiakasNro);
+        korttityyppi = Mjonot.erota(sb, '|', korttityyppi);
         pvm = Mjonot.erota(sb, '|', pvm);
         korttinumero = Mjonot.erota(sb, '|', korttinumero);
         PIN = Mjonot.erota(sb, '|', PIN);
         CVC = Mjonot.erota(sb, '|', CVC);
+        lähimaksu = Mjonot.erota(sb, '|', lähimaksu).equals("true")? true : false;
         VPT = Mjonot.erota(sb, '|', VPT);
         salasana = Mjonot.erota(sb, '|', salasana);
     }

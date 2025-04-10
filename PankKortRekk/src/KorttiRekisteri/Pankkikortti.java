@@ -23,9 +23,9 @@ public class Pankkikortti {
     private static final int    MAX_KORTIT                  = 40; //ei implementoitu ainakaan viel
     private int                 lkm                         = 3; //tää olennaisempi
     private String              tiedostonNimi               = "kortit";
-    private Debit               debit[]                     = new Debit[MAX_KORTIT];
-    private Credit              credit[]                    = new Credit[MAX_KORTIT];
-    private Yhdistelmä          yhdistelmä[]                = new Yhdistelmä[MAX_KORTIT];
+    //private Debit               debit[]                     = new Debit[MAX_KORTIT];
+    //private Credit              credit[]                    = new Credit[MAX_KORTIT];
+    //private Yhdistelmä          yhdistelmä[]                = new Yhdistelmä[MAX_KORTIT];
     private boolean             muutettu                    = false;
     
 
@@ -126,36 +126,39 @@ public class Pankkikortti {
      * @param kortti kortti debittiä varten
      * @throws SailoException jos liikaa kortteja
      */
-    public void lisaaDebit(Debit kortti) throws SailoException{
+    /*public void lisaaDebit(Debit kortti) throws SailoException{
         if (lkm >= debit.length) throw new SailoException("Liikaa alkioita");
         debit[lkm] = kortti;
         lkm++;
         muutettu = true;
     }
+    */
     
     /**
      * Lisää credit kortin, jos on liikaa kortteja niin heittää virheen
      * @param kortti kortti credittiä varten
      * @throws SailoException jos liikaa kortteja
-     */
+     
     public void lisaaCredit(Credit kortti) throws SailoException{
         if (lkm >= credit.length) throw new SailoException("Liikaa alkioita");
         credit[lkm] = kortti;
         lkm++;
         muutettu = true;
     }
+    */
     
     /**
      * Lisää yhdistelmä kortin, jos on liikaa kortteja niin heittää virheen
      * @param kortti kortti yhdistelmäkorttia varten
      * @throws SailoException jos liikaa kortteja
-     */
+     
     public void lisaaYhdistelmä(Yhdistelmä kortti) throws SailoException{
         if (lkm >= yhdistelmä.length) throw new SailoException("Liikaa alkioita");
         yhdistelmä[lkm] = kortti;
         lkm++;
         muutettu = true;
     }
+    */
     
     /**
      * lukee tiedostosta (TODO)
@@ -188,12 +191,12 @@ public class Pankkikortti {
                 else if (rivi.startsWith("CREDIT|")) {
                     Credit cre = new Credit();
                     cre.parse(rivi.substring(7)); // Skip "CREDIT|"
-                    lisaaCredit(cre);
+                    lisaaKreditti(cre);
                 } 
                 else if (rivi.startsWith("YHDISTELMA|")) {
                     Yhdistelmä yhd = new Yhdistelmä();
                     yhd.parse(rivi.substring(11)); // Skip "YHDISTELMA|"
-                    lisaaYhdistelmä(yhd);
+                    lisaaYhdistelma(yhd);
                 }
             }
             muutettu = false;
@@ -224,8 +227,8 @@ public class Pankkikortti {
 
         File fbak = new File(getBakNimi());
         File ftied = new File(getTiedostonNimi());
-        fbak.delete(); //  if ... System.err.println("Ei voi tuhota");
-        ftied.renameTo(fbak); //  if ... System.err.println("Ei voi nimetä");
+        fbak.delete();
+        ftied.renameTo(fbak);
 
         try ( PrintWriter fo = new PrintWriter(new FileWriter(ftied.getCanonicalPath())) ) {
         	        	
