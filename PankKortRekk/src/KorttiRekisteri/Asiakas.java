@@ -10,8 +10,9 @@ import fi.jyu.mit.ohj2.Mjonot;
 */
 
 import static KorttiRekisteri.HetuTarkistus.*;
-
+@SuppressWarnings("javadoc")
 public class Asiakas {
+ 
 	private int			tunnusNro;
 	private String		nimi					= "";
 	private String		hetu					= "";
@@ -26,8 +27,36 @@ public class Asiakas {
 	// Palauttaa jäsenen nimen
 	
 	public String getNimi() {
-		return nimi;
+	    return nimi;
 	}
+	
+	public int getTunnusNro( ) {
+	    return tunnusNro;
+	}
+
+	public String getHetu() {
+	    return hetu;
+	}
+
+	public String getKatuosoite() {
+	    return katuosoite;
+	}
+
+   public String getPostinumero() {
+       return postinumero;
+   }
+   
+   public String getPostiToimipaikka() {
+       return postitoimipaikka;
+   }
+   
+   public String getPuhelinnumero() {
+       return puhelinnumero;
+   }
+   
+   public String getSahkoposti() {
+       return sähköposti;
+   }
 	
 	// Apumetodi, jolla saadaan täytettyä testiarvot jäsenelle.
 	
@@ -96,17 +125,9 @@ public class Asiakas {
           tulosta(new PrintStream(os));
      }
 	 
-	 // Antaa jäsenelle tunnusnumeron
-	 
 	 public int rekisteroi() {
         tunnusNro = seuraavaNro;
         seuraavaNro++;
         return tunnusNro;
-	 }
-	 
-	 // Palauttaa tunnusnumeron
-	 
-	 public int getTunnusNro( ) {
-		 return tunnusNro;
 	 }
 }

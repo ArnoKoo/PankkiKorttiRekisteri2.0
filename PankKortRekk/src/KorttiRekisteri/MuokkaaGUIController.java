@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 public class MuokkaaGUIController implements ModalControllerInterface <String> {
 
     @FXML private void handleMuokkaaPankkiKorttiaVali() {
-        MuokkaJasenGUIController.alkuNaytto(null, "Muokkaa pankiikortin tietoja");
+        //MuokkaJasenGUIController.alkuNaytto(null, "Muokkaa pankiikortin tietoja");
     }
     
     @FXML private Button suljeNappi;

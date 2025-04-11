@@ -1,41 +1,58 @@
 package KorttiRekisteri;
 
-import fi.jyu.mit.fxgui.Dialogs;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
  * @author OMISTAJA
- * @version 9.2.2025
- *
+ * @version 11 Apr 2025
+ * Kysytään asiakkaan tiedot luomalla sinne uusi dialogi
  */
-public class MuokkaJasenGUIController implements ModalControllerInterface <String> {
+public class MuokkaJasenGUIController implements ModalControllerInterface<Asiakas>, Initializable {
     
-    @FXML private void TestiPesti() {
-        Dialogs.showMessageDialog("Ei toimi viel :D");
-    }
-    
-    @FXML private Button suljeNappi;
-    
-    @FXML
-    public void Lopeta() {
-        ModalController.closeStage(suljeNappi);
-    }
+    @FXML private Label labelVirhe;
+    @FXML private TextField editNimi;
+    @FXML private TextField editHetu;
+    @FXML private TextField editKatuosoite;
+    @FXML private TextField editPostinumero;
+    @FXML private TextField editPostiToimipaikka;
+    @FXML private TextField editPuhelinnumero;
+    @FXML private TextField editSahkoposti;
     
     /**
-     * @param modalityStage aa
-     * @param oletus aa
-     * @return aa
+     * @param modalityStage mille ollaan modaalisia, null meinaa sovellukselle
+     * @param oletus mitä dataa näytetään oletuksena
+     * @return null jos painetaan peruuta/cancel, muuten täytetty tietue
      */
-    public static String alkuNaytto(Stage modalityStage, String oletus) {
-        return ModalController.showModal(MuokkaJasenGUIController.class.getResource("MuokkaJasenGUIView.fxml"), "Muokkaa jäsenen tietoja", modalityStage, oletus);
+    public static Asiakas kysyAsiakas(Stage modalityStage, Asiakas oletus) {
+        return ModalController.showModal(MuokkaJasenGUIController.class.getResource("MuokkaJasenGUIView.fxml"), "AgoBank", modalityStage, oletus);
+    }
+    
+    @FXML private void handleOK() {
+        ModalController.closeStage(labelVirhe);
+    }
+    
+    @FXML private void handleCancel() {
+        ModalController.closeStage(labelVirhe);
+    }
+        
+    
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        alusta();
+        
     }
 
     @Override
-    public String getResult() {
+    public Asiakas getResult() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -45,10 +62,42 @@ public class MuokkaJasenGUIController implements ModalControllerInterface <Strin
         // TODO Auto-generated method stub
         
     }
+    
+    /**
+     * Näytetään asiakkaan tiedot TextField komponentteihin
+     * @param edits taulukko, jossa
+     * @param asiakas näytettävä asiakas
+     */
+    public static void naytaAsiakas (TextField[] edits, Asiakas asiakas) {
+        if (asiakas == null) return;
+        edits[0].setText(asiakas.getNimi());
+        edits[1].setText(asiakas.getHetu());
+        edits[2].setText(asiakas.getKatuosoite());
+        edits[3].setText(asiakas.getPostinumero());
+        edits[4].setText(asiakas.getPostiToimipaikka());
+        edits[5].setText(asiakas.getPuhelinnumero());
+        edits[6].setText(asiakas.getSahkoposti());
+    }
+    
+    private Asiakas asiakasKohdalla;
+    private TextField[] edits;
+    
+    protected void alusta() {
+        edits = new TextField[] {editNimi, editHetu, editKatuosoite, editPostinumero, editPostiToimipaikka, editPuhelinnumero, editSahkoposti};
+    }
+    
+    /**
+     * Näytetään asiakkaan tiedot TextField komponentteihin
+     * @param asiakas näytettävä asiakas
+     */
+    public void naytaAsiakas (Asiakas asiakas) {
+        naytaAsiakas(edits, asiakas);
+    }
 
     @Override
-    public void setDefault(String arg0) {
-        // TODO Auto-generated method stub
+    public void setDefault(Asiakas oletus) {
+        asiakasKohdalla = oletus;
+        naytaAsiakas(asiakasKohdalla);
         
     }
 }

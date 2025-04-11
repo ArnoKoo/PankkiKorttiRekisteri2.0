@@ -9,12 +9,14 @@ import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
+import fi.jyu.mit.fxgui.StringGrid;
 import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -28,6 +30,20 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     @FXML private ListChooser<Asiakas> chooserAsiakkaat; //jäsenten/asiakkaiden käsittely
     @FXML private ScrollPane panelAsiakas;
     @FXML private ScrollPane panelKortti;
+    
+    @FXML private TextField editNimi;
+    @FXML private TextField editHetu;
+    @FXML private TextField editKatuosoite;
+    @FXML private TextField editPostinumero;
+    @FXML private TextField editPostiToimipaikka;
+    @FXML private TextField editPuhelinnumero;
+    @FXML private TextField editSahkoposti;
+    
+    @FXML private StringGrid<Debit> tableDebit;
+    @FXML private StringGrid<Credit> tableCredit;
+    @FXML private StringGrid<Yhdistelmä> tableYhdistelma;
+    
+    private TextField[] edits;
     
     private String pankinNimi = "AgoBank";
     
@@ -55,7 +71,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     
     //Jäsen muokkaukset
     @FXML private void handleMuokkaJasen() {
-        MuokkaJasenGUIController.alkuNaytto(null, "Muokkaa jäsenen tietoja");
+        MuokkaJasenGUIController.kysyAsiakas(null, asiakasKohdalla);
     }
     
     @Override
@@ -71,6 +87,9 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         hae(0);
     }
 
+    /**
+     * 
+     */
     @FXML
     public void handleLisaaAsiakas() {
         lisaaAsiakas();
@@ -104,13 +123,20 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     }
     
     private Pankki pankki = new Pankki();
-    private TextArea areaAsiakas = new TextArea();
-    private TextArea areaKortti = new TextArea();
+    //private TextArea areaAsiakas = new TextArea();
+    //private TextArea areaKortti = new TextArea();
+    private Asiakas asiakasKohdalla;
     
+    /**
+     * @param pankki setteri
+     */
     public void setPankki(Pankki pankki) {
         this.pankki = pankki;
     }
     
+    /**
+     * @return true jos voi
+     */
     public boolean voikoSulkea() {
         try {
             pankki.tallenna();
@@ -123,69 +149,75 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
 
     
     private void alusta() {
-        panelAsiakas.setContent(areaAsiakas);
-        areaAsiakas.setFont(new Font("Courier New", 12));
+        //panelAsiakas.setContent(areaAsiakas);
+        //areaAsiakas.setFont(new Font("Courier New", 12));
         panelAsiakas.setFitToHeight(true);
         
-        panelKortti.setContent(areaKortti);
-        areaKortti.setFont(new Font("Courier New", 12));
+        //panelKortti.setContent(areaKortti);
+        //areaKortti.setFont(new Font("Courier New", 12));
         panelKortti.setFitToHeight(true);
         
         chooserAsiakkaat.addSelectionListener(e -> {
             System.out.println("Asiakas valittu: " + chooserAsiakkaat.getSelectedObject());
             naytaAsiakas();
             System.out.println(" ");
-            naytaKortti();
+            naytaKortti(asiakasKohdalla);
             System.out.println(" ");
         });
+        
+        edits = new TextField[] {editNimi, editHetu, editKatuosoite, editPostinumero, editPostiToimipaikka, editPuhelinnumero, editSahkoposti};
     }
 
     
     private void naytaAsiakas() {
-        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
+        asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
-        areaAsiakas.setText("");
-        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaAsiakas)) {
-            asiakasKohdalla.tulosta(os);
-        }            
+        //areaAsiakas.setText("");
+        //try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaAsiakas)) {
+        //    asiakasKohdalla.tulosta(os);
+        //}
+        
+        MuokkaJasenGUIController.naytaAsiakas(edits, asiakasKohdalla);
+        naytaKortti(asiakasKohdalla);
     }
     
-    private void naytaKortti() {
-        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
+    private void naytaKortti(Asiakas asiakas) {
+        tableDebit.clear();
+        tableCredit.clear();
+        tableYhdistelma.clear();
         if (asiakasKohdalla == null) return;
-        areaKortti.setText("");
         
-        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaKortti)) {
-            List<Debit> debitit = pankki.annaDebit(asiakasKohdalla);
-            System.out.println("Debit kortteja löytyi: " + debitit.size());
-            if (debitit.isEmpty()) {
-                os.println("Ei debit-kortteja.");
-            }
+            List<Debit> debitit = pankki.annaDebit(asiakas);
             for (Debit deb : debitit) {
-                deb.tulosta(os);
-                os.println(" ");
+                naytaDebit(deb);
             }
-
-            List<Credit> creditit = pankki.annaCredit(asiakasKohdalla);
-            System.out.println("Credit kortteja löytyi: " + creditit.size());
-            if (creditit.isEmpty()) {
-                os.println("Ei luottokortteja.");
-            }
+            
+            List<Credit> creditit = pankki.annaCredit(asiakas);
             for (Credit cred : creditit) {
-                cred.tulosta(os);
-                os.println(" ");
+                naytaCredit(cred);
             }
 
-            List<Yhdistelmä> yhdistelmat = pankki.annaYhdistelma(asiakasKohdalla);
-            System.out.println("Yhdistelmä kortteja löytyi: " + yhdistelmat.size());
-            if (yhdistelmat.isEmpty()) {
-                os.println("Ei yhdistelmäkortteja.");
-            }
+            List<Yhdistelmä> yhdistelmat = pankki.annaYhdistelma(asiakas);
             for (Yhdistelmä yhd : yhdistelmat) {
-                yhd.tulosta(os);
-                os.println(" ");
+                naytaYhdistelma(yhd);
             }
-        }            
+                      
+    }
+    
+    private void naytaDebit(Debit debit) {
+        System.out.println("Debit toString(): " + debit.toString());
+        String[] rivi = debit.toString().split("\\|");
+        tableDebit.add(debit,rivi[2],rivi[3],rivi[4],rivi[5],rivi[6],rivi[7],rivi[8],rivi[9]);
+    }
+    
+    private void naytaCredit(Credit credit) {
+        String[] rivi = credit.toString().split("\\|");
+        tableCredit.add(credit,rivi[2],rivi[3],rivi[4],rivi[5],rivi[6],rivi[7],rivi[8],rivi[9]);
+    }
+    
+    private void naytaYhdistelma(Yhdistelmä yhdistelma) {
+        String[] rivi = yhdistelma.toString().split("\\|");
+        tableYhdistelma.add(yhdistelma,rivi[2],rivi[3],rivi[4],rivi[5],rivi[6],rivi[7],rivi[8],rivi[9]);
     }
 
     
@@ -207,6 +239,9 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         }
      }
     
+    /**
+     * @return true jos pygee avaa
+     */
     public boolean avaa() {
         String uusinimi = AlkuIkkunaGUIController.kysyNimi(null, pankinNimi);
         if (uusinimi == null) return false;
@@ -222,7 +257,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     }
     
     @FXML private void handleLisaaDebitKortti() { 
-        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
+        asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
         Debit deb = new Debit();
         deb.rekisteroi();
@@ -232,7 +267,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     }
     
     @FXML private void handleLisaaLuottoKortti() {
-        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
+        asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
         Credit cre = new Credit();
         cre.rekisteroi();
@@ -242,7 +277,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     }
     
     @FXML private void handleLisaaYhdistelmaKortti() {
-        Asiakas asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
+        asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
         Yhdistelmä yhd = new Yhdistelmä();
         yhd.rekisteroi();
