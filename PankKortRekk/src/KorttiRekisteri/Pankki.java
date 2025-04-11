@@ -34,6 +34,17 @@ public class Pankki {
     public int poista(@SuppressWarnings("unused") int nro) {
         return 0;
     }
+    
+    /**
+     * Korvaa asiakkaan tietokannassa, ottaa asiakkaan omistukseensa.
+     * Etitään samalla tunnusNro:lla oleva asiakas.
+     * Jos ei löydy niin lisätään uutena asiakkaana.
+     * @param asiakas lisättävän asiakkaan viite
+     * @throws SailoException jos tietorakenne täynnä
+     */
+    public void korvaaTaiLisaa(Asiakas asiakas) throws SailoException {
+        asiakkaat.korvaaTaiLisaa(asiakas);
+    }
  
     /**
      * Lisää pankkiin uuden asiakkaan, SailoException varmistaa ettei liikaa asiakkaita

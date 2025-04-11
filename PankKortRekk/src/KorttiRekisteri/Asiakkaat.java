@@ -237,4 +237,21 @@ public class Asiakkaat implements Iterable <Asiakas> {
         
         return loytyneet; 
     }
+
+    /**
+     * Selitin tän paskan jo pankissa.
+     * @param asiakas aa
+     * @throws SailoException aa
+     */
+    public void korvaaTaiLisaa(Asiakas asiakas) throws SailoException {
+        int id = asiakas.getTunnusNro();
+        for (int i = 0; i < lkm; i++) {
+            if (alkiot[i].getTunnusNro() == id) {
+                alkiot[i] = asiakas;
+                muutettu = true;
+                return;
+            }
+        }
+        lisaa(asiakas);
+    }
 }

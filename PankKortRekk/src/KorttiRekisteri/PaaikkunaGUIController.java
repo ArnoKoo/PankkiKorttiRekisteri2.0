@@ -71,7 +71,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     
     //Jäsen muokkaukset
     @FXML private void handleMuokkaJasen() {
-        MuokkaJasenGUIController.kysyAsiakas(null, asiakasKohdalla);
+        muokkaa();
     }
     
     @Override
@@ -86,6 +86,21 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         alusta(); // ilman tiedostonlukua
         hae(0);
     }
+    
+    private void muokkaa() { 
+        if ( asiakasKohdalla == null ) return; 
+        try { 
+            Asiakas asiakas; 
+            asiakas = MuokkaJasenGUIController.kysyAsiakas(null, asiakasKohdalla.clone()); 
+            if ( asiakas == null ) return; 
+            pankki.korvaaTaiLisaa(asiakas); 
+            hae(asiakas.getTunnusNro()); 
+            } catch (CloneNotSupportedException e) { 
+                // 
+            } catch (SailoException e) { 
+                Dialogs.showMessageDialog(e.getMessage()); 
+            } 
+        }
 
     /**
      * 
@@ -110,16 +125,23 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         chooserAsiakkaat.setSelectedIndex(indeksi);
     }
     
-    private void lisaaAsiakas() {
-        Asiakas uusi = new Asiakas();
-        uusi.rekisteroi();
-        uusi.vastaaErik();
+    /**
+     * hienompi
+     */
+    protected void lisaaAsiakas() {
         try {
+            Asiakas uusi = new Asiakas();
+            uusi = MuokkaJasenGUIController.kysyAsiakas(null, uusi);
+            if (uusi == null) return;
+            uusi.rekisteroi();
+            uusi.vastaaErik();
             pankki.lisaa(uusi);
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog("Ongelma uuden lisäämisessä: " + e.getMessage());
+            hae(uusi.getTunnusNro());
+            pankki.lisaa(uusi); 
+        } catch (SailoException ex) {
+            Dialogs.showMessageDialog("Ongelmia uuden luomisessa: " + ex.getMessage());
         }
-        hae(uusi.getTunnusNro());
+             
     }
     
     private Pankki pankki = new Pankki();

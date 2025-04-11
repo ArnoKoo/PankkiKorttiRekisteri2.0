@@ -11,7 +11,7 @@ import fi.jyu.mit.ohj2.Mjonot;
 
 import static KorttiRekisteri.HetuTarkistus.*;
 @SuppressWarnings("javadoc")
-public class Asiakas {
+public class Asiakas implements Cloneable {
  
 	private int			tunnusNro;
 	private String		nimi					= "";
@@ -30,32 +30,85 @@ public class Asiakas {
 	    return nimi;
 	}
 	
+	public String setNimi(String s) {
+	    nimi = s;
+	    return null;
+	}
+	
 	public int getTunnusNro( ) {
 	    return tunnusNro;
 	}
+	
+	private void setTunnusNro(int nr) {
+        tunnusNro = nr;
+        if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
+    }
 
 	public String getHetu() {
 	    return hetu;
 	}
+	
+	private HetuTarkistus hetut = new HetuTarkistus();
+	
+	public String setHetu(String s) {
+	    String virhe = hetut.tarkista(s);
+	    if (s != null) return virhe;
+	    hetu = s;
+	    return null;
+	}
 
 	public String getKatuosoite() {
 	    return katuosoite;
+	}
+	
+	public String setKatuosoite(String s) {
+	    katuosoite = s;
+	    return null;
 	}
 
    public String getPostinumero() {
        return postinumero;
    }
    
+   public String setPostinumero(String s) {
+       if (!s.matches("[0-9]*")) return "Postinumeron on oltava numeerinen!";
+       postinumero = s;
+       return null;
+   }
+   
    public String getPostiToimipaikka() {
        return postitoimipaikka;
+   }
+   
+   public String setPostiToimipaikka(String s) {
+       postitoimipaikka = s;
+       return null;
    }
    
    public String getPuhelinnumero() {
        return puhelinnumero;
    }
    
+   public String setPuhelinnumero(String s) {
+       if (!s.matches("[0-12]*")) return "Puhelinnumeron on oltava numeerinen!";
+       puhelinnumero = s;
+       return null;
+   }
+   
    public String getSahkoposti() {
        return sähköposti;
+   }
+   
+   public String setSahkoposti(String s) {
+       sähköposti = s;
+       return null;
+   }
+   
+   @Override
+   public Asiakas clone() throws CloneNotSupportedException {
+       Asiakas uusi;
+       uusi = (Asiakas) super.clone();
+       return uusi;
    }
 	
 	// Apumetodi, jolla saadaan täytettyä testiarvot jäsenelle.
@@ -78,11 +131,6 @@ public class Asiakas {
          String apuhetu = arvoHetu();
          vastaaErik(apuhetu);
      }
-	
-	   private void setTunnusNro(int nr) {
-	        tunnusNro = nr;
-	        if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
-	    }
 	
 	@Override
     public String toString() {
