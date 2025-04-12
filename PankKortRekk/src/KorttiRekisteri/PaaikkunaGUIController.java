@@ -17,8 +17,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import static KorttiRekisteri.MuokkaJasenGUIController.getFieldId; 
 
 /**
  * @author OMISTAJA
@@ -71,7 +73,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     
     //Jäsen muokkaukset
     @FXML private void handleMuokkaJasen() {
-        muokkaa();
+        muokkaa(1);
     }
     
     @Override
@@ -87,11 +89,11 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         hae(0);
     }
     
-    private void muokkaa() { 
+    private void muokkaa(int k) { 
         if ( asiakasKohdalla == null ) return; 
         try { 
             Asiakas asiakas; 
-            asiakas = MuokkaJasenGUIController.kysyAsiakas(null, asiakasKohdalla.clone()); 
+            asiakas = MuokkaJasenGUIController.kysyAsiakas(null, asiakasKohdalla.clone(), k); 
             if ( asiakas == null ) return; 
             pankki.korvaaTaiLisaa(asiakas); 
             hae(asiakas.getTunnusNro()); 
@@ -131,7 +133,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     protected void lisaaAsiakas() {
         try {
             Asiakas uusi = new Asiakas();
-            uusi = MuokkaJasenGUIController.kysyAsiakas(null, uusi);
+            uusi = MuokkaJasenGUIController.kysyAsiakas(null, uusi, 1);
             if (uusi == null) return;
             uusi.rekisteroi();
             uusi.vastaaErik();
@@ -168,38 +170,29 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         }
         return true;
     }
-
     
-    private void alusta() {
-        //panelAsiakas.setContent(areaAsiakas);
-        //areaAsiakas.setFont(new Font("Courier New", 12));
-        panelAsiakas.setFitToHeight(true);
-        
-        //panelKortti.setContent(areaKortti);
-        //areaKortti.setFont(new Font("Courier New", 12));
-        panelKortti.setFitToHeight(true);
-        
-        chooserAsiakkaat.addSelectionListener(e -> {
-            System.out.println("Asiakas valittu: " + chooserAsiakkaat.getSelectedObject());
-            naytaAsiakas();
-            System.out.println(" ");
-            naytaKortti(asiakasKohdalla);
-            System.out.println(" ");
-        });
-        
-        edits = new TextField[] {editNimi, editHetu, editKatuosoite, editPostinumero, editPostiToimipaikka, editPuhelinnumero, editSahkoposti};
+    @FXML private GridPane gridAsiakas;
+    private int kentta = 0; 
+    
+    protected void alusta() {
+        chooserAsiakkaat.clear();
+        chooserAsiakkaat.addSelectionListener(e -> naytaAsiakas());
+        edits = MuokkaJasenGUIController.luoKentat(gridAsiakas); 
+        for (TextField edit: edits)  
+            if ( edit != null ) {  
+                edit.setEditable(false);  
+                edit.setOnMouseClicked(e -> { if ( e.getClickCount() > 1 ) muokkaa(getFieldId(e.getSource(),0)); });  
+                edit.focusedProperty().addListener((a,o,n) -> kentta = getFieldId(edit,kentta));  
+            }    
+ 
     }
 
     
-    private void naytaAsiakas() {
+    protected void naytaAsiakas() {
         asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
-        //areaAsiakas.setText("");
-        //try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaAsiakas)) {
-        //    asiakasKohdalla.tulosta(os);
-        //}
         
-        MuokkaJasenGUIController.naytaAsiakas(edits, asiakasKohdalla);
+        MuokkaJasenGUIController.naytaAsiakas(edits, asiakasKohdalla); 
         naytaKortti(asiakasKohdalla);
     }
     
@@ -270,8 +263,6 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         lueTiedosto(uusinimi);
         return true;
     }
-
-
 
     
     @FXML private void handlePoistaJasen() {

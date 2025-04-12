@@ -6,10 +6,14 @@ import java.util.ResourceBundle;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
+import fi.jyu.mit.ohj2.Mjonot;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 /**
@@ -28,18 +32,13 @@ public class MuokkaJasenGUIController implements ModalControllerInterface<Asiaka
     @FXML private TextField editPuhelinnumero;
     @FXML private TextField editSahkoposti;
     
-    /**
-     * @param modalityStage mille ollaan modaalisia, null meinaa sovellukselle
-     * @param oletus mitä dataa näytetään oletuksena
-     * @return null jos painetaan peruuta/cancel, muuten täytetty tietue
-     */
-    public static Asiakas kysyAsiakas(Stage modalityStage, Asiakas oletus) {
-        return ModalController.showModal(MuokkaJasenGUIController.class.getResource("MuokkaJasenGUIView.fxml"), "AgoBank", modalityStage, oletus);
-    }
-    
     @FXML private void handleOK() {
         if (asiakasKohdalla != null && asiakasKohdalla.getNimi().trim().equals("") ) {
             naytaVirhe("Nimi ei saa olla tyhjä");
+            return;
+        }
+        if ( pankki != null && pankki.tarkistaOnkoHetu(asiakasKohdalla) ) {
+            naytaVirhe("Hetu on jo!");
             return;
         }
         ModalController.closeStage(labelVirhe);
@@ -64,7 +63,8 @@ public class MuokkaJasenGUIController implements ModalControllerInterface<Asiaka
 
     @Override
     public void handleShown() {
-        // TODO Auto-generated method stub 
+        kentta = Math.max(apuAsiakas.ekaKentta(), Math.min(kentta, apuAsiakas.getKenttia()-1));
+        edits[kentta].requestFocus();
     }
     
     
@@ -76,52 +76,68 @@ public class MuokkaJasenGUIController implements ModalControllerInterface<Asiaka
      */
     public static void naytaAsiakas (TextField[] edits, Asiakas asiakas) {
         if (asiakas == null) return;
-        edits[0].setText(asiakas.getNimi());
-        edits[1].setText(asiakas.getHetu());
-        edits[2].setText(asiakas.getKatuosoite());
-        edits[3].setText(asiakas.getPostinumero());
-        edits[4].setText(asiakas.getPostiToimipaikka());
-        edits[5].setText(asiakas.getPuhelinnumero());
-        edits[6].setText(asiakas.getSahkoposti());
+        for (int k = asiakas.ekaKentta(); k < asiakas.getKenttia(); k++) {
+            edits[k].setText(asiakas.anna(k));
+        }
     }
     
     private Asiakas asiakasKohdalla;
+    private Pankki pankki;
     private TextField[] edits;
+    private static Asiakas apuAsiakas = new Asiakas();
+    private int kentta = 0;
+    @FXML private ScrollPane panelAsiakas;
+    @FXML private GridPane gridAsiakas;
+    
+    private void setKerho(Pankki pankki) {
+        this.pankki = pankki;
+    }
+    
+    public static TextField[] luoKentat(GridPane gridJasen) {
+        gridJasen.getChildren().clear();
+        TextField[] edits = new TextField[apuAsiakas.getKenttia()];
+        
+        for (int i=0, k = apuAsiakas.ekaKentta(); k < apuAsiakas.getKenttia(); k++, i++) {
+            Label label = new Label(apuAsiakas.getKysymys(k));
+            gridJasen.add(label, 0, i);
+            TextField edit = new TextField();
+            edits[k] = edit;
+            edit.setId("e"+k);
+            gridJasen.add(edit, 1, i);
+        }
+        return edits;
+    }
     
     
     protected void alusta() {
-        edits = new TextField[] {editNimi, editHetu, editKatuosoite, editPostinumero, editPostiToimipaikka, editPuhelinnumero, editSahkoposti};
-        
-        int i = 0;
-        for (TextField edit : edits) {
-            final int k = ++i;
-            edit.setOnKeyReleased( e -> kasitteleMuutosJaseneen(k, (TextField)(e.getSource())));
-        }
+        edits = luoKentat(gridAsiakas);
+        for (TextField edit : edits)
+            if ( edit != null )
+                edit.setOnKeyReleased( e -> kasitteleMuutosJaseneen((TextField)(e.getSource())));
+        panelAsiakas.setFitToHeight(true);
     }
     
-    private void kasitteleMuutosJaseneen(int k, TextField edit) {
+    protected void kasitteleMuutosJaseneen(TextField edit) {
         if (asiakasKohdalla == null) return;
+        int k = getFieldId(edit,apuAsiakas.ekaKentta());
         String s = edit.getText();
         String virhe = null;
-        switch (k) {
-            case 1 : virhe = asiakasKohdalla.setNimi(s); break;
-            case 2 : virhe = asiakasKohdalla.setHetu(s); break;
-            case 3 : virhe = asiakasKohdalla.setKatuosoite(s); break;
-            case 4 : virhe = asiakasKohdalla.setPostinumero(s); break;
-            case 5 : virhe = asiakasKohdalla.setPostiToimipaikka(s); break;
-            case 6 : virhe = asiakasKohdalla.setPuhelinnumero(s); break;
-            case 7 : virhe = asiakasKohdalla.setSahkoposti(s); break;
-            default:
-        }
+        virhe = asiakasKohdalla.aseta(k,s); 
         if (virhe == null) {
-            Dialogs.setToolTipText(edit, "");
+            Dialogs.setToolTipText(edit,"");
             edit.getStyleClass().removeAll("virhe");
             naytaVirhe(virhe);
         } else {
-            Dialogs.setToolTipText(edit, virhe);
+            Dialogs.setToolTipText(edit,virhe);
             edit.getStyleClass().add("virhe");
             naytaVirhe(virhe);
         }
+    }
+    
+    public static int getFieldId(Object obj, int oletus) {
+        if ( !( obj instanceof Node)) return oletus;
+        Node node = (Node)obj;
+        return Mjonot.erotaInt(node.getId().substring(1),oletus);
     }
     
     private void naytaVirhe(String virhe) {
@@ -132,6 +148,21 @@ public class MuokkaJasenGUIController implements ModalControllerInterface<Asiaka
         }
         labelVirhe.setText(virhe);
         labelVirhe.getStyleClass().add("virhe");
+    }
+    
+    
+    
+    public static Asiakas kysyAsiakas(Stage modalityStage, Asiakas oletus, int kentta) {
+        return ModalController.<Asiakas, MuokkaJasenGUIController>showModal(
+                MuokkaJasenGUIController.class.getResource("MuokkaJasenGUIView.fxml"),
+                    "AgoBank",
+                    modalityStage, oletus,
+                    ctrl -> ctrl.setKentta(kentta)
+                );
+    }
+    
+    private void setKentta(int kentta) {
+        this.kentta = kentta;
     }
 
     /**

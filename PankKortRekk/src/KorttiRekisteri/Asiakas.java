@@ -173,6 +173,78 @@ public class Asiakas implements Cloneable {
           tulosta(new PrintStream(os));
      }
 	 
+	 public int getKenttia() {
+	     return 7;
+	 }
+	 
+	 public int ekaKentta() {
+	     return 1;
+	 }
+	 
+	 public String anna(int k) {
+	     switch ( k ) {
+	     case 0: return "" + tunnusNro;
+	     case 1: return "" + nimi;
+	     case 2: return "" + hetu;
+	     case 3: return "" + katuosoite;
+	     case 4: return "" + postinumero;
+	     case 5: return "" + postitoimipaikka;
+	     case 6: return "" + puhelinnumero;
+	     case 7: return "" + sähköposti;
+	     default: return "DUMBASS";
+	     }
+	 }
+	 
+	 public String getKysymys(int k) {
+	        switch (k) {
+	        case 0: return "Tunnus nro";
+	        case 1: return "nimi";
+	        case 2: return "hetu";
+	        case 3: return "katuosoite";
+	        case 4: return "postinumero";
+	        case 5: return "postitoimipaikka";
+	        case 6: return "puhelinnumero";
+	        case 7: return "sähköposti";
+	        default: return "DUMBASS";
+	        }
+	    }
+	 
+	 public String aseta(int k, String jono) {
+	     String tjono = jono.trim();
+	     StringBuffer sb = new StringBuffer(tjono);
+	     switch ( k ) {
+	     case 0:
+	            setTunnusNro(Mjonot.erota(sb, '§', getTunnusNro()));
+	            return null;
+	        case 1:
+	            nimi = tjono;
+	            return null;
+	        case 2:
+	            HetuTarkistus hetut = new HetuTarkistus();
+	            String virhe = hetut.tarkista(tjono);
+	            if ( virhe != null ) return virhe;
+	            hetu = tjono;
+	            return null;
+	        case 3:
+	            katuosoite = tjono;
+	            return null;
+	        case 4:
+	            postinumero = tjono;
+	            return null;
+	        case 5:
+	            postitoimipaikka = tjono;
+	            return null;
+	        case 6:
+	            puhelinnumero = tjono;
+	            return null;
+	        case 7:
+	            sähköposti = tjono;
+	            return null;
+	        default:
+	            return "";
+	     }
+	 }
+	 
 	 public int rekisteroi() {
         tunnusNro = seuraavaNro;
         seuraavaNro++;

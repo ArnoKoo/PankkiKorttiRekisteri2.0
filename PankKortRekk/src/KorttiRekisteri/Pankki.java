@@ -139,6 +139,24 @@ public class Pankki {
             System.out.println("Error reading pankkikortti file: " + e.getMessage());
         }
     }
+    
+    public boolean tarkistaOnkoHetu(Asiakas asiakas) {
+        if ( asiakas == null ) return false;
+        
+        int k = asiakas.ekaKentta() + 1;
+        String hetu = asiakas.anna(k);
+        if ( hetu.length() <= 6 ) return false;
+        
+        Collection<Asiakas> loytyneet = etsi(hetu, k);
+        if ( loytyneet.size() > 1 ) return true;
+        
+        if ( loytyneet.size() < 1 ) return false;
+        
+        Asiakas asiakas2 = loytyneet.iterator().next();
+        
+        if ( asiakas.getTunnusNro() != asiakas2.getTunnusNro() ) return true;
+        return false;
+    }
 
     /**
      * Tallentaa pankin tiedot tiedostoon.
