@@ -156,4 +156,73 @@ public class Yhdistelmä implements Iterable <Pankkikortti> {
         // TODO Auto-generated method stub
         return null;
     }
+    
+    public int getKenttia() {
+        return 10;
+    }
+    
+    /**
+     * @return ensimmäinen käyttäjän syötettävän kentän indeksi
+     */
+    public int ekaKentta() {
+        return 2;
+    }
+    
+    public String anna(int k) {
+        switch (k) {
+            case 0:
+                return "" + tunnusNro;
+            case 1:
+                return "" + asiakasNro;
+            case 2:
+                return "" + korttityyppi;
+            case 3:
+                return "" + pvm;
+            case 4:
+                return "" + korttinumero;
+            case 5:
+                return "" + PIN;
+            case 6:
+                return "" + CVC;
+            case 7:
+                return "" + lähimaksu;
+            case 8:
+                return "" + VPT;
+            case 9:
+                return "" + salasana;
+            default:
+                return "???";
+        }
+    }
+    
+    /**
+     * @param k a
+     * @return a
+     */
+    public String getKysymys(int k) {
+        switch (k) {
+        case 0:
+            return "tunnusNro";
+        case 1:
+            return "asiakasNro";
+        case 2:
+            return "korttityyppi";
+        case 3:
+            return "pvm";
+        case 4:
+            return "korttinumero";
+        case 5:
+            return "PIN";
+        case 6:
+            return "CVC";
+        case 7:
+            return "lähimaksu";
+        case 8:
+            return "VPT";
+        case 9:
+            return "salasana";
+        default:
+            return "???";
+        }
+    }
 }

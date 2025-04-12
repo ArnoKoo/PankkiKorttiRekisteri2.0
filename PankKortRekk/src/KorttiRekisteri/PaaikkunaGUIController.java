@@ -1,7 +1,8 @@
 package KorttiRekisteri;
-
+import static KorttiRekisteri.MuokkaJasenGUIController.getFieldId; 
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -14,13 +15,15 @@ import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import static KorttiRekisteri.MuokkaJasenGUIController.getFieldId; 
 
 /**
  * @author OMISTAJA
@@ -44,6 +47,10 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     @FXML private StringGrid<Debit> tableDebit;
     @FXML private StringGrid<Credit> tableCredit;
     @FXML private StringGrid<Yhdistelmä> tableYhdistelma;
+    
+    private static Debit apuDebit = new Debit(); 
+    private static Credit apuCredits = new Credit(); 
+    private static Yhdistelmä apuYhdistelmä = new Yhdistelmä(); 
     
     private TextField[] edits;
     
@@ -78,31 +85,23 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
-        try {
-            pankki.setTiedosto("AgoBank");
-            pankki.lueTiedostosta("AgoBank");  // vain tämä
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog("Tiedoston lukemisessa ongelmia: " + e.getMessage());
-        }
-
         alusta(); // ilman tiedostonlukua
-        hae(0);
     }
     
     private void muokkaa(int k) { 
         if ( asiakasKohdalla == null ) return; 
         try { 
             Asiakas asiakas; 
-            asiakas = MuokkaJasenGUIController.kysyAsiakas(null, asiakasKohdalla.clone(), k); 
+            asiakas = MuokkaJasenGUIController.kysyAsiakas(null, asiakasKohdalla.clone(), k);   
             if ( asiakas == null ) return; 
             pankki.korvaaTaiLisaa(asiakas); 
             hae(asiakas.getTunnusNro()); 
-            } catch (CloneNotSupportedException e) { 
-                // 
-            } catch (SailoException e) { 
-                Dialogs.showMessageDialog(e.getMessage()); 
-            } 
-        }
+        } catch (CloneNotSupportedException e) { 
+            // 
+        } catch (SailoException e) { 
+            Dialogs.showMessageDialog(e.getMessage()); 
+        } 
+    } 
 
     /**
      * 
@@ -112,19 +111,21 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         lisaaAsiakas();
     }
     
-    private void hae(int asiakasNumero) {
+    /**
+     * @param asiakasNumero aa
+     */
+    protected void hae(int asiakasNumero) {
         chooserAsiakkaat.clear();
-        int indeksi = 0;
-        System.out.println("Asiakkaita yhteensä: " + pankki.getAsiakkaat());
-        System.out.println(" ");
-        for (int i = 0; i < pankki.getAsiakkaat(); i++) {
-            Asiakas asiakas = pankki.annaAsiakas(i); 
-            if (asiakas.getTunnusNro() == asiakasNumero) {
-                indeksi = i;
-            }
-            chooserAsiakkaat.add("" + asiakas.getNimi(), asiakas);
+        int index = 0;
+        Collection<Asiakas> asiakkaat;
+        asiakkaat = pankki.etsi("", -1);
+        int i = 0;
+        for (Asiakas asiakas: asiakkaat) {
+            if (asiakas.getTunnusNro() == asiakasNumero) index = i;
+            chooserAsiakkaat.add(asiakas.getNimi(), asiakas);
+            i++;
         }
-        chooserAsiakkaat.setSelectedIndex(indeksi);
+        chooserAsiakkaat.setSelectedIndex(index);
     }
     
     /**
@@ -133,23 +134,24 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     protected void lisaaAsiakas() {
         try {
             Asiakas uusi = new Asiakas();
-            uusi = MuokkaJasenGUIController.kysyAsiakas(null, uusi, 1);
-            if (uusi == null) return;
+            uusi = MuokkaJasenGUIController.kysyAsiakas(null, uusi, 1);    
+            if ( uusi == null ) return;
             uusi.rekisteroi();
-            uusi.vastaaErik();
             pankki.lisaa(uusi);
             hae(uusi.getTunnusNro());
-            pankki.lisaa(uusi); 
-        } catch (SailoException ex) {
-            Dialogs.showMessageDialog("Ongelmia uuden luomisessa: " + ex.getMessage());
-        }
-             
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
+            return;
+        }      
     }
     
     private Pankki pankki = new Pankki();
     //private TextArea areaAsiakas = new TextArea();
     //private TextArea areaKortti = new TextArea();
     private Asiakas asiakasKohdalla;
+    @FXML private GridPane gridAsiakas;
+    private int kentta = 0; 
+    
     
     /**
      * @param pankki setteri
@@ -170,11 +172,10 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         }
         return true;
     }
+
     
-    @FXML private GridPane gridAsiakas;
-    private int kentta = 0; 
-    
-    protected void alusta() {
+    @SuppressWarnings("deprecation")
+    private void alusta() {
         chooserAsiakkaat.clear();
         chooserAsiakkaat.addSelectionListener(e -> naytaAsiakas());
         edits = MuokkaJasenGUIController.luoKentat(gridAsiakas); 
@@ -182,11 +183,53 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
             if ( edit != null ) {  
                 edit.setEditable(false);  
                 edit.setOnMouseClicked(e -> { if ( e.getClickCount() > 1 ) muokkaa(getFieldId(e.getSource(),0)); });  
-                edit.focusedProperty().addListener((a,o,n) -> kentta = getFieldId(edit,kentta));  
-            }    
- 
-    }
+                edit.focusedProperty().addListener((a,o,n) -> kentta = getFieldId(edit,kentta));
+                edit.setOnKeyPressed( e -> {if ( e.getCode() == KeyCode.F2 ) muokkaa(kentta);}); 
 
+            }
+        
+        int eka = apuDebit.ekaKentta(); 
+        int lkm = apuDebit.getKenttia(); 
+        String[] headings = new String[lkm-eka]; 
+        for (int i=0, k=eka; k<lkm; i++, k++) headings[i] = apuDebit.getKysymys(k); 
+        tableDebit.initTable(headings); 
+        tableDebit.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); 
+        tableDebit.setEditable(false); 
+        tableDebit.setPlaceholder(new Label("Ei vielä harrastuksia")); 
+         
+        // Tämä on vielä huono, ei automaattisesti muutu jos kenttiä muutetaan. 
+        tableDebit.setColumnSortOrderNumber(1); 
+        tableDebit.setColumnSortOrderNumber(2); 
+        tableDebit.setColumnWidth(1, 60);
+        
+        int eka1 = apuDebit.ekaKentta(); 
+        int lkm1 = apuDebit.getKenttia(); 
+        String[] headings1 = new String[lkm1-eka1]; 
+        for (int i=0, k=eka1; k<lkm1; i++, k++) headings1[i] = apuDebit.getKysymys(k); 
+        tableCredit.initTable(headings1); 
+        tableCredit.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); 
+        tableCredit.setEditable(false); 
+        tableCredit.setPlaceholder(new Label("Ei vielä harrastuksia")); 
+         
+        // Tämä on vielä huono, ei automaattisesti muutu jos kenttiä muutetaan. 
+        tableCredit.setColumnSortOrderNumber(1); 
+        tableCredit.setColumnSortOrderNumber(2); 
+        tableCredit.setColumnWidth(1, 60);
+        
+        int eka2 = apuDebit.ekaKentta(); 
+        int lkm2 = apuDebit.getKenttia(); 
+        String[] headings2 = new String[lkm2-eka2]; 
+        for (int i=0, k=eka2; k<lkm2; i++, k++) headings2[i] = apuDebit.getKysymys(k); 
+        tableYhdistelma.initTable(headings2); 
+        tableYhdistelma.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); 
+        tableYhdistelma.setEditable(false); 
+        tableYhdistelma.setPlaceholder(new Label("Ei vielä harrastuksia")); 
+         
+        // Tämä on vielä huono, ei automaattisesti muutu jos kenttiä muutetaan. 
+        tableYhdistelma.setColumnSortOrderNumber(1); 
+        tableYhdistelma.setColumnSortOrderNumber(2); 
+        tableYhdistelma.setColumnWidth(1, 60);
+    }
     
     protected void naytaAsiakas() {
         asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
@@ -203,16 +246,19 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         if (asiakasKohdalla == null) return;
         
             List<Debit> debitit = pankki.annaDebit(asiakas);
-            for (Debit deb : debitit) {
-                naytaDebit(deb);
+            if ( debitit.size() == 0 ) return;
+                for (Debit deb: debitit) {
+                    naytaDebit(deb);
             }
             
             List<Credit> creditit = pankki.annaCredit(asiakas);
-            for (Credit cred : creditit) {
+            if ( creditit.size() == 0 ) return;
+            for (Credit cred: creditit) {
                 naytaCredit(cred);
-            }
+            }   
 
             List<Yhdistelmä> yhdistelmat = pankki.annaYhdistelma(asiakas);
+            if ( yhdistelmat.size() == 0 ) return;
             for (Yhdistelmä yhd : yhdistelmat) {
                 naytaYhdistelma(yhd);
             }
@@ -220,19 +266,27 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     }
     
     private void naytaDebit(Debit debit) {
-        System.out.println("Debit toString(): " + debit.toString());
-        String[] rivi = debit.toString().split("\\|");
-        tableDebit.add(debit,rivi[2],rivi[3],rivi[4],rivi[5],rivi[6],rivi[7],rivi[8],rivi[9]);
+        int kenttia = debit.getKenttia(); 
+        String[] rivi = new String[kenttia-debit.ekaKentta()]; 
+        for (int i=0, k = debit.ekaKentta(); k < kenttia; i++, k++) 
+            rivi[i] = debit.anna(k); 
+        tableDebit.add(debit,rivi);
     }
     
     private void naytaCredit(Credit credit) {
-        String[] rivi = credit.toString().split("\\|");
-        tableCredit.add(credit,rivi[2],rivi[3],rivi[4],rivi[5],rivi[6],rivi[7],rivi[8],rivi[9]);
+        int kenttia = credit.getKenttia(); 
+        String[] rivi = new String[kenttia-credit.ekaKentta()]; 
+        for (int i=0, k = credit.ekaKentta(); k < kenttia; i++, k++) 
+            rivi[i] = credit.anna(k); 
+        tableCredit.add(credit,rivi);
     }
     
     private void naytaYhdistelma(Yhdistelmä yhdistelma) {
-        String[] rivi = yhdistelma.toString().split("\\|");
-        tableYhdistelma.add(yhdistelma,rivi[2],rivi[3],rivi[4],rivi[5],rivi[6],rivi[7],rivi[8],rivi[9]);
+        int kenttia = yhdistelma.getKenttia(); 
+        String[] rivi = new String[kenttia-yhdistelma.ekaKentta()]; 
+        for (int i=0, k = yhdistelma.ekaKentta(); k < kenttia; i++, k++) 
+            rivi[i] = yhdistelma.anna(k); 
+        tableYhdistelma.add(yhdistelma,rivi);
     }
 
     
@@ -264,18 +318,19 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         return true;
     }
 
+
+
     
     @FXML private void handlePoistaJasen() {
         PoistaJasenGUIController.alkuNaytto(null, "Poista jäsen");
     }
     
     @FXML private void handleLisaaDebitKortti() { 
-        asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
-        if (asiakasKohdalla == null) return;
-        Debit deb = new Debit();
-        deb.rekisteroi();
-        deb.vastaaDebit(asiakasKohdalla.getTunnusNro());
-        pankki.lisaaDebit(deb);
+        if ( asiakasKohdalla == null ) return; 
+        Debit deb = new Debit(); 
+        deb.rekisteroi(); 
+        deb.vastaaDebit(asiakasKohdalla.getTunnusNro()); 
+        pankki.lisaaDebit(deb); 
         hae(asiakasKohdalla.getTunnusNro());
     }
     
@@ -306,6 +361,8 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     @FXML private void handlePoistaPankkiKorttiVali() {
         PoistaPankkiKorttiGUIController.alkuNaytto(null, "Poista pankkikortti");
     }
+    
+    
     
     /**
      * @param modalityStage Stage-olio

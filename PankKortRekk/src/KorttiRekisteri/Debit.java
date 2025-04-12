@@ -13,34 +13,34 @@ import fi.jyu.mit.ohj2.Mjonot;
  *
  */
 public class Debit implements Iterable <Pankkikortti> {
-	    
-	private int			tunnusNro;
-	private String		korttityyppi				= "";
-	private int         asiakasNro;
-	private String		pvm							= "";
-	private String		korttinumero				= "";
-	private String		PIN							= "";
-	private String		CVC							= "";
-	private boolean		lähimaksu;
-	private String		VPT							= ""; // Verkkopankkitunnus
-	private String		salasana					= "";
-	
-	private static int  seuraavaNro				= 1;
+        
+    private int         tunnusNro;
+    private String      korttityyppi                = "";
+    private int         asiakasNro;
+    private String      pvm                         = "";
+    private String      korttinumero                = "";
+    private String      PIN                         = "";
+    private String      CVC                         = "";
+    private boolean     lähimaksu;
+    private String      VPT                         = ""; // Verkkopankkitunnus
+    private String      salasana                    = "";
+    
+    private static int  seuraavaNro             = 1;
 
-	/**
-	 * @return korttityyppi
-	 */
-	public String getKorttityyppi() {
-		return korttityyppi;
-	}
-	
+    /**
+     * @return korttityyppi
+     */
+    public String getKorttityyppi() {
+        return korttityyppi;
+    }
+    
     /**
      * Alustetaan kortti tietylle asiakkaalle
      * @return asiakkaan numero
      */
     public int getAsiakasNro() {
         return asiakasNro;
-    }	
+    }   
     
     /**
      * Oletusrakentaja
@@ -58,41 +58,41 @@ public class Debit implements Iterable <Pankkikortti> {
     public Debit(int asiakasNro) {
          this.asiakasNro = asiakasNro;
      }
-	
-	/**
-	 * Tämän tarkoituksena on palauttaa esimerkki debit kortin tiedoista
-	 * @param nro numero
-	 */
-	public void vastaaDebit(int nro) {
-	    asiakasNro = nro;
-		korttityyppi = "Debit";
-		pvm = "1.1.2025";
-		korttinumero = "4000 0000 0000 0001";
-		PIN = "1234";
-		CVC = "420";
-		lähimaksu = true;
-		VPT = "FI41 0000 0000 0000 00";
-		salasana = "2023";
-	}
-	
-	@Override
+    
+    /**
+     * Tämän tarkoituksena on palauttaa esimerkki debit kortin tiedoista
+     * @param nro numero
+     */
+    public void vastaaDebit(int nro) {
+        asiakasNro = nro;
+        korttityyppi = "Debit";
+        pvm = "1.1.2025";
+        korttinumero = "4000 0000 0000 0001";
+        PIN = "1234";
+        CVC = "420";
+        lähimaksu = true;
+        VPT = "FI41 0000 0000 0000 00";
+        salasana = "2023";
+    }
+    
+    @Override
     public String toString() {
-		return String.join("|", 
-		        String.valueOf(tunnusNro),
-		        String.valueOf(asiakasNro),
-		        korttityyppi,
-		        pvm,
-		        korttinumero,
-		        PIN,
-		        CVC,
-		        String.valueOf(lähimaksu),
-		        VPT,
-		        salasana
-		    );
+        return String.join("|", 
+                String.valueOf(tunnusNro),
+                String.valueOf(asiakasNro),
+                korttityyppi,
+                pvm,
+                korttinumero,
+                PIN,
+                CVC,
+                String.valueOf(lähimaksu),
+                VPT,
+                salasana
+            );
     }
 
-	
-	public void parse(String rivi) {
+    
+    public void parse(String rivi) {
         StringBuffer sb = new StringBuffer(rivi);
         setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
         asiakasNro = Mjonot.erota(sb, '|', asiakasNro);
@@ -105,51 +105,51 @@ public class Debit implements Iterable <Pankkikortti> {
         VPT = Mjonot.erota(sb, '|', VPT);
         salasana = Mjonot.erota(sb, '|', salasana);
     }
-	
-	private void setTunnusNro(int nr) {
+    
+    private void setTunnusNro(int nr) {
         tunnusNro = nr;
         if ( tunnusNro >= seuraavaNro ) seuraavaNro = tunnusNro + 1;
     }
 
-	
-	/**
-	 * Tulostetaan kortin tiedot järjestettyyn muotoon.
-	 * @param out tietoa ulos näkyville
-	 */
-	public void tulosta(PrintStream out) {
+    
+    /**
+     * Tulostetaan kortin tiedot järjestettyyn muotoon.
+     * @param out tietoa ulos näkyville
+     */
+    public void tulosta(PrintStream out) {
         out.println(String.format("%03d", tunnusNro, 3) + "  " + korttityyppi + " " + pvm);
         out.println("  " + korttinumero + "  " + PIN + " " + CVC);
         out.println("  Onko lähimaksua: " + lähimaksu);
         out.println("  Verkkopankkitunnus: " + VPT + " Salasana: " + salasana);
     }
-	 
-	 /**
-	  * Ohjataan tulostuksen printstreamin kautta
-	 * @param os avustaa tulosta -aliohjelmaa
-	 */
-	public void tulosta(OutputStream os) {
+     
+     /**
+      * Ohjataan tulostuksen printstreamin kautta
+     * @param os avustaa tulosta -aliohjelmaa
+     */
+    public void tulosta(OutputStream os) {
         tulosta(new PrintStream(os));
-	 }
-	 
-	 /**
-	  * rekisteroi() antaa tunnusnumeron pankkikortille ja antaa seuraavalle kortille tunnusnumeron + 1 
-	 * @return tunnusnumero
-	 */
-	public int rekisteroi() {
+     }
+     
+     /**
+      * rekisteroi() antaa tunnusnumeron pankkikortille ja antaa seuraavalle kortille tunnusnumeron + 1 
+     * @return tunnusnumero
+     */
+    public int rekisteroi() {
       tunnusNro = seuraavaNro;
       seuraavaNro++;
       return tunnusNro;
-	 }
-	 
-	 /**
-	  * Palauttaa kortin tunnusnumeron
-	 * @return tunnusnumeron
-	 */
-	 public int getTunnusNro( ) {
-		 return tunnusNro;
-	 }
-	 
-	 /**
+     }
+     
+     /**
+      * Palauttaa kortin tunnusnumeron
+     * @return tunnusnumeron
+     */
+     public int getTunnusNro( ) {
+         return tunnusNro;
+     }
+     
+     /**
      * UUSI JUTTU ----------------------------------------------------------------
      * Seurasin Vesan luentoa ja huomasin meiltä puuttuvan main aliohjelma. UPDATE: ei pakollinen
      * @param args ei tee mitään
@@ -165,4 +165,71 @@ public class Debit implements Iterable <Pankkikortti> {
         // TODO Auto-generated method stub
         return null;
     }
+
+    public int getKenttia() {
+        return 10;
+    }
+    
+    /**
+     * @return ensimmäinen käyttäjän syötettävän kentän indeksi
+     */
+    public int ekaKentta() {
+        return 2;
+    }
+    
+    public String anna(int k) {
+        switch (k) {
+            case 0:
+                return "" + tunnusNro;
+            case 1:
+                return "" + asiakasNro;
+            case 2:
+                return "" + korttityyppi;
+            case 3:
+                return "" + pvm;
+            case 4:
+                return "" + korttinumero;
+            case 5:
+                return "" + PIN;
+            case 6:
+                return "" + CVC;
+            case 7:
+                return "" + lähimaksu;
+            case 8:
+                return "" + VPT;
+            case 9:
+                return "" + salasana;
+            default:
+                return "???";
+        }
+    }
+    
+    public String getKysymys(int k) {
+        switch (k) {
+        case 0:
+            return "tunnusNro";
+        case 1:
+            return "asiakasNro";
+        case 2:
+            return "korttityyppi";
+        case 3:
+            return "pvm";
+        case 4:
+            return "korttinumero";
+        case 5:
+            return "PIN";
+        case 6:
+            return "CVC";
+        case 7:
+            return "lähimaksu";
+        case 8:
+            return "VPT";
+        case 9:
+            return "salasana";
+        default:
+            return "???";
+        }
+    }
+
+
 }
