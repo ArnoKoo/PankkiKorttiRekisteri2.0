@@ -9,8 +9,7 @@ import fi.jyu.mit.ohj2.Mjonot;
 /*  Luokka credit sijaitsee "Pankkikortit" luokan alla. Luokka vastaanottaa kahdeksan parametria, jotka näkyvät alla.
  * 	Pohja on otettu Vesan esimerkeistä
  */
-
-public class Credit implements Iterable <Pankkikortti> {
+public class Credit implements Cloneable, Tietue {
 	
 	private int			tunnusNro;
 	private String		korttityyppi				= "";
@@ -39,6 +38,13 @@ public class Credit implements Iterable <Pankkikortti> {
     public Credit() {
          //
      }
+    
+    @Override
+    public Credit clone() throws CloneNotSupportedException {
+        Credit uusi;
+        uusi = (Credit) super.clone();
+        return uusi;
+    }
      
      /**
       * UUSI JUTTU ----------------------------------------------------------------
@@ -133,12 +139,12 @@ public class Credit implements Iterable <Pankkikortti> {
          cre.tulosta(System.out);
      }
 
-    @Override
     public Iterator<Pankkikortti> iterator() {
         // TODO Auto-generated method stub
         return null;
     }
     
+    @Override
     public int getKenttia() {
         return 10;
     }
@@ -146,10 +152,12 @@ public class Credit implements Iterable <Pankkikortti> {
     /**
      * @return ensimmäinen käyttäjän syötettävän kentän indeksi
      */
+    @Override
     public int ekaKentta() {
         return 2;
     }
     
+    @Override
     public String anna(int k) {
         switch (k) {
             case 0:
@@ -182,6 +190,7 @@ public class Credit implements Iterable <Pankkikortti> {
      * @param k a
      * @return a
      */
+    @Override
     public String getKysymys(int k) {
         switch (k) {
         case 0:
@@ -207,5 +216,11 @@ public class Credit implements Iterable <Pankkikortti> {
         default:
             return "???";
         }
+    }
+
+    @Override
+    public String aseta(int k, String s) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

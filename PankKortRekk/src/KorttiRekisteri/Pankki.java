@@ -45,6 +45,40 @@ public class Pankki {
     public void korvaaTaiLisaa(Asiakas asiakas) throws SailoException {
         asiakkaat.korvaaTaiLisaa(asiakas);
     }
+    
+    /**
+     * Korvaa debitin tietokannassa, ottaa debitin omistukseensa.
+     * Etitään samalla tunnusNro:lla oleva debit.
+     * Jos ei löydy niin lisätään uutena debittinä.
+     * @param deb lisättävän debitin viite
+     * @throws SailoException aa
+     */
+    public void korvaaTaiLisaaDebit(Debit deb) throws SailoException {
+        pankkikortti.korvaaTaiLisaaDebit(deb);
+        
+    }
+
+    /**
+     * Korvaa creditin tietokannassa, ottaa creditin omistukseensa.
+     * Etitään samalla tunnusNro:lla oleva credit.
+     * Jos ei löydy niin lisätään uutena credittinä. 
+     * @param cred lisättävän creditin viite
+     * @throws SailoException aa 
+     */
+    public void korvaaTaiLisaaCredit(Credit cred) throws SailoException {
+        pankkikortti.korvaaTaiLisaaCredit(cred);       
+    }
+
+    /**
+     * Korvaa yhdistelmäkortin tietokannassa, ottaa yhdistelmäkortin omistukseensa.
+     * Etitään samalla tunnusNro:lla oleva yhdistelmäkortti.
+     * Jos ei löydy niin lisätään uutena yhdistelmäkorttina.  
+     * @param yhd lisättävän yhdistelmäkortin viite
+     * @throws SailoException aa 
+     */
+    public void korvaaTaiLisaaYhdistelma(Yhdistelmä yhd) throws SailoException {
+        pankkikortti.korvaaTaiLisaaYhdistelma(yhd);
+    }
  
     /**
      * Lisää pankkiin uuden asiakkaan, SailoException varmistaa ettei liikaa asiakkaita

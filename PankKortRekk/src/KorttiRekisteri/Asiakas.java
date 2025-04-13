@@ -11,7 +11,7 @@ import fi.jyu.mit.ohj2.Mjonot;
 
 import static KorttiRekisteri.HetuTarkistus.*;
 @SuppressWarnings("javadoc")
-public class Asiakas implements Cloneable {
+public class Asiakas implements Cloneable, Tietue {
  
 	private int			tunnusNro;
 	private String		nimi					= "";
@@ -23,8 +23,6 @@ public class Asiakas implements Cloneable {
 	private String		sähköposti				= "";
 	
 	private static int  seuraavaNro				= 1;
-	
-	// Palauttaa jäsenen nimen
 	
 	public String getNimi() {
 	    return nimi;
@@ -173,15 +171,18 @@ public class Asiakas implements Cloneable {
           tulosta(new PrintStream(os));
      }
 	 
-	 public int getKenttia() {
+	 @Override
+    public int getKenttia() {
 	     return 7;
 	 }
 	 
-	 public int ekaKentta() {
+	 @Override
+    public int ekaKentta() {
 	     return 1;
 	 }
 	 
-	 public String anna(int k) {
+	 @Override
+    public String anna(int k) {
 	     switch ( k ) {
 	     case 0: return "" + tunnusNro;
 	     case 1: return "" + nimi;
@@ -195,7 +196,8 @@ public class Asiakas implements Cloneable {
 	     }
 	 }
 	 
-	 public String getKysymys(int k) {
+	 @Override
+    public String getKysymys(int k) {
 	        switch (k) {
 	        case 0: return "Tunnus nro";
 	        case 1: return "nimi";
@@ -209,7 +211,8 @@ public class Asiakas implements Cloneable {
 	        }
 	    }
 	 
-	 public String aseta(int k, String jono) {
+	 @Override
+    public String aseta(int k, String jono) {
 	     String tjono = jono.trim();
 	     StringBuffer sb = new StringBuffer(tjono);
 	     switch ( k ) {

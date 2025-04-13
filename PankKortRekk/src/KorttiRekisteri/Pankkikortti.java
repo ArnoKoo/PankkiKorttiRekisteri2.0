@@ -40,7 +40,7 @@ public class Pankkikortti {
     }
     
 
-    private Collection<Debit> debitLista = new ArrayList<Debit>(); //UUSI JUTTU: saa nähdä, miten tää soveltuu sinne taulukkoon muiden kanssa
+    private final List<Debit> debitLista = new ArrayList<Debit>(); //UUSI JUTTU: saa nähdä, miten tää soveltuu sinne taulukkoon muiden kanssa
     
     /**
      * @param deb lisättävä debitkortti
@@ -67,7 +67,7 @@ public class Pankkikortti {
     
     
 
-    private Collection<Credit> creditLista = new ArrayList<Credit>(); //UUSI JUTTU: saa nähdä, miten tää soveltuu sinne taulukkoon muiden kanssa
+    private final List<Credit> creditLista = new ArrayList<Credit>(); //UUSI JUTTU: saa nähdä, miten tää soveltuu sinne taulukkoon muiden kanssa
     
     /**
      * @param cred lisättävä luottokortti
@@ -94,7 +94,7 @@ public class Pankkikortti {
     
     
 
-    private Collection<Yhdistelmä> yhdistelmaLista = new ArrayList<Yhdistelmä>();
+    private final List<Yhdistelmä> yhdistelmaLista = new ArrayList<Yhdistelmä>();
     
     /**
      * @param yhd lisättävä kredittikortti
@@ -338,6 +338,57 @@ public class Pankkikortti {
             yhd.tulosta(System.out);
         }
 
+    }
+
+    /**
+     * Selitin tän jo pankis
+     * @param deb aa
+     * @throws SailoException aa
+     */
+    public void korvaaTaiLisaaDebit(Debit deb) throws SailoException {
+        int id = deb.getTunnusNro();
+        for (int i = 0; i < getLkm(); i++) {
+            if (debitLista.get(i).getTunnusNro() == id) {
+                debitLista.set(i, deb);
+                muutettu = true;
+                return;
+            }
+        }
+        lisaaDebitti(deb);
+    }
+
+    /**
+     * Selitin tän jo pankis
+     * @param cred aa
+     * @throws SailoException aa
+     */
+    public void korvaaTaiLisaaCredit(Credit cred) throws SailoException {
+        int id = cred.getTunnusNro();
+        for (int i = 0; i < getLkm(); i++) {
+            if (creditLista.get(i).getTunnusNro() == id) {
+                creditLista.set(i, cred);
+                muutettu = true;
+                return;
+            }
+        }
+        lisaaKreditti(cred);        
+    }
+
+    /**
+     * Selitin tän jo pankis
+     * @param yhd aa
+     * @throws SailoException aa
+     */
+    public void korvaaTaiLisaaYhdistelma(Yhdistelmä yhd) throws SailoException {
+        int id = yhd.getTunnusNro();
+        for (int i = 0; i < getLkm(); i++) {
+            if (yhdistelmaLista.get(i).getTunnusNro() == id) {
+                yhdistelmaLista.set(i, yhd);
+                muutettu = true;
+                return;
+            }
+        }
+        lisaaYhdistelma(yhd);
     }
     
 }

@@ -1,6 +1,6 @@
 package KorttiRekisteri;
-import static KorttiRekisteri.MuokkaJasenGUIController.getFieldId; 
-import java.io.PrintStream;
+import static KorttiRekisteri.TietueDialogGUIController.getFieldId; 
+
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
@@ -11,18 +11,15 @@ import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import fi.jyu.mit.fxgui.StringGrid;
-import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
@@ -80,7 +77,60 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     
     //Jäsen muokkaukset
     @FXML private void handleMuokkaJasen() {
-        muokkaa(1);
+        muokkaa(kentta);
+    }
+    
+    @FXML private void handlePoistaJasen() {
+        PoistaJasenGUIController.alkuNaytto(null, "Poista jäsen");
+    }
+    
+    @FXML private void handleLisaaDebitKortti() { 
+        if ( asiakasKohdalla == null ) return;
+        Debit uusi = new Debit(asiakasKohdalla.getTunnusNro());
+        uusi = TietueDialogGUIController.kysyTietue(null, uusi, 0);
+        if ( uusi == null ) return;
+        uusi.rekisteroi();
+        pankki.lisaaDebit(uusi);
+        naytaKortti(asiakasKohdalla); 
+        tableDebit.selectRow(1000);  // järjestetään viimeinen rivi valituksi
+    }
+    
+    @FXML private void handleLisaaLuottoKortti() {
+        if ( asiakasKohdalla == null ) return;
+        Credit uusi = new Credit(asiakasKohdalla.getTunnusNro());
+        uusi = TietueDialogGUIController.kysyTietue(null, uusi, 0);
+        if ( uusi == null ) return;
+        uusi.rekisteroi();
+        pankki.lisaaCredit(uusi);
+        naytaKortti(asiakasKohdalla); 
+        tableCredit.selectRow(1000);  // järjestetään viimeinen rivi valituksi
+    }
+    
+    @FXML private void handleLisaaYhdistelmaKortti() {
+        if ( asiakasKohdalla == null ) return;
+        Yhdistelmä uusi = new Yhdistelmä(asiakasKohdalla.getTunnusNro());
+        uusi = TietueDialogGUIController.kysyTietue(null, uusi, 0);
+        if ( uusi == null ) return;
+        uusi.rekisteroi();
+        pankki.lisaaYhdistelma(uusi);
+        naytaKortti(asiakasKohdalla); 
+        tableYhdistelma.selectRow(1000);  // järjestetään viimeinen rivi valituksi
+    }
+    
+    @FXML private void handleMuokkaaPankkiKorttiVali() {
+        MuokkaaGUIController.alkuNaytto(null, "Muokkaa pankkikortin tietoja");
+    }
+    
+    @FXML private void handlePoistaPankkiKorttiVali() {
+        PoistaPankkiKorttiGUIController.alkuNaytto(null, "Poista pankkikortti");
+    }
+    
+    /**
+     * 
+     */
+    @FXML
+    public void handleLisaaAsiakas() {
+        lisaaAsiakas();
     }
     
     @Override
@@ -100,7 +150,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         if ( asiakasKohdalla == null ) return; 
         try { 
             Asiakas asiakas; 
-            asiakas = MuokkaJasenGUIController.kysyAsiakas(null, asiakasKohdalla.clone(), k);   
+            asiakas = TietueDialogGUIController.kysyTietue(null, asiakasKohdalla.clone(), k);   
             if ( asiakas == null ) return; 
             pankki.korvaaTaiLisaa(asiakas); 
             hae(asiakas.getTunnusNro()); 
@@ -110,14 +160,6 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
             Dialogs.showMessageDialog(e.getMessage()); 
         } 
     } 
-
-    /**
-     * 
-     */
-    @FXML
-    public void handleLisaaAsiakas() {
-        lisaaAsiakas();
-    }
     
     /**
      * @param asiakasNumero aa
@@ -142,7 +184,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     protected void lisaaAsiakas() {
         try {
             Asiakas uusi = new Asiakas();
-            uusi = MuokkaJasenGUIController.kysyAsiakas(null, uusi, 1);    
+            uusi = TietueDialogGUIController.kysyTietue(null, uusi, 1); 
             if ( uusi == null ) return;
             uusi.rekisteroi();
             pankki.lisaa(uusi);
@@ -186,14 +228,18 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     private void alusta() {
         chooserAsiakkaat.clear();
         chooserAsiakkaat.addSelectionListener(e -> naytaAsiakas());
-        edits = MuokkaJasenGUIController.luoKentat(gridAsiakas); 
+        edits = TietueDialogGUIController.luoKentat(gridAsiakas, new Asiakas());
         for (TextField edit: edits)  
             if ( edit != null ) {  
                 edit.setEditable(false);  
-                edit.setOnMouseClicked(e -> { if ( e.getClickCount() > 1 ) muokkaa(getFieldId(e.getSource(),0)); });  
-                edit.focusedProperty().addListener((a,o,n) -> kentta = getFieldId(edit,kentta));
-                edit.setOnKeyPressed( e -> {if ( e.getCode() == KeyCode.F2 ) muokkaa(kentta);}); 
-
+                tableDebit.setOnMouseClicked( e -> { if ( e.getClickCount() > 1 ) muokkaaDebit(); } );
+                tableDebit.setOnKeyPressed( e -> {if ( e.getCode() == KeyCode.F2 ) muokkaaDebit();});  
+                
+                tableCredit.setOnMouseClicked( e -> { if ( e.getClickCount() > 1 ) muokkaaCredit(); } );
+                tableCredit.setOnKeyPressed( e -> {if ( e.getCode() == KeyCode.F2 ) muokkaaCredit();}); 
+                
+                tableYhdistelma.setOnMouseClicked( e -> { if ( e.getClickCount() > 1 ) muokkaaYhdistelma(); } );
+                tableYhdistelma.setOnKeyPressed( e -> {if ( e.getCode() == KeyCode.F2 ) muokkaaYhdistelma();}); 
             }
         
         int eka = apuDebit.ekaKentta(); 
@@ -239,11 +285,67 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         tableYhdistelma.setColumnWidth(1, 60);
     }
     
+    private void muokkaaDebit() {
+        int r = tableDebit.getRowNr();
+        if ( r < 0 ) return; // klikattu ehkä otsikkoriviä
+        Debit deb = tableDebit.getObject();
+        if ( deb == null ) return;
+        int k = tableDebit.getColumnNr()+deb.ekaKentta();
+        try {
+            deb = TietueDialogGUIController.kysyTietue(null, deb.clone(), k);
+            if ( deb == null ) return;
+            pankki.korvaaTaiLisaaDebit(deb); 
+            naytaKortti(asiakasKohdalla); 
+            tableDebit.selectRow(r);  // järjestetään sama rivi takaisin valituksi
+        } catch (CloneNotSupportedException  e) { /* clone on tehty */  
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Ongelmia lisäämisessä: " + e.getMessage());
+        }
+    }
+    
+    private void muokkaaCredit() {
+        int r = tableCredit.getRowNr();
+        if ( r < 0 ) return; // klikattu ehkä otsikkoriviä
+        Credit cred = tableCredit.getObject();
+        if ( cred == null ) return;
+        int k = tableCredit.getColumnNr()+cred.ekaKentta();
+        try {
+            cred = TietueDialogGUIController.kysyTietue(null, cred.clone(), k);
+            if ( cred == null ) return;
+            pankki.korvaaTaiLisaaCredit(cred); 
+            naytaKortti(asiakasKohdalla); 
+            tableCredit.selectRow(r);  // järjestetään sama rivi takaisin valituksi
+        } catch (CloneNotSupportedException  e) { /* clone on tehty */  
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Ongelmia lisäämisessä: " + e.getMessage());
+        }
+    }
+    
+    private void muokkaaYhdistelma() {
+        int r = tableYhdistelma.getRowNr();
+        if ( r < 0 ) return; // klikattu ehkä otsikkoriviä
+        Yhdistelmä yhd = tableYhdistelma.getObject();
+        if ( yhd == null ) return;
+        int k = tableYhdistelma.getColumnNr()+yhd.ekaKentta();
+        try {
+            yhd = TietueDialogGUIController.kysyTietue(null, yhd.clone(), k);
+            if ( yhd == null ) return;
+            pankki.korvaaTaiLisaaYhdistelma(yhd); 
+            naytaKortti(asiakasKohdalla); 
+            tableYhdistelma.selectRow(r);  // järjestetään sama rivi takaisin valituksi
+        } catch (CloneNotSupportedException  e) { /* clone on tehty */  
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Ongelmia lisäämisessä: " + e.getMessage());
+        }
+    }
+    
+    
+    
     protected void naytaAsiakas() {
         asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
         if (asiakasKohdalla == null) return;
         
-        MuokkaJasenGUIController.naytaAsiakas(edits, asiakasKohdalla); 
+        TietueDialogGUIController.naytaTietue(edits, asiakasKohdalla);
         naytaKortti(asiakasKohdalla);
     }
     
@@ -296,8 +398,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
             rivi[i] = yhdistelma.anna(k); 
         tableYhdistelma.add(yhdistelma,rivi);
     }
-
-    
+        
     /**
      * @param nimi aa
      * @return aa
@@ -325,52 +426,6 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         lueTiedosto(uusinimi);
         return true;
     }
-
-
-
-    
-    @FXML private void handlePoistaJasen() {
-        PoistaJasenGUIController.alkuNaytto(null, "Poista jäsen");
-    }
-    
-    @FXML private void handleLisaaDebitKortti() { 
-        if ( asiakasKohdalla == null ) return; 
-        Debit deb = new Debit(); 
-        deb.rekisteroi(); 
-        deb.vastaaDebit(asiakasKohdalla.getTunnusNro()); 
-        pankki.lisaaDebit(deb); 
-        hae(asiakasKohdalla.getTunnusNro());
-    }
-    
-    @FXML private void handleLisaaLuottoKortti() {
-        asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
-        if (asiakasKohdalla == null) return;
-        Credit cre = new Credit();
-        cre.rekisteroi();
-        cre.vastaaCredit(asiakasKohdalla.getTunnusNro());
-        pankki.lisaaCredit(cre);
-        hae(asiakasKohdalla.getTunnusNro());
-    }
-    
-    @FXML private void handleLisaaYhdistelmaKortti() {
-        asiakasKohdalla = chooserAsiakkaat.getSelectedObject();
-        if (asiakasKohdalla == null) return;
-        Yhdistelmä yhd = new Yhdistelmä();
-        yhd.rekisteroi();
-        yhd.vastaaYhdistelmä(asiakasKohdalla.getTunnusNro());
-        pankki.lisaaYhdistelma(yhd);
-        hae(asiakasKohdalla.getTunnusNro());
-    }
-    
-    @FXML private void handleMuokkaaPankkiKorttiVali() {
-        MuokkaaGUIController.alkuNaytto(null, "Muokkaa pankkikortin tietoja");
-    }
-    
-    @FXML private void handlePoistaPankkiKorttiVali() {
-        PoistaPankkiKorttiGUIController.alkuNaytto(null, "Poista pankkikortti");
-    }
-    
-    
     
     /**
      * @param modalityStage Stage-olio
