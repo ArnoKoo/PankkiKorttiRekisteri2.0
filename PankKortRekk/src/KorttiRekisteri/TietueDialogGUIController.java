@@ -1,7 +1,6 @@
 package KorttiRekisteri;
 
 import java.net.URL;
-
 import java.util.ResourceBundle;
 
 import fi.jyu.mit.fxgui.Dialogs;
@@ -17,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import KorttiRekisteri.Tietue;
+
 /**
  * Kysytään tietueen tiedot luomalla sille uusi dialogi
  * 
@@ -37,9 +37,6 @@ public class TietueDialogGUIController<TYPE extends Tietue> implements ModalCont
     }
     
     @FXML private void handleOK() {
-        for (TextField edit : edits) {
-            kasitteleMuutosTietueeseen(edit);
-        }
         if ( tietueKohdalla != null && tietueKohdalla.anna(tietueKohdalla.ekaKentta()).trim().equals("") ) {
             naytaVirhe("Ei saa olla tyhjä");
             return;
@@ -55,7 +52,7 @@ public class TietueDialogGUIController<TYPE extends Tietue> implements ModalCont
 
 // ========================================================    
     private TYPE tietueKohdalla;
-    private TextField[] edits;
+    @FXML private TextField[] edits;
     private int kentta = 0;
     
 
@@ -104,7 +101,7 @@ public class TietueDialogGUIController<TYPE extends Tietue> implements ModalCont
         for (TextField edit : edits)
             if ( edit != null )
                 edit.setOnKeyReleased( e -> kasitteleMuutosTietueeseen((TextField)(e.getSource())));
-         panelTietue.setFitToHeight(true);
+        // panelTietue.setFitToHeight(true);
     }
     
     
