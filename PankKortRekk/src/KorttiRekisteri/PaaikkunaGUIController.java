@@ -49,8 +49,8 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     @FXML private StringGrid<Yhdistelmä> tableYhdistelma;
     
     private static Debit apuDebit = new Debit(); 
-    private static Credit apuCredits = new Credit(); 
-    private static Yhdistelmä apuYhdistelmä = new Yhdistelmä(); 
+    private static Credit apuCredit = new Credit(); 
+    private static Yhdistelmä apuYhdistelma = new Yhdistelmä(); 
     
     private TextField[] edits;
     
@@ -85,7 +85,15 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
+        try {
+            pankki.setTiedosto("AgoBank");
+            pankki.lueTiedostosta("AgoBank");
+        } catch (SailoException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         alusta(); // ilman tiedostonlukua
+        hae(0);
     }
     
     private void muokkaa(int k) { 
@@ -202,10 +210,10 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         tableDebit.setColumnSortOrderNumber(2); 
         tableDebit.setColumnWidth(1, 60);
         
-        int eka1 = apuDebit.ekaKentta(); 
-        int lkm1 = apuDebit.getKenttia(); 
+        int eka1 = apuCredit.ekaKentta(); 
+        int lkm1 = apuCredit.getKenttia(); 
         String[] headings1 = new String[lkm1-eka1]; 
-        for (int i=0, k=eka1; k<lkm1; i++, k++) headings1[i] = apuDebit.getKysymys(k); 
+        for (int i=0, k=eka1; k<lkm1; i++, k++) headings1[i] = apuCredit.getKysymys(k); 
         tableCredit.initTable(headings1); 
         tableCredit.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); 
         tableCredit.setEditable(false); 
@@ -216,10 +224,10 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         tableCredit.setColumnSortOrderNumber(2); 
         tableCredit.setColumnWidth(1, 60);
         
-        int eka2 = apuDebit.ekaKentta(); 
-        int lkm2 = apuDebit.getKenttia(); 
+        int eka2 = apuYhdistelma.ekaKentta(); 
+        int lkm2 = apuYhdistelma.getKenttia(); 
         String[] headings2 = new String[lkm2-eka2]; 
-        for (int i=0, k=eka2; k<lkm2; i++, k++) headings2[i] = apuDebit.getKysymys(k); 
+        for (int i=0, k=eka2; k<lkm2; i++, k++) headings2[i] = apuYhdistelma.getKysymys(k); 
         tableYhdistelma.initTable(headings2); 
         tableYhdistelma.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); 
         tableYhdistelma.setEditable(false); 
