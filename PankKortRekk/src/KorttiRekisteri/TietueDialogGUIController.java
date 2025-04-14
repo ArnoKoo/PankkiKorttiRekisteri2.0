@@ -37,7 +37,7 @@ public class TietueDialogGUIController<TYPE extends Tietue> implements ModalCont
     }
     
     @FXML private void handleOK() {
-        if ( tietueKohdalla != null && tietueKohdalla.anna(tietueKohdalla.ekaKentta()).trim().equals("") ) {
+        if ( tietueKohdalla == null && tietueKohdalla.anna(tietueKohdalla.ekaKentta()).trim().equals("") ) {
             naytaVirhe("Ei saa olla tyhjä");
             return;
         }

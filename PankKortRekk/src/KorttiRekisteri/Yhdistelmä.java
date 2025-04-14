@@ -237,8 +237,37 @@ public class Yhdistelmä implements Cloneable, Tietue {
     }
 
     @Override
-    public String aseta(int k, String s) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    public String aseta(int k, String jono) {
+     String tjono = jono.trim();
+     StringBuffer sb = new StringBuffer(tjono);
+     switch ( k ) {
+        case 2:
+            korttityyppi = tjono;
+            return null;
+        case 3:
+            pvm = tjono;
+            return null;
+        case 4:
+            korttinumero = tjono;
+            return null;
+        case 5:
+            PIN = tjono;
+            return null;
+        case 6:
+            CVC = tjono;
+            return null;
+        case 7:
+        	String tekstilähimaksu = String.valueOf(lähimaksu);
+        	tekstilähimaksu = tjono;
+        	return null;
+        case 8:
+            VPT = tjono;
+            return null;
+        case 9:
+            salasana = tjono;
+            return null;
+        default:
+            return "";
+     }
+ }
 }

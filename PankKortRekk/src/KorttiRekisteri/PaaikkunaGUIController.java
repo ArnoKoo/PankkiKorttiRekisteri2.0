@@ -249,7 +249,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         tableDebit.initTable(headings); 
         tableDebit.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); 
         tableDebit.setEditable(false); 
-        tableDebit.setPlaceholder(new Label("Ei vielä harrastuksia")); 
+        tableDebit.setPlaceholder(new Label("Ei kortteja")); 
          
         // Tämä on vielä huono, ei automaattisesti muutu jos kenttiä muutetaan. 
         tableDebit.setColumnSortOrderNumber(1); 
@@ -263,7 +263,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         tableCredit.initTable(headings1); 
         tableCredit.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); 
         tableCredit.setEditable(false); 
-        tableCredit.setPlaceholder(new Label("Ei vielä harrastuksia")); 
+        tableCredit.setPlaceholder(new Label("Ei kortteja")); 
          
         // Tämä on vielä huono, ei automaattisesti muutu jos kenttiä muutetaan. 
         tableCredit.setColumnSortOrderNumber(1); 
@@ -277,7 +277,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         tableYhdistelma.initTable(headings2); 
         tableYhdistelma.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); 
         tableYhdistelma.setEditable(false); 
-        tableYhdistelma.setPlaceholder(new Label("Ei vielä harrastuksia")); 
+        tableYhdistelma.setPlaceholder(new Label("Ei kortteja")); 
          
         // Tämä on vielä huono, ei automaattisesti muutu jos kenttiä muutetaan. 
         tableYhdistelma.setColumnSortOrderNumber(1); 
