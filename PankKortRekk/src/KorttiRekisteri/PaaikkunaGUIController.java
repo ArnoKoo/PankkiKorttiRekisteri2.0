@@ -189,13 +189,14 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         
         int index = 0;
         Collection<Asiakas> asiakkaat;
-        asiakkaat = pankki.etsi("", -1);
-        int i = 0;
-        for (Asiakas asiakas: asiakkaat) {
-            if (asiakas.getTunnusNro() == asiakasNumero) index = i;
-            chooserAsiakkaat.add(asiakas.getNimi(), asiakas);
-            i++;
-        }
+       	asiakkaat = pankki.etsi(ehto, k);
+       	int i = 0;
+       	for (Asiakas asiakas: asiakkaat) {
+       		if (asiakas.getTunnusNro() == asiakasNumero) index = i;
+       		chooserAsiakkaat.add(asiakas.getNimi(), asiakas);
+       		i++;
+       	}
+        
         chooserAsiakkaat.setSelectedIndex(index);
     }
     
@@ -381,24 +382,26 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         tableYhdistelma.clear();
         if (asiakasKohdalla == null) return;
         
-            List<Debit> debitit = pankki.annaDebit(asiakas);
-            if ( debitit.size() == 0 ) return;
-                for (Debit deb: debitit) {
-                    naytaDebit(deb);
+        List<Debit> debitit = pankki.annaDebit(asiakas);
+        if (debitit != null && !debitit.isEmpty()) {
+            for (Debit deb : debitit) {
+                naytaDebit(deb);
             }
-            
-            List<Credit> creditit = pankki.annaCredit(asiakas);
-            if ( creditit.size() == 0 ) return;
-            for (Credit cred: creditit) {
-                naytaCredit(cred);
-            }   
+        }
 
-            List<Yhdistelmä> yhdistelmat = pankki.annaYhdistelma(asiakas);
-            if ( yhdistelmat.size() == 0 ) return;
+        List<Credit> creditit = pankki.annaCredit(asiakas);
+        if (creditit != null && !creditit.isEmpty()) {
+            for (Credit cred : creditit) {
+                naytaCredit(cred);
+            }
+        }
+
+        List<Yhdistelmä> yhdistelmat = pankki.annaYhdistelma(asiakas);
+        if (yhdistelmat != null && !yhdistelmat.isEmpty()) {
             for (Yhdistelmä yhd : yhdistelmat) {
                 naytaYhdistelma(yhd);
             }
-                      
+        }      
     }
     
     private void naytaDebit(Debit debit) {

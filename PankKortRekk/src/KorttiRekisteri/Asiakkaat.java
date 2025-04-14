@@ -50,6 +50,7 @@ public class Asiakkaat implements Iterable <Asiakas> {
     	if (lkm >= alkiot.length) alkiot = Arrays.copyOf(alkiot, lkm+20);
         alkiot[lkm] = asiakas;
         lkm++;
+        muutettu = true;
     }
 
     
