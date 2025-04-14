@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import fi.jyu.mit.fxgui.ComboBoxChooser;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
@@ -33,6 +34,9 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     @FXML private ScrollPane panelAsiakas;
     @FXML private ScrollPane panelKortti;
     
+    @FXML private TextField hakuehto;
+    @FXML private ComboBoxChooser<String> cbKentat;
+    
     @FXML private TextField editNimi;
     @FXML private TextField editHetu;
     @FXML private TextField editKatuosoite;
@@ -44,6 +48,8 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     @FXML private StringGrid<Debit> tableDebit;
     @FXML private StringGrid<Credit> tableCredit;
     @FXML private StringGrid<Yhdistelmä> tableYhdistelma;
+    
+    private static Asiakas apuasiakas = new Asiakas();
     
     private static Debit apuDebit = new Debit(); 
     private static Credit apuCredit = new Credit(); 
@@ -146,6 +152,10 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         hae(0);
     }
     
+    @FXML private void handleHakuehto() {
+    	hae(0);
+    }
+    
     private void muokkaa(int k) { 
         if ( asiakasKohdalla == null ) return; 
         try { 
@@ -165,7 +175,18 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
      * @param asiakasNumero aa
      */
     protected void hae(int asiakasNumero) {
+    	 int asiakasnumero = asiakasNumero; // jnro jäsenen numero, joka aktivoidaan haun jälkeen 
+         if ( asiakasnumero <= 0 ) { 
+             Asiakas kohdalla = asiakasKohdalla; 
+             if ( kohdalla != null ) asiakasnumero = kohdalla.getTunnusNro(); 
+         }
+         
+        int k = cbKentat.getSelectionModel().getSelectedIndex() + apuasiakas.ekaKentta(); 
+        String ehto = hakuehto.getText(); 
+        if (ehto.indexOf('*') < 0) ehto = "*" + ehto + "*"; 
+    	
         chooserAsiakkaat.clear();
+        
         int index = 0;
         Collection<Asiakas> asiakkaat;
         asiakkaat = pankki.etsi("", -1);
@@ -223,12 +244,17 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         return true;
     }
 
-    
-    @SuppressWarnings("deprecation")
     private void alusta() {
         chooserAsiakkaat.clear();
         chooserAsiakkaat.addSelectionListener(e -> naytaAsiakas());
-        edits = TietueDialogGUIController.luoKentat(gridAsiakas, new Asiakas());
+        
+        cbKentat.clear(); 
+        for (int k = apuasiakas.ekaKentta(); k < apuasiakas.getKenttia(); k++) 
+            cbKentat.add(apuasiakas.getKysymys(k), null); 
+        cbKentat.getSelectionModel().select(0);
+        
+        
+        edits = TietueDialogGUIController.luoKentat(gridAsiakas, apuasiakas);
         for (TextField edit: edits)  
             if ( edit != null ) {  
                 edit.setEditable(false);  

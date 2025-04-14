@@ -15,7 +15,7 @@ import fi.jyu.mit.ohj2.Mjonot;
 public class Debit implements Cloneable, Tietue {
         
     private int         tunnusNro;
-    private String      korttityyppi                = "";
+    private String      korttityyppi                = "Debit";
     private int         asiakasNro;
     private String      pvm                         = "";
     private String      korttinumero                = "";
@@ -181,7 +181,7 @@ public class Debit implements Cloneable, Tietue {
      */
     @Override
     public int ekaKentta() {
-        return 2;
+        return 3;
     }
     
     @Override
@@ -246,7 +246,6 @@ public class Debit implements Cloneable, Tietue {
      StringBuffer sb = new StringBuffer(tjono);
      switch ( k ) {
         case 2:
-            korttityyppi = tjono;
             return null;
         case 3:
             pvm = tjono;

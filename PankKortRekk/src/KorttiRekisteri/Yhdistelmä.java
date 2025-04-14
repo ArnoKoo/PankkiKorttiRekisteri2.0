@@ -173,7 +173,7 @@ public class Yhdistelmä implements Cloneable, Tietue {
      */
     @Override
     public int ekaKentta() {
-        return 2;
+        return 3;
     }
     
     @Override

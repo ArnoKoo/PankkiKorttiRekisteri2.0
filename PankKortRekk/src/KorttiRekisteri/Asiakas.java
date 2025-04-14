@@ -1,6 +1,7 @@
 package KorttiRekisteri;
 
 import java.io.*;
+import java.util.Comparator;
 
 import fi.jyu.mit.ohj2.Mjonot;
 
@@ -171,9 +172,43 @@ public class Asiakas implements Cloneable, Tietue {
           tulosta(new PrintStream(os));
      }
 	 
+	 public static class Vertailija implements Comparator<Asiakas> { 
+	        private int k;  
+	         
+	        @SuppressWarnings("javadoc") 
+	        public Vertailija(int k) { 
+	            this.k = k; 
+	        } 
+	         
+	        @Override 
+	        public int compare(Asiakas asiakas1, Asiakas asiakas2) { 
+	            return asiakas1.getAvain(k).compareToIgnoreCase(asiakas2.getAvain(k)); 
+	        }
+	    } 
+	     
+	    
+	    /** 
+	     * Antaa k:n kentän sisällön merkkijonona 
+	     * @param k monenenko kentän sisältö palautetaan 
+	     * @return kentän sisältö merkkijonona 
+	     */ 
+	    public String getAvain(int k) { 
+	        switch ( k ) { 
+	         case 0: return "" + tunnusNro;
+		     case 1: return "" + nimi;
+		     case 2: return "" + hetu;
+		     case 3: return "" + katuosoite;
+		     case 4: return "" + postinumero;
+		     case 5: return "" + postitoimipaikka;
+		     case 6: return "" + puhelinnumero;
+		     case 7: return "" + sähköposti;
+		     default: return "DUMBASS";
+	        }
+	    } 
+	 
 	 @Override
     public int getKenttia() {
-	     return 7;
+	     return 8;
 	 }
 	 
 	 @Override

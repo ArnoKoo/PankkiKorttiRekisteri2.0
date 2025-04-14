@@ -11,10 +11,16 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+
+import fi.jyu.mit.ohj2.WildChars;
+
 
 /* AgoBankin asiakkaat, joka osaa mm. lisätä uuden jäsenen (ei vielä)
   * 
@@ -41,10 +47,9 @@ public class Asiakkaat implements Iterable <Asiakas> {
      */
     
     public void lisaa(Asiakas asiakas) throws SailoException {
-        if ( lkm >= alkiot.length ) throw new SailoException("Liikaa alkioita");
+    	if (lkm >= alkiot.length) alkiot = Arrays.copyOf(alkiot, lkm+20);
         alkiot[lkm] = asiakas;
         lkm++;
-        muutettu = true;
     }
 
     
@@ -229,12 +234,16 @@ public class Asiakkaat implements Iterable <Asiakas> {
     }
 
     public Collection<Asiakas> etsi(String hakuehto, int k) {
-        Collection<Asiakas> loytyneet = new ArrayList<Asiakas>(); 
-        for (int i = 0; i < lkm; i++) {  // lkm keeps track of the number of customers
-            Asiakas asiakas = alkiot[i];  // Get the current customer
-            loytyneet.add(asiakas);  // Add to the result collection
-        }
-        
+    	String ehto = "*"; 
+        if ( hakuehto != null && hakuehto.length() > 0 ) ehto = hakuehto; 
+        int hk = k; 
+        if ( hk < 0 ) hk = 1;
+    	
+        List<Asiakas> loytyneet = new ArrayList<Asiakas>(); 
+        for (Asiakas asiakas : this) { 
+            if (WildChars.onkoSamat(asiakas.anna(hk), ehto)) loytyneet.add(asiakas);   
+        } 
+        Collections.sort(loytyneet, new Asiakas.Vertailija(hk)); 
         return loytyneet; 
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import fi.jyu.mit.fxgui.ComboBoxChooser?>
 <?import fi.jyu.mit.fxgui.ListChooser?>
 <?import fi.jyu.mit.fxgui.StringGrid?>
 <?import javafx.geometry.Insets?>
@@ -70,34 +71,31 @@
 
 
                   
-					<TextField layoutX="657.0" layoutY="140.0" prefHeight="25.0" prefWidth="140.0" text="Luottokortin tiedot" />
+					<TextField alignment="CENTER" layoutX="657.0" layoutY="140.0" prefHeight="26.0" prefWidth="182.0" text="Luottokortin tiedot" />
       						<ScrollPane fx:id="panelCredit" fitToHeight="true" fitToWidth="true" layoutX="657.0" layoutY="166.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="52.0" prefWidth="724.0">
       							<content>
       							<StringGrid fx:id="tableCredit" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="722.0" rivit="Korttityyppi|Päivämäärä|Korttinumero|PIN|CVC|Lähimaksu|VPT|Salasana" BorderPane.alignment="CENTER" />
       							</content>
       						</ScrollPane>
 
-					<TextField layoutX="657.0" layoutY="229.0" prefHeight="25.0" prefWidth="170.0" text="Yhdistelmäkortin tiedot" />
+					<TextField alignment="CENTER" layoutX="657.0" layoutY="229.0" prefHeight="26.0" prefWidth="181.0" text="Yhdistelmäkortin tiedot" />
 						<ScrollPane fx:id="panelYhdistelma" fitToHeight="true" fitToWidth="true" layoutX="657.0" layoutY="255.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="52.0" prefWidth="724.0">
    							<content>
       							<StringGrid fx:id="tableYhdistelma" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="722.0" rivit="Korttityyppi|Päivämäärä|Korttinumero|PIN|CVC|Lähimaksu|VPT|Salasana" BorderPane.alignment="CENTER" />
   							 </content>
 						</ScrollPane>
-
-                  
-                  
-                  
-                  <TextField layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="223.0" promptText="Etsi jäsenen nimi" />
                   
                         
                   <ListChooser fx:id="chooserAsiakkaat" layoutX="14.0" layoutY="77.0" prefHeight="349.0" prefWidth="224.0" />
                   <TextField layoutX="14.0" layoutY="51.0" text="Jäsenlista" />
                   <TextField layoutX="250.0" layoutY="51.0" text="Jäsenen tiedot" />
-                  <TextField layoutX="657.0" layoutY="51.0" prefHeight="25.0" prefWidth="114.0" text="Debit kortin tiedot" />
+                  <TextField alignment="CENTER" layoutX="657.0" layoutY="51.0" prefHeight="26.0" prefWidth="184.0" text="Debit kortin tiedot" />
                   <Button layoutX="74.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaAsiakas" text="Uusi Asiakas" />
                   <Button layoutX="250.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaDebitKortti" text="Lisää debit" />
                   <Button layoutX="380.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaLuottoKortti" text="Lisää luottokortti" />
                   <Button layoutX="514.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaYhdistelmaKortti" text="Lisää yhdistelmäkortti" />
+                  <ComboBoxChooser fx:id="cbKentat" layoutX="250.0" layoutY="14.0" onAction="#handleHakuehto" prefHeight="26.0" prefWidth="161.0" />
+                  <TextField fx:id="hakuehto" layoutX="14.0" layoutY="14.0" onKeyReleased="#handleHakuehto" />
                </children>
             </Pane>
          </left>
