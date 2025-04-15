@@ -284,11 +284,10 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     }
     
     private Pankki pankki = new Pankki();
-    //private TextArea areaAsiakas = new TextArea();
-    //private TextArea areaKortti = new TextArea();
     private Asiakas asiakasKohdalla;
-    @FXML private GridPane gridAsiakas;
     private int kentta = 0; 
+    
+    @FXML private GridPane gridAsiakas;
     
     
     /**
@@ -344,7 +343,6 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         tableDebit.setEditable(false); 
         tableDebit.setPlaceholder(new Label("Ei kortteja")); 
          
-        // Tämä on vielä huono, ei automaattisesti muutu jos kenttiä muutetaan. 
         tableDebit.setColumnSortOrderNumber(1); 
         tableDebit.setColumnSortOrderNumber(2); 
         tableDebit.setColumnWidth(1, 60);
@@ -357,8 +355,7 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         tableCredit.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); 
         tableCredit.setEditable(false); 
         tableCredit.setPlaceholder(new Label("Ei kortteja")); 
-         
-        // Tämä on vielä huono, ei automaattisesti muutu jos kenttiä muutetaan. 
+        
         tableCredit.setColumnSortOrderNumber(1); 
         tableCredit.setColumnSortOrderNumber(2); 
         tableCredit.setColumnWidth(1, 60);
@@ -372,7 +369,6 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         tableYhdistelma.setEditable(false); 
         tableYhdistelma.setPlaceholder(new Label("Ei kortteja")); 
          
-        // Tämä on vielä huono, ei automaattisesti muutu jos kenttiä muutetaan. 
         tableYhdistelma.setColumnSortOrderNumber(1); 
         tableYhdistelma.setColumnSortOrderNumber(2); 
         tableYhdistelma.setColumnWidth(1, 60);

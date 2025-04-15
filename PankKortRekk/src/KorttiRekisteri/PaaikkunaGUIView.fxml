@@ -17,30 +17,58 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="515.0" prefWidth="1396.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KorttiRekisteri.PaaikkunaGUIController">
    <top>
-      <BorderPane prefHeight="492.0" prefWidth="1185.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="492.0" prefWidth="1185.0" style="-fx-background-color: #fdf8ed;" BorderPane.alignment="CENTER">
          <left>
-            <Pane prefHeight="467.0" prefWidth="647.0" BorderPane.alignment="CENTER">
+            <Pane prefHeight="467.0" prefWidth="647.0" style="-fx-background-color: #fdf8ed;" BorderPane.alignment="CENTER">
                <children>
                   <ListChooser fx:id="chooserAsiakkaat" layoutX="14.0" layoutY="77.0" prefHeight="349.0" prefWidth="224.0" />
-                  <TextField layoutX="14.0" layoutY="51.0" text="Jäsenlista" />
-                  <TextField layoutX="250.0" layoutY="51.0" text="Jäsenen tiedot" />                 
+                  <TextField alignment="CENTER" layoutX="14.0" layoutY="47.0" style="-fx-background-color: #d5b57c;" text="Jäsenlista">
+                     <font>
+                        <Font name="Mukta Regular" size="13.0" />
+                     </font></TextField>
+                  <TextField alignment="CENTER" layoutX="250.0" layoutY="49.0" style="-fx-background-color: #d5b57c;" text="Jäsenen tiedot">
+                     <font>
+                        <Font name="Mukta Regular" size="13.0" />
+                     </font></TextField>                 
 
-                  <Button layoutX="14.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaAsiakas" text="Uusi Asiakas" />
-                  <Button layoutX="147.0" layoutY="435.0" mnemonicParsing="false" onAction="#handlePoistaAsiakas" text="Poista Asiakas" />
-                  <Button layoutX="250.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaDebitKortti" text="Lisää Debit" />
-                  <Button layoutX="380.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaLuottoKortti" text="Lisää Credit" />
-                  <Button layoutX="514.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaYhdistelmaKortti" text="Lisää Yhdistelmä" />
+                  <Button layoutX="14.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaAsiakas" style="-fx-background-color: #a37437;" text="Uusi Asiakas" textFill="WHITE">
+                     <font>
+                        <Font name="Mukta Regular" size="13.0" />
+                     </font></Button>
+                  <Button layoutX="147.0" layoutY="435.0" mnemonicParsing="false" onAction="#handlePoistaAsiakas" style="-fx-background-color: #a37437;" text="Poista Asiakas" textFill="WHITE">
+                     <font>
+                        <Font name="Mukta Regular" size="13.0" />
+                     </font></Button>
+                  <Button layoutX="250.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaDebitKortti" style="-fx-background-color: #a37437;" text="Lisää Debit" textFill="WHITE">
+                     <font>
+                        <Font name="Mukta Regular" size="13.0" />
+                     </font></Button>
+                  <Button layoutX="380.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaLuottoKortti" style="-fx-background-color: #a37437;" text="Lisää Credit" textFill="WHITE">
+                     <font>
+                        <Font name="Mukta Regular" size="13.0" />
+                     </font></Button>
+                  <Button layoutX="514.0" layoutY="435.0" mnemonicParsing="false" onAction="#handleLisaaYhdistelmaKortti" style="-fx-background-color: #a37437;" text="Lisää Yhdistelmä" textFill="WHITE">
+                     <font>
+                        <Font name="Mukta Regular" size="13.0" />
+                     </font></Button>
                   
-                  <ComboBoxChooser fx:id="cbKentat" layoutX="250.0" layoutY="14.0" onAction="#handleHakuehto" prefHeight="26.0" prefWidth="161.0" />
+                  <ComboBoxChooser fx:id="cbKentat" layoutX="250.0" layoutY="14.0" onAction="#handleHakuehto" prefHeight="26.0" prefWidth="149.0" />
                   <TextField fx:id="hakuehto" layoutX="14.0" layoutY="14.0" onKeyReleased="#handleHakuehto" />
 
 
                   <HBox layoutX="657.0" layoutY="51.0" spacing="10.0">
-                     <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="182.0" text="Debit kortin tiedot" />
-                     <Button mnemonicParsing="false" onAction="#handlePoistaDebit" text="Poista debit" />
+                     <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="182.0" style="-fx-background-color: #d5b57c;" text="Debit kortin tiedot">
+                        <font>
+                           <Font name="Mukta Regular" size="13.0" />
+                        </font></TextField>
+                     <Button mnemonicParsing="false" onAction="#handlePoistaDebit" prefHeight="26.0" prefWidth="140.0" style="-fx-background-color: #a37437;" text="Poista debit" textFill="WHITE">
+                        <font>
+                           <Font name="Mukta Regular" size="13.0" />
+                        </font></Button>
                   </HBox>
                   <ScrollPane fx:id="panelKortti" fitToHeight="true" fitToWidth="true" layoutX="657.0" layoutY="77.0" prefHeight="52.0" prefWidth="724.0">
                      <content>
@@ -50,8 +78,14 @@
 
 
                   <HBox layoutX="657.0" layoutY="140.0" spacing="10.0">
-                     <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="182.0" text="Luottokortin tiedot" />
-                     <Button mnemonicParsing="false" onAction="#handlePoistaCredit" text="Poista luottokortti" />
+                     <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="182.0" style="-fx-background-color: #d5b57c;" text="Luottokortin tiedot">
+                        <font>
+                           <Font name="Mukta Regular" size="13.0" />
+                        </font></TextField>
+                     <Button mnemonicParsing="false" onAction="#handlePoistaCredit" prefHeight="26.0" prefWidth="136.0" style="-fx-background-color: #a37437;" text="Poista luottokortti" textFill="WHITE">
+                        <font>
+                           <Font name="Mukta Regular" size="13.0" />
+                        </font></Button>
                   </HBox>
                   <ScrollPane fx:id="panelCredit" fitToHeight="true" fitToWidth="true" layoutX="657.0" layoutY="166.0" prefHeight="52.0" prefWidth="724.0">
                      <content>
@@ -61,8 +95,14 @@
 
 
                   <HBox layoutX="657.0" layoutY="229.0" spacing="10.0">
-                     <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="181.0" text="Yhdistelmäkortin tiedot" />
-                     <Button mnemonicParsing="false" onAction="#handlePoistaYhdistelma" text="Poista yhdistelmäkortti" />
+                     <TextField alignment="CENTER" editable="false" prefHeight="26.0" prefWidth="181.0" style="-fx-background-color: #d5b57c;" text="Yhdistelmäkortin tiedot">
+                        <font>
+                           <Font name="Mukta Regular" size="13.0" />
+                        </font></TextField>
+                     <Button mnemonicParsing="false" onAction="#handlePoistaYhdistelma" style="-fx-background-color: #a37437;" text="Poista yhdistelmäkortti" textFill="WHITE">
+                        <font>
+                           <Font name="Mukta Regular" size="13.0" />
+                        </font></Button>
                   </HBox>
                   <ScrollPane fx:id="panelYhdistelma" fitToHeight="true" fitToWidth="true" layoutX="657.0" layoutY="255.0" prefHeight="52.0" prefWidth="724.0">
                      <content>
@@ -73,7 +113,7 @@
 
                   <ScrollPane fx:id="panelAsiakas" fitToWidth="true" layoutX="250.0" layoutY="79.0" pannable="true" prefHeight="347.0" prefWidth="392.0">
                      <content>
-                        <GridPane fx:id="gridAsiakas" hgap="10.0" prefHeight="345.0" prefWidth="385.0" style="-fx-font-size: 14px;">
+                        <GridPane fx:id="gridAsiakas" hgap="10.0" prefHeight="345.0" prefWidth="385.0" style="-fx-font-size: 14px; -fx-background-color: #fff2da;">
                            <padding>
                               <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
                            </padding>
@@ -91,13 +131,34 @@
                               <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Label text="nimi" />
-                              <Label text="hetu" GridPane.rowIndex="1" />
-                              <Label text="katuosoite" GridPane.rowIndex="2" />
-                              <Label text="postinumero" GridPane.rowIndex="3" />
-                              <Label text="postitoimipaikka" GridPane.rowIndex="4" />
-                              <Label text="puhelinnumero" GridPane.rowIndex="5" />
-                              <Label text="sähköposti" GridPane.rowIndex="6" />
+                              <Label text="Koko nimi">
+                                 <font>
+                                    <Font name="Mukta Regular" size="13.0" />
+                                 </font></Label>
+                              <Label text="Henkilötunnus" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font name="Mukta Regular" size="13.0" />
+                                 </font></Label>
+                              <Label text="Katuosoite" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font name="Mukta Regular" size="13.0" />
+                                 </font></Label>
+                              <Label text="Postinumero" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font name="Mukta Regular" size="13.0" />
+                                 </font></Label>
+                              <Label text="Postitoimipaikka" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font name="Mukta Regular" size="13.0" />
+                                 </font></Label>
+                              <Label text="Puhelinnumero" GridPane.rowIndex="5">
+                                 <font>
+                                    <Font name="Mukta Regular" size="13.0" />
+                                 </font></Label>
+                              <Label text="Sähköpostiosoite" GridPane.rowIndex="6">
+                                 <font>
+                                    <Font name="Mukta Regular" size="13.0" />
+                                 </font></Label>
                               <TextField fx:id="editNimi" text="Erik Sandren" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
                               <TextField fx:id="editHetu" text="010245-123U" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
                               <TextField fx:id="editKatuosoite" text="Paratiisitie 13" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
@@ -114,7 +175,7 @@
             </Pane>
          </left>
          <top>
-            <MenuBar prefHeight="5.0" prefWidth="782.0" BorderPane.alignment="CENTER">
+            <MenuBar prefHeight="5.0" prefWidth="782.0" style="-fx-background-color: #d5b57c;" BorderPane.alignment="CENTER">
                <menus>
                   <Menu mnemonicParsing="false" text="TIEDOSTO">
                      <items>

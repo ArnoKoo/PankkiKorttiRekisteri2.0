@@ -9,10 +9,9 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane stylesheets="@paaikkuna.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KorttiRekisteri.TietueDialogGUIController">
+<BorderPane stylesheets="@paaikkuna.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="KorttiRekisteri.TietueDialogGUIController">
    <bottom>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -20,8 +19,8 @@
             <HBox />
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
                <buttons>
-                  <Button defaultButton="true" mnemonicParsing="false" onAction="#handleOK" text="OK" />
                   <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#handleOK" prefHeight="26.0" prefWidth="103.0" text="OK" />
                </buttons>
                <padding>
                   <Insets right="10.0" />

@@ -18,7 +18,6 @@ public class AlkuIkkunaMain extends Application {
         try {
             FXMLLoader ldr = new FXMLLoader(getClass().getResource("AlkuIkkunaGUIView.fxml"));
             final Pane root = ldr.load();
-            //final AlkuIkkunaGUIController alkuikkunaCtrl = (AlkuIkkunaGUIController) ldr.getController();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("alkuikkuna.css").toExternalForm());
             primaryStage.setScene(scene);

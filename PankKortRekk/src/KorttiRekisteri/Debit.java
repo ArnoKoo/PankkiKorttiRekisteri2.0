@@ -57,8 +57,7 @@ public class Debit implements Cloneable, Tietue {
         return uusi;
     }
      
-     /**
-      * UUSI JUTTU ----------------------------------------------------------------
+     /*
       * Alustetaan tietyn asiakkaan kortti 
      * @param asiakasNro asiakkaan viitenumero
      */

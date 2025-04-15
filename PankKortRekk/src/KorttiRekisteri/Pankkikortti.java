@@ -29,10 +29,6 @@ public class Pankkikortti {
     //private Yhdistelmä          yhdistelmä[]                = new Yhdistelmä[MAX_KORTIT];
     private boolean             muutettu                    = false;
     
-
-    
-    //-------------------------------------------------------------------------------------------------------------------------------------- Arskan juttuja
-    
     /**
     * alustaa olion
     */
@@ -120,8 +116,6 @@ public class Pankkikortti {
         return loydetyt; //palauttaa löydetyn
     }
     
-    //-------------------------------------------------------------------------------------------------------------------------------------- Arskan jutut loppuvat
-    
     /**
      * Lisää debit kortin, jos on liikaa kortteja niin heittää virheen
      * @param kortti kortti debittiä varten
@@ -162,9 +156,9 @@ public class Pankkikortti {
     */
     
     /**
-     * lukee tiedostosta (TODO)
-     * @param tied tiedostonNimi kiinni tässä (Dani, täydennä)
-     * @throws SailoException ei kye lukemaan (Dani, täydennä)
+     * lukee tiedostosta
+     * @param tied tiedostonNimi kiinni tässä
+     * @throws SailoException ei kye lukemaan
      */
     public void lueTiedostosta(String tied) throws SailoException {
         setTiedostonPerusNimi(tied);
@@ -220,8 +214,8 @@ public class Pankkikortti {
 
     
     /**
-     * Talentaa tiedostoon (TODO)
-     * @throws SailoException ei kye tallentamaan (Dani, täydennä)
+     * Talentaa tiedostoon
+     * @throws SailoException ei kye tallentamaan 
      */ 
     public void tallenna() throws SailoException {
         if ( !muutettu ) return;
