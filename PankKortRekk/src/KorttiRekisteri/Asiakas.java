@@ -175,7 +175,7 @@ public class Asiakas implements Cloneable, Tietue {
 	 public static class Vertailija implements Comparator<Asiakas> { 
 	        private int k;  
 	         
-	        @SuppressWarnings("javadoc") 
+ 
 	        public Vertailija(int k) { 
 	            this.k = k; 
 	        } 

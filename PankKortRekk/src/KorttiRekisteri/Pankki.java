@@ -28,11 +28,27 @@ public class Pankki {
     
     /**
      * Poistaa asiakkaan ja korteista ne joilla on nro. Kesken.
-     * @param nro viitenumero, jonka mukaan poistetaan
+     * @param asiakas poistettava
      * @return montako jäsentä poistettiin
      */
-    public int poista(@SuppressWarnings("unused") int nro) {
-        return 0;
+    public int poista(Asiakas asiakas) {
+        if ( asiakas == null ) return 0;
+        int ret = asiakkaat.poista(asiakas.getTunnusNro()); 
+        pankkikortti.poistaAsiakkaanDebit(asiakas.getTunnusNro()); 
+        return ret; 
+    }
+    
+    public void poistaDebit(Debit debit) { 
+        pankkikortti.poistaDebit(debit); 
+    } 
+    
+    
+    public void poistaCredit(Credit credit) { 
+        pankkikortti.poistaCredit(credit); 
+    }
+    
+    public void poistaYhdistelma(Yhdistelmä yhdistelma) { 
+        pankkikortti.poistaYhdistelma(yhdistelma); 
     }
     
     /**

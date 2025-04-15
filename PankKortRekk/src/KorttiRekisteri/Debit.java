@@ -82,6 +82,7 @@ public class Debit implements Cloneable, Tietue {
         salasana = "2023";
     }
     
+    @Override
     public String toString() {
         return String.join("|", 
                 String.valueOf(tunnusNro),
@@ -239,11 +240,11 @@ public class Debit implements Cloneable, Tietue {
             return "???";
         }
     }
-
+    String tekstilähimaksu = String.valueOf(lähimaksu);
     @Override
     public String aseta(int k, String jono) {
      String tjono = jono.trim();
-     StringBuffer sb = new StringBuffer(tjono);
+     //StringBuffer sb = new StringBuffer(tjono);
      switch ( k ) {
         case 2:
             return null;
@@ -260,7 +261,6 @@ public class Debit implements Cloneable, Tietue {
             CVC = tjono;
             return null;
         case 7:
-        	String tekstilähimaksu = String.valueOf(lähimaksu);
         	tekstilähimaksu = tjono;
         	return null;
         case 8:

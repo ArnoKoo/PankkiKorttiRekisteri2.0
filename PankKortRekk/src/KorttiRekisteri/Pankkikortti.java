@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -338,6 +339,63 @@ public class Pankkikortti {
             yhd.tulosta(System.out);
         }
 
+    }
+    
+    public boolean poistaDebit(Debit debit) {
+        boolean ret = debitLista.remove(debit);
+        if (ret) muutettu = true;
+        return ret;
+    }
+    
+    public int poistaAsiakkaanDebit(int tunnusNro) {
+        int n = 0;
+        for (Iterator<Debit> it = debitLista.iterator(); it.hasNext();) {
+            Debit deb = it.next();
+            if ( deb.getAsiakasNro() == tunnusNro ) {
+                it.remove();
+                n++;
+            }
+        }
+        if (n > 0) muutettu = true;
+        return n;
+    }
+    
+    public boolean poistaCredit(Credit credit) {
+        boolean ret = creditLista.remove(credit);
+        if (ret) muutettu = true;
+        return ret;
+    }
+    
+    public int poistaAsiakkaanCredit(int tunnusNro) {
+        int n = 0;
+        for (Iterator<Credit> it = creditLista.iterator(); it.hasNext();) {
+            Credit cred = it.next();
+            if ( cred.getAsiakasNro() == tunnusNro ) {
+                it.remove();
+                n++;
+            }
+        }
+        if (n > 0) muutettu = true;
+        return n;
+    }
+    
+    public boolean poistaYhdistelma(Yhdistelmä yhdistelma) {
+        boolean ret = yhdistelmaLista.remove(yhdistelma);
+        if (ret) muutettu = true;
+        return ret;
+    }
+    
+    public int poistaAsiakkaanYhdistelma(int tunnusNro) {
+        int n = 0;
+        for (Iterator<Yhdistelmä> it = yhdistelmaLista.iterator(); it.hasNext();) {
+            Yhdistelmä yhd = it.next();
+            if ( yhd.getAsiakasNro() == tunnusNro ) {
+                it.remove();
+                n++;
+            }
+        }
+        if (n > 0) muutettu = true;
+        return n;
     }
 
     /**

@@ -73,10 +73,6 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         Dialogs.showMessageDialog("You're on your own lil bro.");
     }
     
-    @FXML private void Tietoja() {
-        Dialogs.showMessageDialog("Kunpa tietäisin itekki.");
-    }
-    
     @FXML private void Lopeta() {
         Platform.exit();
     }
@@ -123,12 +119,70 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
         tableYhdistelma.selectRow(1000);  // järjestetään viimeinen rivi valituksi
     }
     
-    @FXML private void handleMuokkaaPankkiKorttiVali() {
-        MuokkaaGUIController.alkuNaytto(null, "Muokkaa pankkikortin tietoja");
+    @FXML private void handlePoistaAsiakas() {
+        PoistaAsiakas();
     }
     
-    @FXML private void handlePoistaPankkiKorttiVali() {
-        PoistaPankkiKorttiGUIController.alkuNaytto(null, "Poista pankkikortti");
+    private void PoistaAsiakas() {
+        Asiakas asiakas = asiakasKohdalla;
+        if ( asiakas == null ) return;
+        if ( !Dialogs.showQuestionDialog("Poisto", "Poistetaanko asiakas: " + asiakas.getNimi(), "Kyllä", "Ei") )
+            return;
+        pankki.poista(asiakas);
+        int index = chooserAsiakkaat.getSelectedIndex();
+        hae(0);
+        chooserAsiakkaat.setSelectedIndex(index);
+    }
+    
+    @FXML private void handlePoistaDebit() {
+        PoistaDebit();
+    }
+    
+    private void PoistaDebit() {
+        int rivi = tableDebit.getRowNr();
+        if ( rivi < 0 ) return;
+        Debit deb = tableDebit.getObject();
+        if ( deb == null ) return;
+        pankki.poistaDebit(deb);
+        naytaKortti(asiakasKohdalla);
+        int harrastuksia = tableDebit.getItems().size(); 
+        if ( rivi >= harrastuksia ) rivi = harrastuksia -1;
+        tableDebit.getFocusModel().focus(rivi);
+        tableDebit.getSelectionModel().select(rivi);
+    }
+    
+    @FXML private void handlePoistaCredit() {
+        PoistaCredit();
+    }
+    
+    private void PoistaCredit() {
+        int rivi = tableCredit.getRowNr();
+        if ( rivi < 0 ) return;
+        Credit cred = tableCredit.getObject();
+        if ( cred == null ) return;
+        pankki.poistaCredit(cred);
+        naytaKortti(asiakasKohdalla);
+        int harrastuksia = tableCredit.getItems().size(); 
+        if ( rivi >= harrastuksia ) rivi = harrastuksia -1;
+        tableCredit.getFocusModel().focus(rivi);
+        tableCredit.getSelectionModel().select(rivi);
+    }
+    
+    @FXML private void handlePoistaYhdistelma() {
+        PoistaYhdistelma();
+    }
+    
+    private void PoistaYhdistelma() {
+        int rivi = tableYhdistelma.getRowNr();
+        if ( rivi < 0 ) return;
+        Yhdistelmä yhd = tableYhdistelma.getObject();
+        if ( yhd == null ) return;
+        pankki.poistaYhdistelma(yhd);
+        naytaKortti(asiakasKohdalla);
+        int harrastuksia = tableYhdistelma.getItems().size(); 
+        if ( rivi >= harrastuksia ) rivi = harrastuksia -1;
+        tableYhdistelma.getFocusModel().focus(rivi);
+        tableYhdistelma.getSelectionModel().select(rivi);
     }
     
     /**
@@ -154,6 +208,18 @@ public class PaaikkunaGUIController implements Initializable, ModalControllerInt
     
     @FXML private void handleHakuehto() {
     	hae(0);
+    }
+    
+    @FXML private void handleMuokkaaDebit() {
+        muokkaaDebit();
+    }
+    
+    @FXML private void handleMuokkaaCredit() {
+        muokkaaCredit();
+    }
+    
+    @FXML private void handleMuokkaaYhdistelma() {
+        muokkaaYhdistelma();
     }
     
     private void muokkaa(int k) { 

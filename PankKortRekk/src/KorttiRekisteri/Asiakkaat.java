@@ -46,7 +46,7 @@ public class Asiakkaat implements Iterable <Asiakas> {
      * Heittää virheen jos asiakkaita on liikaa
      */
     
-    public void lisaa(Asiakas asiakas) throws SailoException {
+    public void lisaa(Asiakas asiakas) {
     	if (lkm >= alkiot.length) alkiot = Arrays.copyOf(alkiot, lkm+20);
         alkiot[lkm] = asiakas;
         lkm++;
@@ -212,19 +212,15 @@ public class Asiakkaat implements Iterable <Asiakas> {
             erik2.rekisteroi();
             erik2.vastaaErik();
             
-            try {
-                asiakkaat.lisaa(erik);
-                asiakkaat.lisaa(erik2);
-                
-                System.out.println("=================== Asiakkaat testi =======================");
-                
-                for (int i = 0; i < asiakkaat.getLkm(); i++) {
-                    Asiakas asiakas = asiakkaat.anna(i);
-                    System.out.println("Asiakasnumero: " + i);
-                    asiakas.tulosta(System.out);
-                }
-            } catch (SailoException ex) {
-                System.out.println(ex.getMessage());
+            asiakkaat.lisaa(erik);
+            asiakkaat.lisaa(erik2);
+            
+            System.out.println("=================== Asiakkaat testi =======================");
+            
+            for (int i = 0; i < asiakkaat.getLkm(); i++) {
+                Asiakas asiakas = asiakkaat.anna(i);
+                System.out.println("Asiakasnumero: " + i);
+                asiakas.tulosta(System.out);
             }
         }
     }
@@ -263,5 +259,22 @@ public class Asiakkaat implements Iterable <Asiakas> {
             }
         }
         lisaa(asiakas);
+    }
+
+    public int poista(int id) { 
+        int ind = etsiId(id); 
+        if (ind < 0) return 0; 
+        lkm--; 
+        for (int i = ind; i < lkm; i++) 
+            alkiot[i] = alkiot[i + 1]; 
+        alkiot[lkm] = null; 
+        muutettu = true; 
+        return 1; 
+    }
+    
+    public int etsiId(int id) { 
+        for (int i = 0; i < lkm; i++) 
+            if (id == alkiot[i].getTunnusNro()) return i; 
+        return -1; 
     }
 }
