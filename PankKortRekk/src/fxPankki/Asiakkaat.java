@@ -1,4 +1,4 @@
-package KorttiRekisteri;
+package fxPankki;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import KorttiRekisteri.SailoException;
 import fi.jyu.mit.ohj2.WildChars;
 
 /**

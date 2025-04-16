@@ -1,8 +1,10 @@
-package KorttiRekisteri;
+package fxPankki;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+
+import KorttiRekisteri.SailoException;
 
 /**
  * Kerho-luokka, joka huolehtii jäsenistöstä. Pääosin kaikki metodit

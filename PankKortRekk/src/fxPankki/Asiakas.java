@@ -1,8 +1,10 @@
-package KorttiRekisteri;
+package fxPankki;
 
 import java.io.*;
 import java.util.Comparator;
 
+import KorttiRekisteri.HetuTarkistus;
+import KorttiRekisteri.Tietue;
 import fi.jyu.mit.ohj2.Mjonot;
 
 /**

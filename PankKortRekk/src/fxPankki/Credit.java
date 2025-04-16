@@ -1,17 +1,16 @@
-package KorttiRekisteri;
+package fxPankki;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Iterator;
-import KorttiRekisteri.HetuTarkistus;
+
+import KorttiRekisteri.Tietue;
 import fi.jyu.mit.ohj2.Mjonot;
 
-
-/*  Luokka "yhdistelmä" sijaitsee "Pankkikortit" luokan alla. Luokka vastaanottaa kahdeksan parametria, jotka näkyvät alla.
+/*  Luokka credit sijaitsee "Pankkikortit" luokan alla. Luokka vastaanottaa kahdeksan parametria, jotka näkyvät alla.
  * 	Pohja on otettu Vesan esimerkeistä
  */
-
-public class Yhdistelmä implements Cloneable, Tietue {
+public class Credit implements Cloneable, Tietue {
 	
 	private int			tunnusNro;
 	private String		korttityyppi				= "";
@@ -26,57 +25,50 @@ public class Yhdistelmä implements Cloneable, Tietue {
 	
 	private static int  seuraavaNro				= 1;
 
+	public String getKorttityyppi() {
+		return korttityyppi;
+	}
+	
+	public int getAsiakasNro() {
+	    return asiakasNro;
+	}
+	
     /**
-     * @return korttityypin
+     * Palataan asiaan ht seiskassa
      */
-    public String getKorttityyppi() {
-        return korttityyppi;
-    }
+    public Credit() {
+         //
+     }
     
-    /**
-     * @return asiakkaan numero
+    @Override
+    public Credit clone() throws CloneNotSupportedException {
+        Credit uusi;
+        uusi = (Credit) super.clone();
+        return uusi;
+    }
+     
+     /**
+      * UUSI JUTTU ----------------------------------------------------------------
+      * Alustetaan tietyn asiakkaan kortti 
+     * @param asiakasNro asiakkaan viitenumero
      */
-    public int getAsiakasNro() {
-        return asiakasNro;
-    }
-    
-    /**
-    * Palataan asiaan ht seiskassa
-    */
-   public Yhdistelmä() {
-        //
-    }
-   
-   @Override
-   public Yhdistelmä clone() throws CloneNotSupportedException {
-       Yhdistelmä uusi;
-       uusi = (Yhdistelmä) super.clone();
-       return uusi;
-   }
-    
-    /**
-     * UUSI JUTTU ----------------------------------------------------------------
-     * Alustetaan tietyn asiakkaan kortti 
-    * @param asiakasNro asiakkaan viitenumero
-    */
-   public Yhdistelmä(int asiakasNro) {
+    public Credit(int asiakasNro) {
         this.asiakasNro = asiakasNro;
-    }
+     }
 	
-	/*
-	 * Tämän tarkoituksena on palauttaa esimerkki yhdistelmä kortista
+	/**
+	 * @param nro apujuttu Asiakasnumeroa varten
 	 */
-	
-	public void vastaaYhdistelmä(int nro) {
+	public void vastaaCredit(int nro) {
 	    asiakasNro = nro;
-		korttityyppi = "Yhdistelmä";
+		korttityyppi = "Credit";
 		pvm = "1.1.2025";
-		korttinumero = "4000 0000 0000 0003";
+		korttinumero = "4000 0000 0000 0002";
 		PIN = "1234";
 		CVC = "420";
 		lähimaksu = true;
-		VPT = "FI43 0000 0000 0000 00";
-		salasana = "2025";
+		VPT = "FI42 0000 0000 0000 00";
+		salasana = "2024";
 	}
 	
 	@Override
@@ -94,6 +86,7 @@ public class Yhdistelmä implements Cloneable, Tietue {
 		        salasana
 		    );
     }
+
 	
 	public void parse(String rivi) {
         StringBuffer sb = new StringBuffer(rivi);
@@ -114,24 +107,17 @@ public class Yhdistelmä implements Cloneable, Tietue {
         if ( tunnusNro >= seuraavaNro ) seuraavaNro = tunnusNro + 1;
     }
 	
-	/*
-	 * Tulosta() tulostaa (no shit) kaikki tiedot ulos näkyville
-	 */
-	
 	public void tulosta(PrintStream out) {
         out.println(String.format("%03d", tunnusNro, 3) + "  " + korttityyppi + " " + pvm);
         out.println("  " + korttinumero + "  " + PIN + " " + CVC);
         out.println("  Onko lähimaksua: " + lähimaksu);
         out.println("  Verkkopankkitunnus: " + VPT + " Salasana: " + salasana);
     }
-	 
+	
+	
 	 public void tulosta(OutputStream os) {
         tulosta(new PrintStream(os));
 	 }
-	 
-	 /*
-	  * rekisteroi() antaa tunnusnumeron pankkikortille ja antaa seuraavalle kortille numeron + 1 
-	  */
 	 
 	 public int rekisteroi() {
       tunnusNro = seuraavaNro;
@@ -139,24 +125,20 @@ public class Yhdistelmä implements Cloneable, Tietue {
       return tunnusNro;
 	 }
 	 
-	 /*
-	  * Palauttaa tunnusnumeron
-	  */
-	 
 	 public int getTunnusNro( ) {
 		 return tunnusNro;
 	 }
 	 
 	 /**
-	  * UUSI JUTTU ----------------------------------------------------------------
-	  * Seurasin Vesan luentoa ja huomasin meiltä puuttuvan main aliohjelma. 
-	 * @param args ei tee mitään
-	 */
-	public static void main(String[] args) {
-	     Yhdistelmä yhd = new Yhdistelmä();
-	     yhd.vastaaYhdistelmä(2);
-	     yhd.tulosta(System.out);
-	 }
+     * UUSI JUTTU ----------------------------------------------------------------
+     * Seurasin Vesan luentoa ja huomasin meiltä puuttuvan main aliohjelma. 
+     * @param args ei tee mitään
+     */
+    public static void main(String[] args) {
+         Credit cre = new Credit();
+         cre.vastaaCredit(2);
+         cre.tulosta(System.out);
+     }
 
     public Iterator<Pankkikortti> iterator() {
         // TODO Auto-generated method stub
@@ -204,6 +186,7 @@ public class Yhdistelmä implements Cloneable, Tietue {
         }
     }
     
+
     /**
      * @param k a
      * @return a
@@ -236,6 +219,7 @@ public class Yhdistelmä implements Cloneable, Tietue {
         }
     }
     String tekstilähimaksu = String.valueOf(lähimaksu);
+    
     @Override
     public String aseta(int k, String jono) {
      String tjono = jono.trim();

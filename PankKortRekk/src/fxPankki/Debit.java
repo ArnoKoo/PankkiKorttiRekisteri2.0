@@ -1,9 +1,10 @@
-package KorttiRekisteri;
+package fxPankki;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Iterator;
 
+import KorttiRekisteri.Tietue;
 import fi.jyu.mit.ohj2.Mjonot;
 
  /**
