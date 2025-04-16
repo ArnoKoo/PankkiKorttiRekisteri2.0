@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,6 +20,7 @@ import java.util.List;
  */
 public class Pankkikortti {
     
+    @SuppressWarnings("unused")
     private static final int    MAX_KORTIT                  = 40; //ei implementoitu ainakaan viel
     private int                 lkm                         = 3; //tää olennaisempi
     private String              tiedostonNimi               = "kortit";
@@ -48,9 +48,31 @@ public class Pankkikortti {
     }
     
     /**
-     * Palauttaa listan tietylle asiakkaalle kuuluvista korteista
-     * @param tunnusNro tunnusnumero
-     * @return löydetyt numerot
+     * @param tunnusNro asiakkaan tunnusnumero jolle harrastuksia haetaan
+     * @return tietorakenne jossa viiteet löydetteyihin pankkikortteihi
+     * @example
+     * <pre name="test">
+     * #import java.util.*;
+     * 
+     *  Pankkikortti pankkikortti = new Pankkikortti();
+     *  Debit pitsi21 = new Debit(2); pankkikortti.lisaaDebitti(pitsi21);
+     *  Debit pitsi11 = new Debit(1); pankkikortti.lisaaDebitti(pitsi11);
+     *  Debit pitsi22 = new Debit(2); pankkikortti.lisaaDebitti(pitsi22);
+     *  Debit pitsi12 = new Debit(1); pankkikortti.lisaaDebitti(pitsi12);
+     *  Debit pitsi23 = new Debit(2); pankkikortti.lisaaDebitti(pitsi23);
+     *  Debit pitsi51 = new Debit(5); pankkikortti.lisaaDebitti(pitsi51);
+     *  
+     *  List<Debit> loytyneet;
+     *  loytyneet = pankkikortti.annaDebitti(3);
+     *  loytyneet.size() === 0; 
+     *  loytyneet = harrasteet.annaDebitti(1);
+     *  loytyneet.size() === 2; 
+     *  loytyneet.get(0) == pitsi11 === true;
+     *  loytyneet.get(1) == pitsi12 === true;
+     *  loytyneet = harrasteet.annaDebitti(5);
+     *  loytyneet.size() === 1; 
+     *  loytyneet.get(0) == pitsi51 === true;
+     * </pre> 
      */
     public List<Debit> annaDebitti(int tunnusNro) { 
         List<Debit> loydetyt = new ArrayList<Debit>();
@@ -75,9 +97,22 @@ public class Pankkikortti {
     }
     
     /**
-     * Palauttaa listan tietylle asiakkaalle kuuluvista korteista
-     * @param tunnusNro tunnusnumero
-     * @return löydetyt numerot
+     * Palauttaa listan tietylle asiakkaalle kuuluvista luottokorteista.
+     * 
+     * @param tunnusNro Asiakkaan tunnusnumero, jonka luotto-kortit halutaan.
+     * @return Lista löydetyistä luottokorteista.
+     * @example
+     * <pre name="test">
+     * Pankkikortti pankkikortti = new Pankkikortti();
+     * Credit cred1 = new Credit(1); cred1.vastaaCredit(2);
+     * Credit cred2 = new Credit(1); cred2.vastaaCredit(3);
+     * pankkikortti.lisaaKreditti(cred1);
+     * pankkikortti.lisaaKreditti(cred2);
+     * List<Credit> loydetyt = pankkikortti.annaKreditti(1);
+     * loydetyt.size() === 2;
+     * loydetyt.get(0) == cred1 === true;
+     * loydetyt.get(1) == cred2 === true;
+     * </pre>
      */
     public List<Credit> annaKreditti(int tunnusNro) {
         List<Credit> loydetyt = new ArrayList<Credit>();
@@ -102,9 +137,22 @@ public class Pankkikortti {
     }
     
     /**
-     * Palauttaa listan tietylle asiakkaalle kuuluvista korteista
-     * @param tunnusNro tunnusnumero
-     * @return löydetyt numerot
+     * Palauttaa listan tietylle asiakkaalle kuuluvista yhdistelmäkorteista.
+     * 
+     * @param tunnusNro Asiakkaan tunnusnumero, jonka yhdistelmä-kortit halutaan.
+     * @return Lista löydetyistä yhdistelmäkorteista.
+     * @example
+     * <pre name="test">
+     * Pankkikortti pankkikortti = new Pankkikortti();
+     * Yhdistelmä yhd1 = new Yhdistelmä(1); yhd1.vastaaYhdistelmä(2);
+     * Yhdistelmä yhd2 = new Yhdistelmä(1); yhd2.vastaaYhdistelmä(3);
+     * pankkikortti.lisaaYhdistelma(yhd1);
+     * pankkikortti.lisaaYhdistelma(yhd2);
+     * List<Yhdistelmä> loydetyt = pankkikortti.annaYhdistelma(1);
+     * loydetyt.size() === 2;
+     * loydetyt.get(0) == yhd1 === true;
+     * loydetyt.get(1) == yhd2 === true;
+     * </pre>
      */
     public List<Yhdistelmä> annaYhdistelma(int tunnusNro) {
         List<Yhdistelmä> loydetyt = new ArrayList<Yhdistelmä>();
@@ -117,48 +165,43 @@ public class Pankkikortti {
     }
     
     /**
-     * Lisää debit kortin, jos on liikaa kortteja niin heittää virheen
-     * @param kortti kortti debittiä varten
-     * @throws SailoException jos liikaa kortteja
-     */
-    /*public void lisaaDebit(Debit kortti) throws SailoException{
-        if (lkm >= debit.length) throw new SailoException("Liikaa alkioita");
-        debit[lkm] = kortti;
-        lkm++;
-        muutettu = true;
-    }
-    */
-    
-    /**
-     * Lisää credit kortin, jos on liikaa kortteja niin heittää virheen
-     * @param kortti kortti credittiä varten
-     * @throws SailoException jos liikaa kortteja
-     
-    public void lisaaCredit(Credit kortti) throws SailoException{
-        if (lkm >= credit.length) throw new SailoException("Liikaa alkioita");
-        credit[lkm] = kortti;
-        lkm++;
-        muutettu = true;
-    }
-    */
-    
-    /**
-     * Lisää yhdistelmä kortin, jos on liikaa kortteja niin heittää virheen
-     * @param kortti kortti yhdistelmäkorttia varten
-     * @throws SailoException jos liikaa kortteja
-     
-    public void lisaaYhdistelmä(Yhdistelmä kortti) throws SailoException{
-        if (lkm >= yhdistelmä.length) throw new SailoException("Liikaa alkioita");
-        yhdistelmä[lkm] = kortti;
-        lkm++;
-        muutettu = true;
-    }
-    */
-    
-    /**
-     * lukee tiedostosta
-     * @param tied tiedostonNimi kiinni tässä
-     * @throws SailoException ei kye lukemaan
+     * @param tied tiedoston nimen alkuosa
+     * @throws SailoException jos lukeminen epäonnistuu
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException 
+     * #import java.io.File;
+     *  Pankkikortti pankkikortti = new Pankkikortti();
+     *  Debit pitsi21 = new Debit(); pitsi21.vastaaDebit(2);
+     *  Debit pitsi11 = new Debit(); pitsi11.vastaaDebit(1);
+     *  Debit pitsi22 = new Debit(); pitsi22.vastaaDebit(2); 
+     *  Debit pitsi12 = new Debit(); pitsi12.vastaaDebit(1); 
+     *  Debit pitsi23 = new Debit(); pitsi23.vastaaDebit(2); 
+     *  String tiedNimi = "testiPankki";
+     *  File ftied = new File(tiedNimi+".dat");
+     *  ftied.delete();
+     *  pankkikortti.lueTiedostosta(tiedNimi); #THROWS SailoException
+     *  pankkikortti.lisaaDebitti(pitsi21);
+     *  pankkikortti.lisaaDebitti(pitsi11);
+     *  pankkikortti.lisaaDebitti(pitsi22);
+     *  pankkikortti.lisaaDebitti(pitsi12);
+     *  pankkikortti.lisaaDebitti(pitsi23);
+     *  pankkikortti.tallenna();
+     *  pankkikortti = new Pankkikortti();
+     *  pankkikortti.lueTiedostosta(tiedNimi);
+     *  Iterator<Debit> i = pankkikortti.iterator();
+     *  i.next().toString() === pitsi21.toString();
+     *  i.next().toString() === pitsi11.toString();
+     *  i.next().toString() === pitsi22.toString();
+     *  i.next().toString() === pitsi12.toString();
+     *  i.next().toString() === pitsi23.toString();
+     *  i.hasNext() === false;
+     *  pankkikortti.lisaaDebitti(pitsi23);
+     *  pankkikortti.tallenna();
+     *  ftied.delete() === true;
+     *  File fbak = new File(tiedNimi+".bak");
+     *  fbak.delete() === true;
+     * </pre>
      */
     public void lueTiedostosta(String tied) throws SailoException {
         setTiedostonPerusNimi(tied);
@@ -246,6 +289,10 @@ public class Pankkikortti {
         muutettu = false;
     }
 
+    /**
+     * antaa lukumäärän
+     * @return lkm
+     */
     public int getLkm() {
         return lkm;
     }
@@ -335,12 +382,63 @@ public class Pankkikortti {
 
     }
     
+    /**
+     * Poistaa valitun kortin
+     * @param debit poistettava debit
+     * @return tosi jos löytyi poistettava tietue 
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException 
+     * #import java.io.File;
+     *  Pankkikortti pankkikortti = new Pankkikortti();
+     *  Debit pitsi21 = new Debit(); pitsi21.vastaaDebit(2);
+     *  Debit pitsi11 = new Debit(); pitsi11.vastaaDebit(1);
+     *  Debit pitsi22 = new Debit(); pitsi22.vastaaDebit(2); 
+     *  Debit pitsi12 = new Debit(); pitsi12.vastaaDebit(1); 
+     *  Debit pitsi23 = new Debit(); pitsi23.vastaaDebit(2); 
+     *  pankkikortti.lisaaDebitti(pitsi21);
+     *  pankkikortti.lisaaDebitti(pitsi11);
+     *  pankkikortti.lisaaDebitti(pitsi22);
+     *  pankkikortti.lisaaDebitti(pitsi12);
+     *  pankkikortti.poistaDebit(pitsi23) === false ; pankkikortti.getLkm() === 4;
+     *  pankkikortti.poistaDebit(pitsi11) === true;   pankkikortti.getLkm() === 3;
+     *  List<Debit> h = pankkikortti.annaDebitti(1);
+     *  h.size() === 1; 
+     *  h.get(0) === pitsi12;
+     * </pre>
+     */
     public boolean poistaDebit(Debit debit) {
         boolean ret = debitLista.remove(debit);
         if (ret) muutettu = true;
         return ret;
     }
     
+    /**
+     * Poistaa kaikki tietyn tietyn jäsenen harrastukset
+     * @param tunnusNro viite siihen, mihin liittyvät tietueet poistetaan
+     * @return montako poistettiin 
+     * @example
+     * <pre name="test">
+     *  Pankkikortti pankkikortti = new Pankkikortti();
+     *  Debit pitsi21 = new Debit(); pitsi21.vastaaDebit(2);
+     *  Debit pitsi11 = new Debit(); pitsi11.vastaaDebit(1);
+     *  Debit pitsi22 = new Debit(); pitsi22.vastaaDebit(2); 
+     *  Debit pitsi12 = new Debit(); pitsi12.vastaaDebit(1); 
+     *  Debit pitsi23 = new Debit(); pitsi23.vastaaDebit(2); 
+     *  harrasteet.lisaaDebitti(pitsi21);
+     *  harrasteet.lisaaDebitti(pitsi11);
+     *  harrasteet.lisaaDebitti(pitsi22);
+     *  harrasteet.lisaaDebitti(pitsi12);
+     *  harrasteet.lisaaDebitti(pitsi23);
+     *  harrasteet.poistaAsiakkaanDebit(2) === 3;  pankkikortti.getLkm() === 2;
+     *  harrasteet.poistaAsiakkaanDebit(3) === 0;  pankkikortti.getLkm() === 2;
+     *  List<Harrastus> h = pankkikortti.annaDebitti(2);
+     *  h.size() === 0; 
+     *  h = pankkikortti.annaDebitti(1);
+     *  h.get(0) === pitsi11;
+     *  h.get(1) === pitsi12;
+     * </pre>
+     */
     public int poistaAsiakkaanDebit(int tunnusNro) {
         int n = 0;
         for (Iterator<Debit> it = debitLista.iterator(); it.hasNext();) {
@@ -354,12 +452,38 @@ public class Pankkikortti {
         return n;
     }
     
+    /**
+     * @param credit Poistettava luottokortti.
+     * @return true, jos kortti löytyi ja poistettiin, muuten false.
+     * @example
+     * <pre name="test">
+     * Pankkikortti pankkikortti = new Pankkikortti();
+     * Credit cred = new Credit(); cred.vastaaCredit(2);
+     * pankkikortti.lisaaKreditti(cred);
+     * pankkikortti.poistaCredit(cred) === true;
+     * pankkikortti.annaKreditti(cred.getAsiakasNro()).size() === 0;
+     * </pre>
+     */
     public boolean poistaCredit(Credit credit) {
         boolean ret = creditLista.remove(credit);
         if (ret) muutettu = true;
         return ret;
     }
     
+    /**
+     * @param tunnusNro Asiakkaan tunnusnumero, jonka kortit poistetaan.
+     * @return Palauttaa poistettujen luottokorttien lukumäärän.
+     * @example
+     * <pre name="test">
+     * Pankkikortti pankkikortti = new Pankkikortti();
+     * Credit cred1 = new Credit(); cred1.vastaaCredit(2);
+     * Credit cred2 = new Credit(); cred2.vastaaCredit(2);
+     * pankkikortti.lisaaKreditti(cred1);
+     * pankkikortti.lisaaKreditti(cred2);
+     * pankkikortti.poistaAsiakkaanCredit(2) === 2;
+     * pankkikortti.annaKreditti(2).size() === 0;
+     * </pre>
+     */
     public int poistaAsiakkaanCredit(int tunnusNro) {
         int n = 0;
         for (Iterator<Credit> it = creditLista.iterator(); it.hasNext();) {
@@ -373,12 +497,38 @@ public class Pankkikortti {
         return n;
     }
     
+    /**
+     * @param yhdistelma Poistettava yhdistelmäkortti.
+     * @return true, jos kortti löytyi ja poistettiin, muuten false.
+     * @example
+     * <pre name="test">
+     * Pankkikortti pankkikortti = new Pankkikortti();
+     * Yhdistelmä yhd = new Yhdistelmä(); yhd.vastaaYhdistelmä(2);
+     * pankkikortti.lisaaYhdistelma(yhd);
+     * pankkikortti.poistaYhdistelma(yhd) === true;
+     * pankkikortti.annaYhdistelma(yhd.getAsiakasNro()).size() === 0;
+     * </pre>
+     */
     public boolean poistaYhdistelma(Yhdistelmä yhdistelma) {
         boolean ret = yhdistelmaLista.remove(yhdistelma);
         if (ret) muutettu = true;
         return ret;
     }
     
+    /**
+     * @param tunnusNro Asiakkaan tunnusnumero, jonka kortit poistetaan.
+     * @return Palauttaa poistettujen yhdistelmäkorttien lukumäärän.
+     * @example
+     * <pre name="test">
+     * Pankkikortti pankkikortti = new Pankkikortti();
+     * Yhdistelmä yhd1 = new Yhdistelmä(); yhd1.vastaaYhdistelmä(2);
+     * Yhdistelmä yhd2 = new Yhdistelmä(); yhd2.vastaaYhdistelmä(2);
+     * pankkikortti.lisaaYhdistelma(yhd1);
+     * pankkikortti.lisaaYhdistelma(yhd2);
+     * pankkikortti.poistaAsiakkaanYhdistelma(2) === 2;
+     * pankkikortti.annaYhdistelma(2).size() === 0;
+     * </pre>
+     */
     public int poistaAsiakkaanYhdistelma(int tunnusNro) {
         int n = 0;
         for (Iterator<Yhdistelmä> it = yhdistelmaLista.iterator(); it.hasNext();) {
@@ -393,9 +543,30 @@ public class Pankkikortti {
     }
 
     /**
-     * Selitin tän jo pankis
-     * @param deb aa
-     * @throws SailoException aa
+     * Korvaa kortin tietorakenteessa. Ottaa kortin omistukseensa.
+     * @param deb lisättävän kortin viite. Huom tietorakenne muuttuu omistajaksi
+     * @throws SailoException jos tietorakenne on jo täynnä
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException,CloneNotSupportedException
+     * #PACKAGEIMPORT
+     * Pankkikortti pankkikortti = new Pankkikortti();
+     * Debit deb1 = new Debit(), deb2 = new Debit();
+     * deb1.rekisteroi(); deb2.rekisteroi();
+     * pankkikortti.getLkm() === 0;
+     * pankkikortti.korvaaTaiLisaaDebit(har1); pankkikortti.getLkm() === 1;
+     * pankkikortti.korvaaTaiLisaaDebit(har2); pankkikortti.getLkm() === 2;
+     * Debit deb3 = deb1.clone();
+     * deb3.aseta(2,"kkk");
+     * Iterator<Debit> deb1=pankkikortti.iterator();
+     * i2.next() === deb1;
+     * pankkikortti.korvaaTaiLisaaDebut(har3); pankkikortti.getLkm() === 2;
+     * i2=pankkikortti.iterator();
+     * Pankkikortti h = i2.next();
+     * h === deb3;
+     * h == deb3 === true;
+     * h == deb1 === false;
+     * </pre>
      */
     public void korvaaTaiLisaaDebit(Debit deb) throws SailoException {
         int id = deb.getTunnusNro();
@@ -410,9 +581,17 @@ public class Pankkikortti {
     }
 
     /**
-     * Selitin tän jo pankis
-     * @param cred aa
-     * @throws SailoException aa
+     * @param cred Korvattava tai lisättävä luottokortti.
+     * @throws SailoException Jos tietorakenne on jo täynnä.
+     * @example
+     * <pre name="test">
+     * Pankkikortti pankkikortti = new Pankkikortti();
+     * Credit cred1 = new Credit(1); cred1.vastaaCredit(2);
+     * Credit cred2 = new Credit(1); cred2.vastaaCredit(3);
+     * pankkikortti.korvaaTaiLisaaCredit(cred1);
+     * pankkikortti.korvaaTaiLisaaCredit(cred2);
+     * // Jos luottokortti, jolla on sama tunnusNro, löytyy, se korvataan.
+     * </pre>
      */
     public void korvaaTaiLisaaCredit(Credit cred) throws SailoException {
         int id = cred.getTunnusNro();
@@ -427,9 +606,17 @@ public class Pankkikortti {
     }
 
     /**
-     * Selitin tän jo pankis
-     * @param yhd aa
-     * @throws SailoException aa
+     * @param yhd Korvattava tai lisättävä yhdistelmäkortti.
+     * @throws SailoException Jos tietorakenne on jo täynnä.
+     * @example
+     * <pre name="test">
+     * Pankkikortti pankkikortti = new Pankkikortti();
+     * Yhdistelmä yhd1 = new Yhdistelmä(1); yhd1.vastaaYhdistelmä(2);
+     * Yhdistelmä yhd2 = new Yhdistelmä(1); yhd2.vastaaYhdistelmä(3);
+     * pankkikortti.korvaaTaiLisaaYhdistelma(yhd1);
+     * pankkikortti.korvaaTaiLisaaYhdistelma(yhd2);
+     * // Jos yhdistelmäkortti, jolla on sama tunnusNro, löytyy, se korvataan.
+     * </pre>
      */
     public void korvaaTaiLisaaYhdistelma(Yhdistelmä yhd) throws SailoException {
         int id = yhd.getTunnusNro();

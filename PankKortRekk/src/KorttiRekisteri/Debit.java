@@ -13,7 +13,6 @@ import fi.jyu.mit.ohj2.Mjonot;
  *
  */
 public class Debit implements Cloneable, Tietue {
-        
     private int         tunnusNro;
     private String      korttityyppi                = "Debit";
     private int         asiakasNro;
@@ -50,6 +49,20 @@ public class Debit implements Cloneable, Tietue {
          //
      }
     
+    /**
+     * Tehdään identtinen klooni asiakkaasta
+     * @return Object kloonattu asiakas
+     * @example
+     * <pre name="test">
+     *   #THROWS CloneNotSupportedException
+     *   Debit deb = new Debit();
+     *   deb.vastaaDebit(1);
+     *   Debit kopio = deb.clone();
+     *   kopio.toString() === deb.toString();
+     *   deb.vastaaDebit(2);
+     *   kopio.toString().equals(deb.toString()) === false;
+     * </pre>
+     */
     @Override
     public Debit clone() throws CloneNotSupportedException {
         Debit uusi;
@@ -57,8 +70,9 @@ public class Debit implements Cloneable, Tietue {
         return uusi;
     }
      
-     /*
-      * Alustetaan tietyn asiakkaan kortti 
+
+    /**
+     * Alustetaan tietyn asiakkaan kortti 
      * @param asiakasNro asiakkaan viitenumero
      */
     public Debit(int asiakasNro) {
@@ -81,6 +95,15 @@ public class Debit implements Cloneable, Tietue {
         salasana = "2023";
     }
     
+    /**
+     * @return Debit tolppaeroteltuna merkkijonona 
+     * @example
+     * <pre name="test">
+     *   Debit deb = new Debit();
+     *   deb.vastaaDebit(1);
+     *   deb.toString() === "0|1|Debit|1.1.2025|4000 0000 0000 0001|1234|420|true|FI41 0000 0000 0000 00|2023";
+     * </pre>
+     */
     @Override
     public String toString() {
         return String.join("|", 
@@ -97,7 +120,21 @@ public class Debit implements Cloneable, Tietue {
             );
     }
 
-    
+    /**
+     * @param rivi josta harrastuksen tiedot otetaan
+     * @example
+     * <pre name="test">
+     *   Debit deb = new Debit();
+     *   deb.parse(" 2 | 10 | Debit | 1.1.2025 | 4000 0000 0000 0001 | 1234 | 420 | true | FI41 0000 0000 0000 00 | 2023");
+     *   deb.getAsiakasNro() === 10;
+     *   deb.toString() === "2|10|Debit|1.1.2025|4000 0000 0000 0001|1234|420|true|FI41 0000 0000 0000 00|2023";
+     *   deb.rekisteroi();
+     *   int n = deb.getTunnusNro();
+     *   deb.parse("" + (n+20));
+     *   deb.rekisteroi();
+     *   deb.getTunnusNro() === n+20+1;
+     * </pre>
+     */
     public void parse(String rivi) {
         StringBuffer sb = new StringBuffer(rivi);
         setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
@@ -137,9 +174,20 @@ public class Debit implements Cloneable, Tietue {
         tulosta(new PrintStream(os));
      }
      
-     /**
-      * rekisteroi() antaa tunnusnumeron pankkikortille ja antaa seuraavalle kortille tunnusnumeron + 1 
-     * @return tunnusnumero
+    /**
+     * Antaa debitille seuraavan rekisterinumeron.
+     * @return harrastuksen uusi tunnusNro
+     * @example
+     * <pre name="test">
+     *   Debit pitsi1 = new Debit();
+     *   pitsi1.getTunnusNro() === 0;
+     *   pitsi1.rekisteroi();
+     *   Debit pitsi2 = new Debit();
+     *   pitsi2.rekisteroi();
+     *   int n1 = pitsi1.getTunnusNro();
+     *   int n2 = pitsi2.getTunnusNro();
+     *   n1 === n2-1;
+     * </pre>
      */
     public int rekisteroi() {
       tunnusNro = seuraavaNro;
@@ -166,6 +214,9 @@ public class Debit implements Cloneable, Tietue {
         deb.tulosta(System.out);
      }
 
+    /**
+     * @return null, ei tullu kai kunnol käytettyy
+     */
     public Iterator<Pankkikortti> iterator() {
         // TODO Auto-generated method stub
         return null;
@@ -184,6 +235,35 @@ public class Debit implements Cloneable, Tietue {
         return 3;
     }
     
+    /**
+     * @param k Minkä kentän sisältö halutaan
+     * @return valitun kentän sisältö
+     * @example
+     * <pre name="test">
+     *   Debit deb = new Debit();
+     * deb.tunnusNro = 2; 
+     * deb.asiakasNro = 10; 
+     * deb.korttityyppi = "Debit";
+     * deb.pvm = "1.1.2025"; 
+     * deb.korttinumero = "4000 0000 0000 0001";
+     * deb.PIN = "1234"; 
+     * deb.CVC = "420"; 
+     * deb.lähimaksu = true;
+     * deb.VPT = "FI41 0000 0000 0000 00"; 
+     * deb.salasana = "2023";
+     * 
+     * deb.anna(0) === "2";
+     * deb.anna(1) === "10";
+     * deb.anna(2) === "Debit";
+     * deb.anna(3) === "1.1.2025";
+     * deb.anna(4) === "4000 0000 0000 0001";
+     * deb.anna(5) === "1234";
+     * deb.anna(6) === "420";
+     * deb.anna(7) === "true";
+     * deb.anna(8) === "FI41 0000 0000 0000 00";
+     * deb.anna(9) === "2023";
+     * </pre>
+     */
     @Override
     public String anna(int k) {
         switch (k) {
@@ -239,7 +319,23 @@ public class Debit implements Cloneable, Tietue {
             return "???";
         }
     }
+    
+    
     String tekstilähimaksu = String.valueOf(lähimaksu);
+    /**
+     * Asetetaan valitun kentän sisältö.  Mikäli asettaminen onnistuu,
+     * palautetaan null, muutoin virheteksti.
+     * @param k minkä kentän sisältö asetetaan
+     * @param jono asetettava sisältö merkkijonona
+     * @return null jos ok, muuten virheteksti
+     * @example
+     * <pre name="test">
+     * Debit deb = new Debit();
+     * deb.aseta(3, "1.1.2025") === null;
+     * deb.aseta(3, "kissa") !== null;
+     * deb.aseta(2, "Mikä tahansa") === null;
+     * </pre>
+     */
     @Override
     public String aseta(int k, String jono) {
      String tjono = jono.trim();
@@ -270,8 +366,6 @@ public class Debit implements Cloneable, Tietue {
             return null;
         default:
             return "";
-     }
- }
-
-
+         }
+    }
 }
