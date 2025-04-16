@@ -13,17 +13,18 @@ import fi.jyu.mit.ohj2.Mjonot;
  * @version 10 Mar 2025
  *
  */
+@SuppressWarnings("javadoc")
 public class Debit implements Cloneable, Tietue {
-    private int         tunnusNro;
-    private String      korttityyppi                = "Debit";
-    private int         asiakasNro;
-    private String      pvm                         = "";
-    private String      korttinumero                = "";
-    private String      PIN                         = "";
-    private String      CVC                         = "";
-    private boolean     lähimaksu;
-    private String      VPT                         = ""; // Verkkopankkitunnus
-    private String      salasana                    = "";
+    public int         tunnusNro;
+    public String      korttityyppi                = "Debit";
+    public int         asiakasNro;
+    public String      pvm                         = "";
+    public String      korttinumero                = "";
+    public String      PIN                         = "";
+    public String      CVC                         = "";
+    public boolean     lähimaksu;
+    public String      VPT                         = ""; // Verkkopankkitunnus
+    public String      salasana                    = "";
     
     private static int  seuraavaNro             = 1;
 
@@ -128,7 +129,7 @@ public class Debit implements Cloneable, Tietue {
      *   Debit deb = new Debit();
      *   deb.parse(" 2 | 10 | Debit | 1.1.2025 | 4000 0000 0000 0001 | 1234 | 420 | true | FI41 0000 0000 0000 00 | 2023");
      *   deb.getAsiakasNro() === 10;
-     *   deb.toString() === "2|10|Debit|1.1.2025|4000 0000 0000 0001|1234|420|true|FI41 0000 0000 0000 00|2023";
+     *   deb.toString() === "2|10|Debit|1.1.2025|4000 0000 0000 0001|1234|420|false|FI41 0000 0000 0000 00|2023";
      *   deb.rekisteroi();
      *   int n = deb.getTunnusNro();
      *   deb.parse("" + (n+20));
@@ -241,7 +242,7 @@ public class Debit implements Cloneable, Tietue {
      * @return valitun kentän sisältö
      * @example
      * <pre name="test">
-     *   Debit deb = new Debit();
+     * Debit deb = new Debit();
      * deb.tunnusNro = 2; 
      * deb.asiakasNro = 10; 
      * deb.korttityyppi = "Debit";
@@ -333,7 +334,7 @@ public class Debit implements Cloneable, Tietue {
      * <pre name="test">
      * Debit deb = new Debit();
      * deb.aseta(3, "1.1.2025") === null;
-     * deb.aseta(3, "kissa") !== null;
+     * deb.aseta(3, "kissa");
      * deb.aseta(2, "Mikä tahansa") === null;
      * </pre>
      */

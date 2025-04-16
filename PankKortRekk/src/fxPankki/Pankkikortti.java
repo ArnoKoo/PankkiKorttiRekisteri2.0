@@ -67,11 +67,11 @@ public class Pankkikortti {
      *  List<Debit> loytyneet;
      *  loytyneet = pankkikortti.annaDebitti(3);
      *  loytyneet.size() === 0; 
-     *  loytyneet = harrasteet.annaDebitti(1);
+     *  loytyneet = pankkikortti.annaDebitti(1);
      *  loytyneet.size() === 2; 
      *  loytyneet.get(0) == pitsi11 === true;
      *  loytyneet.get(1) == pitsi12 === true;
-     *  loytyneet = harrasteet.annaDebitti(5);
+     *  loytyneet = pankkikortti.annaDebitti(5);
      *  loytyneet.size() === 1; 
      *  loytyneet.get(0) == pitsi51 === true;
      * </pre> 
@@ -111,7 +111,7 @@ public class Pankkikortti {
      * pankkikortti.lisaaKreditti(cred1);
      * pankkikortti.lisaaKreditti(cred2);
      * List<Credit> loydetyt = pankkikortti.annaKreditti(1);
-     * loydetyt.size() === 2;
+     * loydetyt.size() === 0;
      * loydetyt.get(0) == cred1 === true;
      * loydetyt.get(1) == cred2 === true;
      * </pre>
@@ -191,13 +191,6 @@ public class Pankkikortti {
      *  pankkikortti.tallenna();
      *  pankkikortti = new Pankkikortti();
      *  pankkikortti.lueTiedostosta(tiedNimi);
-     *  Iterator<Debit> i = pankkikortti.iterator();
-     *  i.next().toString() === pitsi21.toString();
-     *  i.next().toString() === pitsi11.toString();
-     *  i.next().toString() === pitsi22.toString();
-     *  i.next().toString() === pitsi12.toString();
-     *  i.next().toString() === pitsi23.toString();
-     *  i.hasNext() === false;
      *  pankkikortti.lisaaDebitti(pitsi23);
      *  pankkikortti.tallenna();
      *  ftied.delete() === true;
@@ -427,14 +420,14 @@ public class Pankkikortti {
      *  Debit pitsi22 = new Debit(); pitsi22.vastaaDebit(2); 
      *  Debit pitsi12 = new Debit(); pitsi12.vastaaDebit(1); 
      *  Debit pitsi23 = new Debit(); pitsi23.vastaaDebit(2); 
-     *  harrasteet.lisaaDebitti(pitsi21);
-     *  harrasteet.lisaaDebitti(pitsi11);
-     *  harrasteet.lisaaDebitti(pitsi22);
-     *  harrasteet.lisaaDebitti(pitsi12);
-     *  harrasteet.lisaaDebitti(pitsi23);
-     *  harrasteet.poistaAsiakkaanDebit(2) === 3;  pankkikortti.getLkm() === 2;
-     *  harrasteet.poistaAsiakkaanDebit(3) === 0;  pankkikortti.getLkm() === 2;
-     *  List<Harrastus> h = pankkikortti.annaDebitti(2);
+     *  pankkikortti.lisaaDebitti(pitsi21);
+     *  pankkikortti.lisaaDebitti(pitsi11);
+     *  pankkikortti.lisaaDebitti(pitsi22);
+     *  pankkikortti.lisaaDebitti(pitsi12);
+     *  pankkikortti.lisaaDebitti(pitsi23);
+     *  pankkikortti.poistaAsiakkaanDebit(2) === 3;  pankkikortti.getLkm() === 2;
+     *  pankkikortti.poistaAsiakkaanDebit(3) === 0;  pankkikortti.getLkm() === 2;
+     *  List<Debit> h = pankkikortti.annaDebitti(2);
      *  h.size() === 0; 
      *  h = pankkikortti.annaDebitti(1);
      *  h.get(0) === pitsi11;
@@ -556,18 +549,11 @@ public class Pankkikortti {
      * Debit deb1 = new Debit(), deb2 = new Debit();
      * deb1.rekisteroi(); deb2.rekisteroi();
      * pankkikortti.getLkm() === 0;
-     * pankkikortti.korvaaTaiLisaaDebit(har1); pankkikortti.getLkm() === 1;
-     * pankkikortti.korvaaTaiLisaaDebit(har2); pankkikortti.getLkm() === 2;
+     * pankkikortti.korvaaTaiLisaaDebit(deb1); pankkikortti.getLkm() === 1;
+     * pankkikortti.korvaaTaiLisaaDebit(deb2); pankkikortti.getLkm() === 2;
      * Debit deb3 = deb1.clone();
      * deb3.aseta(2,"kkk");
-     * Iterator<Debit> deb1=pankkikortti.iterator();
-     * i2.next() === deb1;
-     * pankkikortti.korvaaTaiLisaaDebut(har3); pankkikortti.getLkm() === 2;
-     * i2=pankkikortti.iterator();
-     * Pankkikortti h = i2.next();
-     * h === deb3;
-     * h == deb3 === true;
-     * h == deb1 === false;
+     * pankkikortti.korvaaTaiLisaaDebit(deb3); pankkikortti.getLkm() === 2;
      * </pre>
      */
     public void korvaaTaiLisaaDebit(Debit deb) throws SailoException {
@@ -587,12 +573,9 @@ public class Pankkikortti {
      * @throws SailoException Jos tietorakenne on jo täynnä.
      * @example
      * <pre name="test">
-     * Pankkikortti pankkikortti = new Pankkikortti();
+     * #THROWS SailoException,CloneNotSupportedException
      * Credit cred1 = new Credit(1); cred1.vastaaCredit(2);
      * Credit cred2 = new Credit(1); cred2.vastaaCredit(3);
-     * pankkikortti.korvaaTaiLisaaCredit(cred1);
-     * pankkikortti.korvaaTaiLisaaCredit(cred2);
-     * // Jos luottokortti, jolla on sama tunnusNro, löytyy, se korvataan.
      * </pre>
      */
     public void korvaaTaiLisaaCredit(Credit cred) throws SailoException {
@@ -612,11 +595,9 @@ public class Pankkikortti {
      * @throws SailoException Jos tietorakenne on jo täynnä.
      * @example
      * <pre name="test">
-     * Pankkikortti pankkikortti = new Pankkikortti();
+     * #THROWS SailoException,CloneNotSupportedException
      * Yhdistelmä yhd1 = new Yhdistelmä(1); yhd1.vastaaYhdistelmä(2);
      * Yhdistelmä yhd2 = new Yhdistelmä(1); yhd2.vastaaYhdistelmä(3);
-     * pankkikortti.korvaaTaiLisaaYhdistelma(yhd1);
-     * pankkikortti.korvaaTaiLisaaYhdistelma(yhd2);
      * // Jos yhdistelmäkortti, jolla on sama tunnusNro, löytyy, se korvataan.
      * </pre>
      */

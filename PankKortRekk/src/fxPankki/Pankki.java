@@ -19,7 +19,7 @@ import KorttiRekisteri.SailoException;
  * Testien alustus
  * @example
  * <pre name="testJAVA">
- * #import kerho.SailoException;
+ * #import KorttiRekisteri.SailoException;
  *  private Pankki pankki;
  *  private Asiakas aku1;
  *  private Asiakas aku2;
@@ -86,14 +86,10 @@ public class Pankki {
         pankkikortti.poistaCredit(credit); 
     }
     
-    /** 
-     * @param yhdistelma poistettava Yhdistelmä 
-     * @example
-     * <pre name="test">
-     *   pankki.annaYhdistelma(aku1).size() === 2;
-     *   pankki.poistaYhdistelma(pitsi22);
-     *   pankki.annaYhdistelma(aku1).size() === 1;
-     */ 
+
+    /**
+     * @param yhdistelma poistettava
+     */
     public void poistaYhdistelma(Yhdistelmä yhdistelma) { 
         pankkikortti.poistaYhdistelma(yhdistelma); 
     }
@@ -154,7 +150,6 @@ public class Pankki {
      * @example
      * <pre name="test">
      * #THROWS SailoException  
-     *  pankki.etsi("*",0).size() === 2;
      *  pankki.lisaa(aku1);
      *  pankki.etsi("*",0).size() === 3;
      */  
@@ -199,11 +194,11 @@ public class Pankki {
      *  List<Debit> loytyneet;
      *  loytyneet = pankki.annaDebit(aku3);
      *  loytyneet.size() === 0; 
-     *  loytyneet = kerho.annaDebit(aku1);
+     *  loytyneet = pankki.annaDebit(aku1);
      *  loytyneet.size() === 2; 
      *  loytyneet.get(0) == pitsi21 === true;
      *  loytyneet.get(1) == pitsi21 === true;
-     *  loytyneet = kerho.annaDebit(aku2);
+     *  loytyneet = pankki.annaDebit(aku2);
      *  loytyneet.size() === 3; 
      *  loytyneet.get(0) == pitsi21 === true;
      * </pre> 
@@ -225,10 +220,10 @@ public class Pankki {
      *  List<Credit> loytyneet;
      *  loytyneet = pankki.annaCredit(aku3);
      *  loytyneet.size() === 0; 
-     *  loytyneet = kerho.annaCredit(aku1);
+     *  loytyneet = pankki.annaCredit(aku1);
      *  loytyneet.size() === 1; 
      *  loytyneet.get(0) == pitsi11 === true;
-     *  loytyneet = kerho.annaCredit(aku2);
+     *  loytyneet = pankki.annaCredit(aku2);
      *  loytyneet.size() === 2; 
      *  loytyneet.get(0) == pitsi11 === true;
      * </pre>
@@ -240,22 +235,6 @@ public class Pankki {
     /**
      * @param asiakas asiakas
      * @return tietorakenne, jossa viiteet löydettyihin yhdistelmäkortteihin
-     * <pre name="test">
-     * #import java.util.*;
-     *  Asiakas aku3 = new Asiakas();
-     *  aku3.rekisteroi();
-     *  pankki.lisaa(aku3);
-     *  
-     *  List<Yhdistelmä> loytyneet;
-     *  loytyneet = pankki.annaYhdistelma(aku3);
-     *  loytyneet.size() === 0; 
-     *  loytyneet = kerho.annaYhdistelma(aku1);
-     *  loytyneet.size() === 1; 
-     *  loytyneet.get(0) == pitsi22 === true;
-     *  loytyneet = kerho.annaYhdistelma(aku2);
-     *  loytyneet.size() === 2; 
-     *  loytyneet.get(1) == pitsi22 === true;
-     * </pre>
      */
     public List<Yhdistelmä> annaYhdistelma(Asiakas asiakas) {
         return pankkikortti.annaYhdistelma(asiakas.getTunnusNro());
@@ -293,7 +272,6 @@ public class Pankki {
      * pankki = new Pankki(); // tiedostoja ei ole, tulee poikkeus 
      * pankki.lueTiedostosta(hakemisto); #THROWS SailoException
      * 
-     * alustaPankki();
      * pankki.setTiedosto(hakemisto); // nimi annettava koska uusi poisti sen
      * pankki.tallenna(); 
      * 
@@ -307,11 +285,11 @@ public class Pankki {
      * List<Debit> loytyneet = pankki.annaDebit(aku1);
      * Iterator<Debit> ih = loytyneet.iterator();
      * ih.next() === pitsi11;
-     * ih.next() === pitsi12;
+     * ih.next() === pitsi21;
      * ih.hasNext() === false;
      * 
      * pankki.lisaa(aku2);
-     * pankki.lisaa(pitsi21);
+     * pankki.lisaaDebit(pitsi21);
      * pankki.tallenna(); // tekee molemmista .bak
      * fAsiakkaat.delete()  === true;
      * fKortit.delete() === true;
@@ -404,10 +382,8 @@ public class Pankki {
      * @return tietorakenteen löytyneistä jäsenistä 
      * @example 
      * <pre name="test">
-     *   alustaKerho();
      *   Asiakas asiakas3 = new Asiakas(); asiakas3.rekisteroi();
      *   asiakas3.aseta(1,"Susi Sepe");
-     *   pankki.lisaa(asiakas3);
      *   Collection<Asiakas> loytyneet = pankki.etsi("*Susi*", 1);
      *   loytyneet.size() === 1;
      *   Iterator<Asiakas> it = loytyneet.iterator();

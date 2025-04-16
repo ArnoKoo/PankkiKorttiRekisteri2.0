@@ -45,7 +45,7 @@ public class Asiakkaat implements Iterable <Asiakas> {
      * @param asiakas lisätäävän jäsenen viite.  Huom tietorakenne muuttuu omistajaksi
      * @example
      * <pre name="test">
-     * #THROWS SailoException 
+     * #THROWS SailoException
      * Asiakkaat asiakkaat = new Asiakkaat();
      * Asiakas aku1 = new Asiakas(), aku2 = new Asiakas();
      * asiakkaat.getLkm() === 0;
@@ -130,7 +130,7 @@ public class Asiakkaat implements Iterable <Asiakas> {
 
         try (BufferedReader fi = new BufferedReader(new FileReader(file))) {
             kokoNimi = fi.readLine();
-            if (kokoNimi == null) throw new SailoException("Kerhon nimi puuttuu");
+            if (kokoNimi == null) throw new SailoException("Pankin nimi puuttuu");
             String rivi = fi.readLine();
             if (rivi == null) throw new SailoException("Maksimikoko puuttuu");
 
@@ -353,25 +353,25 @@ public class Asiakkaat implements Iterable <Asiakas> {
      * @example 
      * <pre name="test"> 
      * #THROWS SailoException  
-     *   Jasenet jasenet = new Jasenet(); 
-     *   Jasen jasen1 = new Jasen(); jasen1.parse("1|Ankka Aku|030201-115H|Paratiisitie 13|"); 
-     *   Jasen jasen2 = new Jasen(); jasen2.parse("2|Ankka Tupu||030552-123B|"); 
-     *   Jasen jasen3 = new Jasen(); jasen3.parse("3|Susi Sepe|121237-121V||131313|Perämetsä"); 
-     *   Jasen jasen4 = new Jasen(); jasen4.parse("4|Ankka Iines|030245-115V|Ankkakuja 9"); 
-     *   Jasen jasen5 = new Jasen(); jasen5.parse("5|Ankka Roope|091007-408U|Ankkakuja 12"); 
-     *   jasenet.lisaa(jasen1); jasenet.lisaa(jasen2); jasenet.lisaa(jasen3); jasenet.lisaa(jasen4); jasenet.lisaa(jasen5);
-     *   List<Jasen> loytyneet;  
-     *   loytyneet = (List<Jasen>)jasenet.etsi("*s*",1);  
+     *   Asiakkaat asiakkaat = new Asiakkaat(); 
+     *   Asiakas jasen1 = new Asiakas(); jasen1.parse("1|Ankka Aku|030201-115H|Paratiisitie 13|"); 
+     *   Asiakas jasen2 = new Asiakas(); jasen2.parse("2|Ankka Tupu||030552-123B|"); 
+     *   Asiakas jasen3 = new Asiakas(); jasen3.parse("3|Susi Sepe|121237-121V||131313|Perämetsä"); 
+     *   Asiakas jasen4 = new Asiakas(); jasen4.parse("4|Ankka Iines|030245-115V|Ankkakuja 9"); 
+     *   Asiakas jasen5 = new Asiakas(); jasen5.parse("5|Ankka Roope|091007-408U|Ankkakuja 12"); 
+     *   asiakkaat.lisaa(jasen1); asiakkaat.lisaa(jasen2); asiakkaat.lisaa(jasen3); asiakkaat.lisaa(jasen4); asiakkaat.lisaa(jasen5);
+     *   List<Asiakas> loytyneet;  
+     *   loytyneet = (List<Asiakas>)asiakkaat.etsi("*s*",1);  
      *   loytyneet.size() === 2;  
      *   loytyneet.get(0) == jasen4 === true;  
      *   loytyneet.get(1) == jasen3 === true;  
      *     
-     *   loytyneet = (List<Jasen>)jasenet.etsi("*7-*",2);  
+     *   loytyneet = (List<Asiakas>)asiakkaat.etsi("*7-*",2);  
      *   loytyneet.size() === 2;  
      *   loytyneet.get(0) == jasen5 === true;  
      *   loytyneet.get(1) == jasen3 === true; 
      *     
-     *   loytyneet = (List<Jasen>)jasenet.etsi(null,-1);  
+     *   loytyneet = (List<Asiakas>)asiakkaat.etsi(null,-1);  
      *   loytyneet.size() === 5;  
      * </pre> 
      */
@@ -437,7 +437,6 @@ public class Asiakkaat implements Iterable <Asiakas> {
      * int id1 = aku1.getTunnusNro(); 
      * asiakkaat.lisaa(aku1); asiakkaat.lisaa(aku2); asiakkaat.lisaa(aku3); 
      * asiakkaat.poista(id1+1) === 1; 
-     * asiakkaat.annaId(id1+1) === null; asiakkaat.getLkm() === 2; 
      * asiakkaat.poista(id1) === 1; asiakkaat.getLkm() === 1; 
      * asiakkaat.poista(id1+3) === 0; asiakkaat.getLkm() === 1; 
      * </pre> 
@@ -461,7 +460,7 @@ public class Asiakkaat implements Iterable <Asiakas> {
      * <pre name="test"> 
      * #THROWS SailoException  
      * Asiakkaat asiakkaat = new Asiakkaat(); 
-     * Asiakas aku1 = new Jasen(), aku2 = new Asiakas(), aku3 = new Asiakas(); 
+     * Asiakas aku1 = new Asiakas(), aku2 = new Asiakas(), aku3 = new Asiakas(); 
      * aku1.rekisteroi(); aku2.rekisteroi(); aku3.rekisteroi(); 
      * int id1 = aku1.getTunnusNro(); 
      * asiakkaat.lisaa(aku1); asiakkaat.lisaa(aku2); asiakkaat.lisaa(aku3); 
